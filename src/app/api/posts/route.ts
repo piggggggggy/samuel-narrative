@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getContentProvider } from "@/lib/content";
 import { isAdmin } from "@/lib/auth";
 import { createPostSchema } from "@/lib/validations/post";
+import { revalidatePost } from "@/lib/revalidate";
 
 export async function GET() {
   try {
@@ -47,6 +48,10 @@ export async function POST(request: Request) {
     }
 
     const post = await provider.createPost(validation.data);
+
+    // 캐시 revalidate
+    revalidatePost(post.slug);
+
     return NextResponse.json(post, { status: 201 });
   } catch (error) {
     console.error("Failed to create post:", error);

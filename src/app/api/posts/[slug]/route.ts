@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getContentProvider } from "@/lib/content";
 import { isAdmin } from "@/lib/auth";
 import { updatePostSchema } from "@/lib/validations/post";
+import { revalidatePost } from "@/lib/revalidate";
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -61,6 +62,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
     }
 
     const post = await provider.updatePost(slug, validation.data);
+
+    // 캐시 revalidate
+    revalidatePost(slug);
+
     return NextResponse.json(post);
   } catch (error) {
     console.error("Failed to update post:", error);
@@ -100,6 +105,10 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     }
 
     await provider.deletePost(slug);
+
+    // 캐시 revalidate
+    revalidatePost(slug);
+
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Failed to delete post:", error);
