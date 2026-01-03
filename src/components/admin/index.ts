@@ -3,3 +3,4 @@ export { TagInput } from "./TagInput";
 export { PostForm } from "./PostForm";
 export { DashboardStats } from "./DashboardStats";
 export { PostTable } from "./PostTable";
+export { ImageUpload } from "./ImageUpload";
