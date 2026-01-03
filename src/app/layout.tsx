@@ -16,12 +16,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://samuel-narrative.vercel.app";
+
 export const metadata: Metadata = {
   title: {
     default: "Samuel's Blog",
     template: "%s | Samuel's Blog",
   },
-  description: "개인 기술 블로그 - 웹 개발, 아키텍처, 그리고 개발 경험을 공유합니다.",
+  description:
+    "개인 기술 블로그 - 웹 개발, 아키텍처, 그리고 개발 경험을 공유합니다.",
   openGraph: {
     type: "website",
     locale: "ko_KR",
@@ -30,6 +34,11 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    types: {
+      "application/rss+xml": `${BASE_URL}/feed.xml`,
+    },
   },
 };
 
