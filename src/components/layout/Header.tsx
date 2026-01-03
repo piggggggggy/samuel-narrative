@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ThemeToggle } from "./ThemeToggle";
+import { UserMenu } from "./UserMenu";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -34,11 +35,13 @@ export function Header() {
             </Link>
           ))}
           <ThemeToggle />
+          <UserMenu />
         </div>
 
         {/* Mobile: Theme Toggle + Menu Button */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-3 md:hidden">
           <ThemeToggle />
+          <UserMenu />
           <button
           type="button"
           className="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white md:hidden"
