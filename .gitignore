@@ -1,8 +1,15 @@
 .vscode/
-.next/
-.claude/
 
+.claude/
+CLAUDE.md
+
+.cursor/
+
+
+.next/
 node_modules/
+
+docs/
 
 .env
 .env.local
@@ -11,3 +18,4 @@ node_modules/
 .env.production.local
 
 .DS_Store
+
