@@ -1,5 +1,6 @@
 import { getContentProvider } from "@/lib/content";
 import { PostContent } from "@/components/post";
+import { Utterances } from "@/components/common";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -88,6 +89,8 @@ export default async function PostPage({ params }: PostPageProps) {
 
         <PostContent content={post.content} />
       </article>
+
+      <Utterances repo="piggggggggy/samuel-narrative" />
 
       <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
         <Link
