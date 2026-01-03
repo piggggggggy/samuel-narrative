@@ -1,7 +1,12 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import type { ContentProvider, Post, CreatePostInput, UpdatePostInput } from "./types";
+import type {
+  ContentProvider,
+  Post,
+  CreatePostInput,
+  UpdatePostInput,
+} from "./types";
 
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const POSTS_PATH = "content/posts";
@@ -19,6 +24,13 @@ interface GitHubFileResponse {
   sha: string;
   content: string;
   encoding: string;
+}
+
+interface GitHubDirectoryItem {
+  name: string;
+  path: string;
+  sha: string;
+  type: "file" | "dir";
 }
 
 function isProduction(): boolean {
@@ -75,15 +87,15 @@ export class GitHubProvider implements ContentProvider {
       .filter((file) => file.endsWith(".md"));
   }
 
-  private parsePost(slug: string): Post | null {
-    const filePath = path.join(POSTS_DIRECTORY, `${slug}.md`);
-
-    if (!fs.existsSync(filePath)) {
+  private parsePost(slug: string, content: string): Post | null {
+    if (!slug || !content) {
+      console.error(`Invalid slug or content: ${slug}, ${content}`);
       return null;
     }
 
-    const fileContent = fs.readFileSync(filePath, "utf-8");
-    return this.parseMarkdownContent(slug, fileContent);
+    const decodedContent = Buffer.from(content, "base64").toString("utf-8");
+
+    return this.parseMarkdownContent(slug, decodedContent);
   }
 
   private parseMarkdownContent(slug: string, fileContent: string): Post {
@@ -103,23 +115,42 @@ export class GitHubProvider implements ContentProvider {
   }
 
   async getAllPosts(): Promise<Post[]> {
-    const files = this.getPostFiles();
-    const posts = files
-      .map((file) => {
-        const slug = file.replace(/\.md$/, "");
-        return this.parsePost(slug);
+    const directoryItems = await githubApiRequest<GitHubDirectoryItem[]>(
+      `/contents/${POSTS_PATH}`
+    );
+
+    const mdFiles = directoryItems.filter(
+      (item) => item.type === "file" && item.name.endsWith(".md")
+    );
+
+    const posts = await Promise.all(
+      mdFiles.map(async (item) => {
+        const fileResponse = await githubApiRequest<GitHubFileResponse>(
+          `/contents/${POSTS_PATH}/${item.name}`
+        );
+
+        return this.parsePost(item.name, fileResponse.content);
       })
+    );
+
+    return posts
       .filter((post): post is Post => post !== null)
       .sort(
         (a, b) =>
           new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       );
-
-    return posts;
   }
 
   async getPostBySlug(slug: string): Promise<Post | null> {
-    return this.parsePost(slug);
+    try {
+      const fileResponse = await githubApiRequest<GitHubFileResponse>(
+        `/contents/${POSTS_PATH}/${slug}.md`
+      );
+
+      return this.parsePost(slug, fileResponse.content);
+    } catch {
+      return null;
+    }
   }
 
   async getPostsByTag(tag: string): Promise<Post[]> {
@@ -197,153 +228,101 @@ export class GitHubProvider implements ContentProvider {
     const markdown = this.generateMarkdown(input);
     const filePath = `${POSTS_PATH}/${input.slug}.md`;
 
-    if (isProduction()) {
-      const { branch } = getGitHubConfig();
+    const { branch } = getGitHubConfig();
 
-      // Check if file already exists
-      const existingSha = await this.getFileSha(filePath);
-      if (existingSha) {
-        throw new Error(`Post with slug "${input.slug}" already exists`);
-      }
-
-      // Create file via GitHub API
-      await githubApiRequest(`/contents/${filePath}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          message: `Create post: ${input.title}`,
-          content: Buffer.from(markdown).toString("base64"),
-          branch,
-        }),
-      });
-
-      // Return the created post
-      return {
-        slug: input.slug,
-        title: input.title,
-        content: input.content,
-        excerpt: input.excerpt,
-        publishedAt: input.publishedAt || new Date().toISOString().split("T")[0],
-        tags: input.tags || [],
-        thumbnail: input.thumbnail,
-      };
-    } else {
-      // Local development: use file system
-      if (!fs.existsSync(POSTS_DIRECTORY)) {
-        fs.mkdirSync(POSTS_DIRECTORY, { recursive: true });
-      }
-
-      const localFilePath = path.join(POSTS_DIRECTORY, `${input.slug}.md`);
-
-      if (fs.existsSync(localFilePath)) {
-        throw new Error(`Post with slug "${input.slug}" already exists`);
-      }
-
-      fs.writeFileSync(localFilePath, markdown, "utf-8");
-
-      const post = this.parsePost(input.slug);
-      if (!post) {
-        throw new Error("Failed to create post");
-      }
-
-      return post;
+    // Check if file already exists
+    const existingSha = await this.getFileSha(filePath);
+    if (existingSha) {
+      throw new Error(`Post with slug "${input.slug}" already exists`);
     }
+
+    // Create file via GitHub API
+    await githubApiRequest(`/contents/${filePath}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: `Create post: ${input.title}`,
+        content: Buffer.from(markdown).toString("base64"),
+        branch,
+      }),
+    });
+
+    // Return the created post
+    return {
+      slug: input.slug,
+      title: input.title,
+      content: input.content,
+      excerpt: input.excerpt,
+      publishedAt: input.publishedAt || new Date().toISOString().split("T")[0],
+      tags: input.tags || [],
+      thumbnail: input.thumbnail,
+    };
   }
 
   async updatePost(slug: string, input: UpdatePostInput): Promise<Post> {
     const filePath = `${POSTS_PATH}/${slug}.md`;
 
-    if (isProduction()) {
-      const { branch } = getGitHubConfig();
+    const { branch } = getGitHubConfig();
 
-      // Get existing file to get SHA and content
-      const existingFile = await githubApiRequest<GitHubFileResponse>(
-        `/contents/${filePath}`
-      ).catch(() => null);
+    // Get existing file to get SHA and content
+    const existingFile = await githubApiRequest<GitHubFileResponse>(
+      `/contents/${filePath}`
+    ).catch(() => null);
 
-      if (!existingFile) {
-        throw new Error(`Post with slug "${slug}" not found`);
-      }
-
-      // Decode existing content
-      const existingContent = Buffer.from(
-        existingFile.content,
-        "base64"
-      ).toString("utf-8");
-      const existingPost = this.parseMarkdownContent(slug, existingContent);
-
-      // Generate updated markdown
-      const markdown = this.generateMarkdown(input, existingPost);
-
-      // Update file via GitHub API
-      await githubApiRequest(`/contents/${filePath}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          message: `Update post: ${slug}`,
-          content: Buffer.from(markdown).toString("base64"),
-          sha: existingFile.sha,
-          branch,
-        }),
-      });
-
-      // Return updated post
-      return {
-        ...existingPost,
-        ...input,
-        slug,
-      };
-    } else {
-      // Local development: use file system
-      const existingPost = await this.getPostBySlug(slug);
-      if (!existingPost) {
-        throw new Error(`Post with slug "${slug}" not found`);
-      }
-
-      const localFilePath = path.join(POSTS_DIRECTORY, `${slug}.md`);
-      const markdown = this.generateMarkdown(input, existingPost);
-      fs.writeFileSync(localFilePath, markdown, "utf-8");
-
-      const updatedPost = this.parsePost(slug);
-      if (!updatedPost) {
-        throw new Error("Failed to update post");
-      }
-
-      return updatedPost;
+    if (!existingFile) {
+      throw new Error(`Post with slug "${slug}" not found`);
     }
+
+    // Decode existing content
+    const existingContent = Buffer.from(
+      existingFile.content,
+      "base64"
+    ).toString("utf-8");
+    const existingPost = this.parseMarkdownContent(slug, existingContent);
+
+    // Generate updated markdown
+    const markdown = this.generateMarkdown(input, existingPost);
+
+    // Update file via GitHub API
+    await githubApiRequest(`/contents/${filePath}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: `Update post: ${slug}`,
+        content: Buffer.from(markdown).toString("base64"),
+        sha: existingFile.sha,
+        branch,
+      }),
+    });
+
+    // Return updated post
+    return {
+      ...existingPost,
+      ...input,
+      slug,
+    };
   }
 
   async deletePost(slug: string): Promise<void> {
     const filePath = `${POSTS_PATH}/${slug}.md`;
 
-    if (isProduction()) {
-      const { branch } = getGitHubConfig();
+    const { branch } = getGitHubConfig();
 
-      // Get file SHA
-      const existingFile = await githubApiRequest<GitHubFileResponse>(
-        `/contents/${filePath}`
-      ).catch(() => null);
+    // Get file SHA
+    const existingFile = await githubApiRequest<GitHubFileResponse>(
+      `/contents/${filePath}`
+    ).catch(() => null);
 
-      if (!existingFile) {
-        throw new Error(`Post with slug "${slug}" not found`);
-      }
-
-      // Delete file via GitHub API
-      await githubApiRequest(`/contents/${filePath}`, {
-        method: "DELETE",
-        body: JSON.stringify({
-          message: `Delete post: ${slug}`,
-          sha: existingFile.sha,
-          branch,
-        }),
-      });
-    } else {
-      // Local development: use file system
-      const localFilePath = path.join(POSTS_DIRECTORY, `${slug}.md`);
-
-      if (!fs.existsSync(localFilePath)) {
-        throw new Error(`Post with slug "${slug}" not found`);
-      }
-
-      fs.unlinkSync(localFilePath);
+    if (!existingFile) {
+      throw new Error(`Post with slug "${slug}" not found`);
     }
+
+    // Delete file via GitHub API
+    await githubApiRequest(`/contents/${filePath}`, {
+      method: "DELETE",
+      body: JSON.stringify({
+        message: `Delete post: ${slug}`,
+        sha: existingFile.sha,
+        branch,
+      }),
+    });
   }
 }
