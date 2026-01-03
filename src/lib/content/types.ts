@@ -10,11 +10,13 @@ export interface Post {
 }
 
 export interface CreatePostInput {
+  slug: string;
   title: string;
   content: string;
   excerpt: string;
   tags: string[];
   thumbnail?: string;
+  publishedAt?: string;
 }
 
 export interface UpdatePostInput {
