@@ -53,7 +53,7 @@ export function PostCard({ post }: PostCardProps) {
                 <Link
                   key={tag}
                   href={`/tags/${tag}`}
-                  className="rounded-full bg-gray-100 px-2.5 py-0.5 text-sm text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                  className="rounded-full bg-gray-100 px-2.5 py-0.5 text-sm text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
                 >
                   {tag}
                 </Link>

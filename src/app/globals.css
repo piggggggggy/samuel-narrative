@@ -4,10 +4,17 @@
 /* Enable class-based dark mode for next-themes */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* highlight.js github theme */
+/* highlight.js github dark theme */
 .hljs {
-  background: #0d1117 !important;
+  background: #111827 !important; /* gray-900 */
   color: #c9d1d9;
+}
+
+/* Reset highlight.js code element styles */
+pre code.hljs,
+code.hljs {
+  background: transparent !important;
+  padding: 0 !important;
 }
 
 .hljs-keyword,
