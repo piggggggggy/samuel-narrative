@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ConfirmModal } from "@/components/common";
 import type { Post } from "@/lib/content/types";
 
 interface PostTableProps {
@@ -9,7 +11,38 @@ interface PostTableProps {
 }
 
 export function PostTable({ posts }: PostTableProps) {
+  const router = useRouter();
   const [search, setSearch] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<Post | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+
+    setIsDeleting(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/posts/${deleteTarget.slug}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "삭제에 실패했습니다.");
+      }
+
+      setDeleteTarget(null);
+      router.refresh();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "삭제 중 오류가 발생했습니다."
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const filteredPosts = useMemo(() => {
     if (!search.trim()) return posts;
@@ -165,6 +198,16 @@ export function PostTable({ posts }: PostTableProps) {
                       >
                         보기
                       </Link>
+                      <span className="text-gray-300 dark:text-gray-600">
+                        |
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setDeleteTarget(post)}
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                      >
+                        삭제
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -182,6 +225,36 @@ export function PostTable({ posts }: PostTableProps) {
             : `총 ${filteredPosts.length}개의 포스트`}
         </p>
       )}
+
+      {/* 에러 메시지 */}
+      {error && (
+        <div className="rounded-md bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
+          {error}
+          <button
+            onClick={() => setError(null)}
+            className="ml-2 font-medium underline"
+          >
+            닫기
+          </button>
+        </div>
+      )}
+
+      {/* 삭제 확인 모달 */}
+      <ConfirmModal
+        isOpen={deleteTarget !== null}
+        title="포스트 삭제"
+        message={
+          deleteTarget
+            ? `"${deleteTarget.title}" 포스트를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`
+            : ""
+        }
+        confirmText="삭제"
+        cancelText="취소"
+        variant="danger"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }
