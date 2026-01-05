@@ -66,29 +66,29 @@ export default function AboutPage() {
             S
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl font-bold text-text-primary">
           Samuel
         </h1>
-        <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
+        <p className="mt-2 text-lg text-text-secondary">
           Web Developer
         </p>
       </section>
 
       {/* Bio Section */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="mb-4 text-xl font-semibold text-text-primary">
           소개
         </h2>
         <div className="prose prose-gray dark:prose-invert">
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-text-secondary">
             안녕하세요! 웹 개발을 사랑하는 개발자 Samuel입니다.
           </p>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">
+          <p className="mt-4 text-text-secondary">
             사용자 경험을 중시하며, 깔끔하고 유지보수하기 좋은 코드를 작성하려고
             노력합니다. 새로운 기술을 배우고 적용하는 것을 좋아하며, 이 블로그를
             통해 개발 경험과 지식을 공유하고 있습니다.
           </p>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">
+          <p className="mt-4 text-text-secondary">
             주로 React와 Next.js를 사용한 프론트엔드 개발을 하고 있으며,
             백엔드와 인프라에도 관심을 가지고 있습니다.
           </p>
@@ -97,19 +97,19 @@ export default function AboutPage() {
 
       {/* Skills Section */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="mb-4 text-xl font-semibold text-text-primary">
           기술 스택
         </h2>
         <div className="grid gap-6 md:grid-cols-3">
           <div>
-            <h3 className="mb-2 font-medium text-gray-900 dark:text-white">
+            <h3 className="mb-2 font-medium text-text-primary">
               Frontend
             </h3>
             <ul className="space-y-1">
               {skills.frontend.map((skill) => (
                 <li
                   key={skill}
-                  className="text-gray-600 dark:text-gray-400"
+                  className="text-text-secondary"
                 >
                   {skill}
                 </li>
@@ -117,14 +117,14 @@ export default function AboutPage() {
             </ul>
           </div>
           <div>
-            <h3 className="mb-2 font-medium text-gray-900 dark:text-white">
+            <h3 className="mb-2 font-medium text-text-primary">
               Backend
             </h3>
             <ul className="space-y-1">
               {skills.backend.map((skill) => (
                 <li
                   key={skill}
-                  className="text-gray-600 dark:text-gray-400"
+                  className="text-text-secondary"
                 >
                   {skill}
                 </li>
@@ -132,14 +132,14 @@ export default function AboutPage() {
             </ul>
           </div>
           <div>
-            <h3 className="mb-2 font-medium text-gray-900 dark:text-white">
+            <h3 className="mb-2 font-medium text-text-primary">
               Tools
             </h3>
             <ul className="space-y-1">
               {skills.tools.map((skill) => (
                 <li
                   key={skill}
-                  className="text-gray-600 dark:text-gray-400"
+                  className="text-text-secondary"
                 >
                   {skill}
                 </li>
@@ -151,7 +151,7 @@ export default function AboutPage() {
 
       {/* Contact Section */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="mb-4 text-xl font-semibold text-text-primary">
           연락처
         </h2>
         <div className="flex gap-4">
@@ -161,7 +161,7 @@ export default function AboutPage() {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              className="text-text-secondary transition-colors hover:text-text-primary"
               aria-label={link.name}
             >
               {link.icon}
@@ -171,13 +171,13 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="rounded-lg bg-gray-50 p-6 text-center dark:bg-gray-900">
-        <p className="text-gray-600 dark:text-gray-400">
+      <section className="rounded-lg bg-bg-secondary p-6 text-center">
+        <p className="text-text-secondary">
           블로그 글이 마음에 드셨다면, 최신 포스트도 확인해보세요!
         </p>
         <Link
           href="/"
-          className="mt-4 inline-block rounded-lg bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700"
+          className="mt-4 inline-block rounded-lg bg-accent-primary px-6 py-2 text-text-inverted transition-colors hover:bg-accent-hover"
         >
           포스트 보러가기
         </Link>

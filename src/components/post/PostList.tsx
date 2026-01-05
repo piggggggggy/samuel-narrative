@@ -13,7 +13,7 @@ export function PostList({
   if (posts.length === 0) {
     return (
       <div className="py-16 text-center">
-        <p className="text-gray-500 dark:text-gray-400">{emptyMessage}</p>
+        <p className="text-text-muted">{emptyMessage}</p>
       </div>
     );
   }

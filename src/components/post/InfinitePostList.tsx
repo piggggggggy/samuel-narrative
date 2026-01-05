@@ -70,7 +70,7 @@ export function InfinitePostList({
   if (posts.length === 0) {
     return (
       <div className="py-16 text-center">
-        <p className="text-gray-500 dark:text-gray-400">{emptyMessage}</p>
+        <p className="text-text-muted">{emptyMessage}</p>
       </div>
     );
   }
@@ -89,10 +89,10 @@ export function InfinitePostList({
         className="flex h-20 items-center justify-center"
       >
         {isLoading && (
-          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600" />
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-accent-primary" />
         )}
         {!hasMore && posts.length > 0 && (
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-text-muted">
             모든 포스트를 불러왔습니다
           </p>
         )}

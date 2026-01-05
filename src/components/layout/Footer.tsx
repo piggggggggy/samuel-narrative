@@ -29,10 +29,10 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950">
+    <footer className="border-t border-border-default bg-bg-secondary">
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-text-secondary">
             &copy; {currentYear} Samuel&apos;s Blog. All rights reserved.
           </p>
 
@@ -43,7 +43,7 @@ export function Footer() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="text-text-secondary transition-colors hover:text-text-primary"
                 aria-label={link.name}
               >
                 {link.icon}

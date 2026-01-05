@@ -46,7 +46,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
 
   return (
     <nav>
-      <h2 className="mb-4 text-sm font-semibold text-gray-900 dark:text-white">
+      <h2 className="mb-4 text-sm font-semibold text-text-primary">
         목차
       </h2>
       <ul className="space-y-2 text-sm">
@@ -66,10 +66,10 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                     window.history.pushState(null, "", `#${item.id}`);
                   }
                 }}
-                className={`block py-1 transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                className={`block py-1 transition-colors hover:text-accent-primary ${
                   activeId === item.id
-                    ? "font-medium text-blue-600 dark:text-blue-400"
-                    : "text-gray-600 dark:text-gray-400"
+                    ? "font-medium text-accent-primary"
+                    : "text-text-secondary"
                 }`}
               >
                 {item.text}

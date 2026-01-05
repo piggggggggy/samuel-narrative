@@ -4,9 +4,102 @@
 /* Enable class-based dark mode for next-themes */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* highlight.js github dark theme */
+/* ========================================
+   Color Token System
+   ======================================== */
+
+:root {
+  /* Background */
+  --bg-primary: #ffffff;           /* white */
+  --bg-secondary: #f9fafb;         /* gray-50 */
+  --bg-tertiary: #f3f4f6;          /* gray-100 */
+  --bg-elevated: rgba(255, 255, 255, 0.8);
+  --bg-code: #111827;              /* gray-900 */
+  --bg-code-inline: #f3f4f6;       /* gray-100 */
+
+  /* Text */
+  --text-primary: #111827;         /* gray-900 */
+  --text-secondary: #4b5563;       /* gray-600 */
+  --text-muted: #6b7280;           /* gray-500 */
+  --text-inverted: #ffffff;        /* white */
+
+  /* Border */
+  --border-default: #e5e7eb;       /* gray-200 */
+  --border-muted: #d1d5db;         /* gray-300 */
+  --border-code: transparent;
+
+  /* Accent */
+  --accent-primary: #2563eb;       /* blue-600 */
+  --accent-hover: #3b82f6;         /* blue-500 */
+
+  /* Tag/Badge */
+  --tag-bg: #f3f4f6;               /* gray-100 */
+  --tag-bg-hover: #e5e7eb;         /* gray-200 */
+  --tag-text: #4b5563;             /* gray-600 */
+}
+
+.dark {
+  /* Background */
+  --bg-primary: #000000;           /* black */
+  --bg-secondary: #030712;         /* gray-950 */
+  --bg-tertiary: #111827;          /* gray-900 */
+  --bg-elevated: rgba(0, 0, 0, 0.8);
+  --bg-code: #111827;              /* gray-900 */
+  --bg-code-inline: #1f2937;       /* gray-800 */
+
+  /* Text */
+  --text-primary: #f3f4f6;         /* gray-100 */
+  --text-secondary: #9ca3af;       /* gray-400 */
+  --text-muted: #6b7280;           /* gray-500 */
+  --text-inverted: #111827;        /* gray-900 */
+
+  /* Border */
+  --border-default: #1f2937;       /* gray-800 */
+  --border-muted: #374151;         /* gray-700 */
+  --border-code: #1f2937;          /* gray-800 */
+
+  /* Accent */
+  --accent-primary: #60a5fa;       /* blue-400 */
+  --accent-hover: #93c5fd;         /* blue-300 */
+
+  /* Tag/Badge */
+  --tag-bg: #111827;               /* gray-900 */
+  --tag-bg-hover: #1f2937;         /* gray-800 */
+  --tag-text: #9ca3af;             /* gray-400 */
+}
+
+/* Tailwind theme extension */
+@theme {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-code: var(--bg-code);
+  --color-bg-code-inline: var(--bg-code-inline);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverted: var(--text-inverted);
+
+  --color-border-default: var(--border-default);
+  --color-border-muted: var(--border-muted);
+  --color-border-code: var(--border-code);
+
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-hover: var(--accent-hover);
+
+  --color-tag-bg: var(--tag-bg);
+  --color-tag-bg-hover: var(--tag-bg-hover);
+  --color-tag-text: var(--tag-text);
+}
+
+/* ========================================
+   highlight.js theme (uses tokens)
+   ======================================== */
+
 .hljs {
-  background: #111827 !important; /* gray-900 */
+  background: var(--bg-code) !important;
   color: #c9d1d9;
 }
 

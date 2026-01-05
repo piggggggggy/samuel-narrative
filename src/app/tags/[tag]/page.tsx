@@ -42,14 +42,14 @@ export default async function TagPage({ params }: TagPageProps) {
     <div className="mx-auto max-w-4xl px-4 py-12">
       <section className="mb-12">
         <div className="mb-2">
-          <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+          <span className="rounded-full bg-tag-bg px-3 py-1 text-sm font-medium text-tag-text">
             {decodedTag}
           </span>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl font-bold text-text-primary">
           {decodedTag} 태그 포스트
         </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
+        <p className="mt-2 text-text-secondary">
           {posts.length}개의 포스트가 있습니다.
         </p>
       </section>

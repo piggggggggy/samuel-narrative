@@ -14,11 +14,11 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-gray-800 dark:bg-black/80">
+    <header className="sticky top-0 z-50 border-b border-border-default bg-bg-elevated backdrop-blur-sm">
       <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
         <Link
           href="/"
-          className="text-xl font-bold text-gray-900 dark:text-white"
+          className="text-xl font-bold text-text-primary"
         >
           Samuel&apos;s Blog
         </Link>
@@ -29,7 +29,7 @@ export function Header() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              className="text-text-secondary transition-colors hover:text-text-primary"
             >
               {item.name}
             </Link>
@@ -44,7 +44,7 @@ export function Header() {
           <UserMenu />
           <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white md:hidden"
+          className="inline-flex items-center justify-center rounded-md p-2 text-text-secondary hover:bg-bg-tertiary hover:text-text-primary md:hidden"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-expanded={isMobileMenuOpen}
           aria-label="Toggle menu"
@@ -84,13 +84,13 @@ export function Header() {
 
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-black md:hidden">
+        <div className="border-t border-border-default bg-bg-primary md:hidden">
           <div className="mx-auto max-w-4xl space-y-1 px-4 py-3">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="block rounded-md px-3 py-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                className="block rounded-md px-3 py-2 text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-text-primary"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}

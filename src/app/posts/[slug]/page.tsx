@@ -106,26 +106,26 @@ export default async function PostPage({ params }: PostPageProps) {
         {/* 메인 콘텐츠 */}
         <div className={showToc ? "max-w-3xl" : ""}>
           <article>
-            <header className="mb-8 border-b border-gray-200 pb-8 dark:border-gray-800">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+            <header className="mb-8 border-b border-border-default pb-8">
+              <h1 className="text-3xl font-bold text-text-primary md:text-4xl">
                 {post.title}
               </h1>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+              <p className="mt-4 text-lg text-text-secondary">
                 {post.excerpt}
               </p>
-              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
+              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-text-muted">
                 <time dateTime={post.publishedAt}>{formattedDate}</time>
-                <span>·</span>
+                <span className="text-border-default">·</span>
                 <span>{readingTime}분 읽기</span>
                 {post.tags.length > 0 && (
                   <>
-                    <span>·</span>
+                    <span className="text-border-default">·</span>
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
                         <Link
                           key={tag}
                           href={`/tags/${tag}`}
-                          className="rounded-full bg-gray-100 px-2.5 py-0.5 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+                          className="rounded-full bg-tag-bg px-2.5 py-0.5 text-tag-text transition-colors hover:bg-tag-bg-hover"
                         >
                           {tag}
                         </Link>
@@ -138,7 +138,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
             <PostContent content={post.content} />
 
-            <div className="mt-8 flex items-center justify-end border-t border-gray-200 pt-6 dark:border-gray-800">
+            <div className="mt-8 flex items-center justify-end border-t border-border-default pt-6">
               <ShareButtons url={postUrl} title={post.title} />
             </div>
           </article>
@@ -149,10 +149,10 @@ export default async function PostPage({ params }: PostPageProps) {
 
           <Utterances repo="piggggggggy/samuel-narrative" />
 
-          <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
+          <div className="mt-12 border-t border-border-default pt-8">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              className="inline-flex items-center gap-2 text-text-secondary transition-colors hover:text-text-primary"
             >
               <svg
                 className="h-4 w-4"
