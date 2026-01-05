@@ -6,6 +6,7 @@ import slugify from "slugify";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { TagInput } from "./TagInput";
 import { ThumbnailUpload } from "./ThumbnailUpload";
+import { ButtonSpinner } from "@/components/common";
 import type { Post } from "@/lib/content/types";
 
 interface PostFormProps {
@@ -268,8 +269,9 @@ export function PostForm({ post, mode }: PostFormProps) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50"
           >
+            {isSubmitting && <ButtonSpinner />}
             {isSubmitting
               ? "저장 중..."
               : mode === "create"

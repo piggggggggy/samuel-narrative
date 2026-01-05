@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { PostCard } from "./PostCard";
+import { Spinner } from "@/components/common";
 import type { Post } from "@/lib/content/types";
 
 interface TagCount {
@@ -167,9 +168,7 @@ export function InfinitePostList({
         ref={observerRef}
         className="flex h-20 items-center justify-center"
       >
-        {isLoading && (
-          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-accent-primary" />
-        )}
+        {isLoading && <Spinner size="lg" />}
         {!hasMore && posts.length > 0 && (
           <p className="text-sm text-text-muted">
             모든 포스트를 불러왔습니다

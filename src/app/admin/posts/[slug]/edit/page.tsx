@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { PostForm } from "@/components/admin";
-import { ConfirmModal } from "@/components/common";
+import { ConfirmModal, PostFormSkeleton } from "@/components/common";
 import type { Post } from "@/lib/content/types";
 
 export default function EditPostPage() {
@@ -64,11 +64,7 @@ export default function EditPostPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <div className="text-gray-500 dark:text-gray-400">로딩 중...</div>
-      </div>
-    );
+    return <PostFormSkeleton />;
   }
 
   if (error) {
