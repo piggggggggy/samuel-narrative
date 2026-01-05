@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import { CodeBlock } from "./CodeBlock";
+import { slugify } from "@/lib/utils/toc";
 
 interface PostContentProps {
   content: string;
@@ -14,6 +15,33 @@ export function PostContent({ content }: PostContentProps) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
         components={{
+          h2({ children }) {
+            const text = String(children);
+            const id = slugify(text);
+            return (
+              <h2 id={id} className="scroll-mt-24">
+                {children}
+              </h2>
+            );
+          },
+          h3({ children }) {
+            const text = String(children);
+            const id = slugify(text);
+            return (
+              <h3 id={id} className="scroll-mt-24">
+                {children}
+              </h3>
+            );
+          },
+          h4({ children }) {
+            const text = String(children);
+            const id = slugify(text);
+            return (
+              <h4 id={id} className="scroll-mt-24">
+                {children}
+              </h4>
+            );
+          },
           pre({ children, className, ...props }) {
             return (
               <CodeBlock className={className} {...props}>

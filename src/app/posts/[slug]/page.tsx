@@ -1,6 +1,11 @@
 import { getContentProvider } from "@/lib/content";
-import { getReadingTimeMinutes, getRelatedPosts } from "@/lib/utils";
-import { PostContent, RelatedPosts, PostNavigation } from "@/components/post";
+import { getReadingTimeMinutes, getRelatedPosts, extractToc } from "@/lib/utils";
+import {
+  PostContent,
+  RelatedPosts,
+  PostNavigation,
+  TableOfContents,
+} from "@/components/post";
 import { Utterances, ShareButtons } from "@/components/common";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -92,73 +97,84 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const readingTime = getReadingTimeMinutes(post.content);
   const postUrl = `${BASE_URL}/posts/${slug}`;
+  const tocItems = extractToc(post.content);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <article>
-        <header className="mb-8 border-b border-gray-200 pb-8 dark:border-gray-800">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
-            {post.title}
-          </h1>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-            {post.excerpt}
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
-            <time dateTime={post.publishedAt}>{formattedDate}</time>
-            <span>·</span>
-            <span>{readingTime}분 읽기</span>
-            {post.tags.length > 0 && (
-              <>
+    <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="lg:grid lg:grid-cols-[1fr_220px] lg:gap-8">
+        {/* 메인 콘텐츠 */}
+        <div className="max-w-3xl">
+          <article>
+            <header className="mb-8 border-b border-gray-200 pb-8 dark:border-gray-800">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+                {post.title}
+              </h1>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                {post.excerpt}
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
+                <time dateTime={post.publishedAt}>{formattedDate}</time>
                 <span>·</span>
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <Link
-                      key={tag}
-                      href={`/tags/${tag}`}
-                      className="rounded-full bg-gray-100 px-2.5 py-0.5 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
-                    >
-                      {tag}
-                    </Link>
-                  ))}
-                </div>
-              </>
-            )}
+                <span>{readingTime}분 읽기</span>
+                {post.tags.length > 0 && (
+                  <>
+                    <span>·</span>
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <Link
+                          key={tag}
+                          href={`/tags/${tag}`}
+                          className="rounded-full bg-gray-100 px-2.5 py-0.5 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+                        >
+                          {tag}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            </header>
+
+            <PostContent content={post.content} />
+
+            <div className="mt-8 flex items-center justify-end border-t border-gray-200 pt-6 dark:border-gray-800">
+              <ShareButtons url={postUrl} title={post.title} />
+            </div>
+          </article>
+
+          <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+
+          <RelatedPosts posts={relatedPosts} />
+
+          <Utterances repo="piggggggggy/samuel-narrative" />
+
+          <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                />
+              </svg>
+              목록으로 돌아가기
+            </Link>
           </div>
-        </header>
-
-        <PostContent content={post.content} />
-
-        <div className="mt-8 flex items-center justify-end border-t border-gray-200 pt-6 dark:border-gray-800">
-          <ShareButtons url={postUrl} title={post.title} />
         </div>
-      </article>
 
-      <PostNavigation prevPost={prevPost} nextPost={nextPost} />
-
-      <RelatedPosts posts={relatedPosts} />
-
-      <Utterances repo="piggggggggy/samuel-narrative" />
-
-      <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-        >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-            />
-          </svg>
-          목록으로 돌아가기
-        </Link>
+        {/* 목차 사이드바 */}
+        <aside className="hidden lg:block self-start sticky top-24">
+          <TableOfContents items={tocItems} />
+        </aside>
       </div>
     </div>
   );
