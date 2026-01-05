@@ -1,7 +1,7 @@
 import { getContentProvider } from "@/lib/content";
 import { getReadingTimeMinutes, getRelatedPosts } from "@/lib/utils";
 import { PostContent, RelatedPosts } from "@/components/post";
-import { Utterances } from "@/components/common";
+import { Utterances, ShareButtons } from "@/components/common";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -82,6 +82,7 @@ export default async function PostPage({ params }: PostPageProps) {
   });
 
   const readingTime = getReadingTimeMinutes(post.content);
+  const postUrl = `${BASE_URL}/posts/${slug}`;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -117,6 +118,10 @@ export default async function PostPage({ params }: PostPageProps) {
         </header>
 
         <PostContent content={post.content} />
+
+        <div className="mt-8 flex items-center justify-end border-t border-gray-200 pt-6 dark:border-gray-800">
+          <ShareButtons url={postUrl} title={post.title} />
+        </div>
       </article>
 
       <RelatedPosts posts={relatedPosts} />
