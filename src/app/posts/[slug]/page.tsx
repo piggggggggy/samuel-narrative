@@ -7,6 +7,9 @@ import type { Metadata } from "next";
 
 export const revalidate = 3600;
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://samuel-narrative.vercel.app";
+
 interface PostPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -28,6 +31,11 @@ export async function generateMetadata({
     return {};
   }
 
+  // Use thumbnail if available, otherwise generate OG image
+  const ogImage = post.thumbnail
+    ? post.thumbnail
+    : `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(post.excerpt)}`;
+
   return {
     title: post.title,
     description: post.excerpt,
@@ -36,7 +44,20 @@ export async function generateMetadata({
       description: post.excerpt,
       type: "article",
       publishedTime: post.publishedAt,
-      ...(post.thumbnail && { images: [post.thumbnail] }),
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [ogImage],
     },
   };
 }

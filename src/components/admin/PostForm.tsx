@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import slugify from "slugify";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { TagInput } from "./TagInput";
+import { ThumbnailUpload } from "./ThumbnailUpload";
 import type { Post } from "@/lib/content/types";
 
 interface PostFormProps {
@@ -18,6 +19,7 @@ interface FormState {
   excerpt: string;
   content: string;
   tags: string[];
+  thumbnail: string;
 }
 
 const STORAGE_KEY = "post-draft";
@@ -34,6 +36,7 @@ export function PostForm({ post, mode }: PostFormProps) {
     excerpt: post?.excerpt || "",
     content: post?.content || "",
     tags: post?.tags || [],
+    thumbnail: post?.thumbnail || "",
   });
 
   // Load draft from localStorage (only for create mode)
@@ -125,6 +128,7 @@ export function PostForm({ post, mode }: PostFormProps) {
       excerpt: "",
       content: "",
       tags: [],
+      thumbnail: "",
     });
     setSlugEdited(false);
   };
@@ -199,6 +203,19 @@ export function PostForm({ post, mode }: PostFormProps) {
           className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           required
         />
+      </div>
+
+      {/* Thumbnail */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          썸네일
+        </label>
+        <div className="mt-1">
+          <ThumbnailUpload
+            value={form.thumbnail}
+            onChange={(url) => updateField("thumbnail", url)}
+          />
+        </div>
       </div>
 
       {/* Tags */}
