@@ -155,7 +155,9 @@ export function PostTable({ posts }: PostTableProps) {
                       >
                         수정
                       </Link>
-                      <span className="text-gray-300 dark:text-gray-600">|</span>
+                      <span className="text-gray-300 dark:text-gray-600">
+                        |
+                      </span>
                       <Link
                         href={`/posts/${post.slug}`}
                         className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300"

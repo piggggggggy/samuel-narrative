@@ -1,19 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { use } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { PostForm } from "@/components/admin";
 import { ConfirmModal } from "@/components/common";
 import type { Post } from "@/lib/content/types";
 
-interface EditPostPageProps {
-  params: Promise<{ slug: string }>;
-}
-
-export default function EditPostPage({ params }: EditPostPageProps) {
-  const { slug } = use(params);
+export default function EditPostPage() {
   const router = useRouter();
+  const params = useParams();
+  const slug = params.slug as string;
+
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +54,9 @@ export default function EditPostPage({ params }: EditPostPageProps) {
       router.push("/admin");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "삭제 중 오류가 발생했습니다.");
+      setError(
+        err instanceof Error ? err.message : "삭제 중 오류가 발생했습니다."
+      );
       setShowDeleteModal(false);
     } finally {
       setIsDeleting(false);

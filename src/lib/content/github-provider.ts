@@ -103,7 +103,7 @@ export class GitHubProvider implements ContentProvider {
     const frontmatter = data as PostFrontmatter;
 
     return {
-      slug,
+      slug: slug.replace(/\.md$/, ""),
       title: frontmatter.title,
       content,
       excerpt: frontmatter.excerpt,
