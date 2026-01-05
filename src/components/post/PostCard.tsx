@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Post } from "@/lib/content";
+import { getReadingTimeMinutes } from "@/lib/utils";
 
 interface PostCardProps {
   post: Post;
@@ -11,6 +12,8 @@ export function PostCard({ post }: PostCardProps) {
     month: "long",
     day: "numeric",
   });
+
+  const readingTime = getReadingTimeMinutes(post.content);
 
   return (
     <article className="group">
@@ -38,6 +41,10 @@ export function PostCard({ post }: PostCardProps) {
         >
           {formattedDate}
         </time>
+        <span className="text-gray-300 dark:text-gray-600">·</span>
+        <span className="text-sm text-gray-500 dark:text-gray-500">
+          {readingTime}분 읽기
+        </span>
         {post.tags.length > 0 && (
           <>
             <span className="text-gray-300 dark:text-gray-600">·</span>

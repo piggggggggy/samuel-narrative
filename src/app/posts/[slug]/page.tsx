@@ -1,4 +1,5 @@
 import { getContentProvider } from "@/lib/content";
+import { getReadingTimeMinutes } from "@/lib/utils";
 import { PostContent } from "@/components/post";
 import { Utterances } from "@/components/common";
 import { notFound } from "next/navigation";
@@ -77,6 +78,8 @@ export default async function PostPage({ params }: PostPageProps) {
     day: "numeric",
   });
 
+  const readingTime = getReadingTimeMinutes(post.content);
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <article>
@@ -89,6 +92,8 @@ export default async function PostPage({ params }: PostPageProps) {
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
             <time dateTime={post.publishedAt}>{formattedDate}</time>
+            <span>·</span>
+            <span>{readingTime}분 읽기</span>
             {post.tags.length > 0 && (
               <>
                 <span>·</span>
