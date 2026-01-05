@@ -1,6 +1,6 @@
 import { getContentProvider } from "@/lib/content";
-import { getReadingTimeMinutes } from "@/lib/utils";
-import { PostContent } from "@/components/post";
+import { getReadingTimeMinutes, getRelatedPosts } from "@/lib/utils";
+import { PostContent, RelatedPosts } from "@/components/post";
 import { Utterances } from "@/components/common";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -72,6 +72,9 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
+  const allPosts = await provider.getAllPosts();
+  const relatedPosts = getRelatedPosts(post, allPosts, 3);
+
   const formattedDate = new Date(post.publishedAt).toLocaleDateString("ko-KR", {
     year: "numeric",
     month: "long",
@@ -115,6 +118,8 @@ export default async function PostPage({ params }: PostPageProps) {
 
         <PostContent content={post.content} />
       </article>
+
+      <RelatedPosts posts={relatedPosts} />
 
       <Utterances repo="piggggggggy/samuel-narrative" />
 
