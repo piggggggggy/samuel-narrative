@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState, useRef, useCallback } from "react";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
+import { Spinner, SpinnerOverlay } from "@/components/common";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -169,33 +170,7 @@ export function MarkdownEditor({
       data-color-mode={resolvedTheme === "dark" ? "dark" : "light"}
       className="relative"
     >
-      {isUploading && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 rounded-md">
-          <div className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 dark:bg-gray-800">
-            <svg
-              className="h-5 w-5 animate-spin text-blue-600"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-              />
-            </svg>
-            <span className="text-sm font-medium">이미지 업로드 중...</span>
-          </div>
-        </div>
-      )}
+      {isUploading && <SpinnerOverlay message="이미지 업로드 중..." />}
       {isDragOver && (
         <div className="absolute inset-0 z-50 flex items-center justify-center rounded-md border-2 border-dashed border-blue-500 bg-blue-50/80 dark:bg-blue-900/30">
           <div className="text-center">

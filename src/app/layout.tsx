@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { SessionProvider } from "@/components/providers";
+import { ProgressBar } from "@/components/common";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,6 +54,9 @@ export default function RootLayout({
       <body className="min-h-screen bg-bg-primary text-text-primary antialiased">
         <SessionProvider>
           <ThemeProvider>
+            <Suspense fallback={null}>
+              <ProgressBar />
+            </Suspense>
             <div className="flex min-h-screen flex-col">
               <Header />
               <main className="flex-1">{children}</main>

@@ -8,13 +8,20 @@ const POSTS_PER_PAGE = 10;
 export default async function HomePage() {
   const provider = await getContentProvider();
   const allPosts = await provider.getAllPosts();
+  const allTags = await provider.getAllTags();
 
   // 초기 로드: 첫 페이지만 (SEO용 SSR)
   const initialPosts = allPosts.slice(0, POSTS_PER_PAGE);
 
+  // 태그별 포스트 개수 계산
+  const tagCounts = allTags.map((tag) => ({
+    name: tag,
+    count: allPosts.filter((post) => post.tags.includes(tag)).length,
+  }));
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <section className="mb-12">
+      <section className="mb-8">
         <h1 className="text-3xl font-bold text-text-primary">
           최신 포스트
         </h1>
@@ -23,7 +30,11 @@ export default async function HomePage() {
         </p>
       </section>
 
-      <InfinitePostList initialPosts={initialPosts} postsPerPage={POSTS_PER_PAGE} />
+      <InfinitePostList
+        initialPosts={initialPosts}
+        allTags={tagCounts}
+        postsPerPage={POSTS_PER_PAGE}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { UserMenu } from "./UserMenu";
+import { ReadingProgress } from "@/components/common";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -14,7 +15,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border-default bg-bg-elevated backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b border-border-default bg-bg-elevated backdrop-blur-sm relative">
       <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
         <Link
           href="/"
@@ -99,6 +100,7 @@ export function Header() {
           </div>
         </div>
       )}
+      <ReadingProgress />
     </header>
   );
 }

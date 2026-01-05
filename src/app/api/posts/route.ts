@@ -9,25 +9,31 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "0"); // 0 = 전체
+    const tag = searchParams.get("tag"); // 태그 필터
 
     const provider = await getContentProvider();
-    const allPosts = await provider.getAllPosts();
+    let posts = await provider.getAllPosts();
+
+    // 태그 필터링
+    if (tag) {
+      posts = posts.filter((post) => post.tags.includes(tag));
+    }
 
     // 페이지네이션이 요청된 경우
     if (limit > 0) {
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
-      const posts = allPosts.slice(startIndex, endIndex);
+      const paginatedPosts = posts.slice(startIndex, endIndex);
 
       return NextResponse.json({
-        posts,
-        hasMore: endIndex < allPosts.length,
-        total: allPosts.length,
+        posts: paginatedPosts,
+        hasMore: endIndex < posts.length,
+        total: posts.length,
       });
     }
 
     // 기존 동작: 전체 포스트 반환
-    return NextResponse.json(allPosts);
+    return NextResponse.json(posts);
   } catch (error) {
     console.error("Failed to fetch posts:", error);
     return NextResponse.json(
