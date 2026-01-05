@@ -1,11 +1,16 @@
 import { getContentProvider } from "@/lib/content";
-import { PostList } from "@/components/post";
+import { InfinitePostList } from "@/components/post";
 
 export const revalidate = 3600; // 1시간마다 재생성
 
+const POSTS_PER_PAGE = 10;
+
 export default async function HomePage() {
   const provider = await getContentProvider();
-  const posts = await provider.getAllPosts();
+  const allPosts = await provider.getAllPosts();
+
+  // 초기 로드: 첫 페이지만 (SEO용 SSR)
+  const initialPosts = allPosts.slice(0, POSTS_PER_PAGE);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
@@ -18,7 +23,7 @@ export default async function HomePage() {
         </p>
       </section>
 
-      <PostList posts={posts} />
+      <InfinitePostList initialPosts={initialPosts} postsPerPage={POSTS_PER_PAGE} />
     </div>
   );
 }

@@ -1,14 +1,33 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getContentProvider } from "@/lib/content";
 import { isAdmin } from "@/lib/auth";
 import { createPostSchema } from "@/lib/validations/post";
 import { revalidatePost } from "@/lib/revalidate";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "0"); // 0 = 전체
+
     const provider = await getContentProvider();
-    const posts = await provider.getAllPosts();
-    return NextResponse.json(posts);
+    const allPosts = await provider.getAllPosts();
+
+    // 페이지네이션이 요청된 경우
+    if (limit > 0) {
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const posts = allPosts.slice(startIndex, endIndex);
+
+      return NextResponse.json({
+        posts,
+        hasMore: endIndex < allPosts.length,
+        total: allPosts.length,
+      });
+    }
+
+    // 기존 동작: 전체 포스트 반환
+    return NextResponse.json(allPosts);
   } catch (error) {
     console.error("Failed to fetch posts:", error);
     return NextResponse.json(
