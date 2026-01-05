@@ -110,7 +110,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
               alt="썸네일 미리보기"
               fill
               className="object-cover"
-              unoptimized
+              sizes="256px"
             />
           </div>
           <button
