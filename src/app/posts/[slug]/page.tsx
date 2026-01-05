@@ -1,6 +1,6 @@
 import { getContentProvider } from "@/lib/content";
 import { getReadingTimeMinutes, getRelatedPosts } from "@/lib/utils";
-import { PostContent, RelatedPosts } from "@/components/post";
+import { PostContent, RelatedPosts, PostNavigation } from "@/components/post";
 import { Utterances, ShareButtons } from "@/components/common";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -75,6 +75,15 @@ export default async function PostPage({ params }: PostPageProps) {
   const allPosts = await provider.getAllPosts();
   const relatedPosts = getRelatedPosts(post, allPosts, 3);
 
+  // 날짜순 정렬 (최신순)
+  const sortedPosts = [...allPosts].sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+  const currentIndex = sortedPosts.findIndex((p) => p.slug === slug);
+  const prevPost = sortedPosts[currentIndex + 1] || null; // 이전 글 (더 오래된)
+  const nextPost = sortedPosts[currentIndex - 1] || null; // 다음 글 (더 최신)
+
   const formattedDate = new Date(post.publishedAt).toLocaleDateString("ko-KR", {
     year: "numeric",
     month: "long",
@@ -123,6 +132,8 @@ export default async function PostPage({ params }: PostPageProps) {
           <ShareButtons url={postUrl} title={post.title} />
         </div>
       </article>
+
+      <PostNavigation prevPost={prevPost} nextPost={nextPost} />
 
       <RelatedPosts posts={relatedPosts} />
 
