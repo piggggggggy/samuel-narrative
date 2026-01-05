@@ -14,7 +14,7 @@ export function PostCard({ post }: PostCardProps) {
 
   return (
     <article className="group">
-      <Link href={`/posts/${post.slug.replace(/\.md$/, "")}`} className="block">
+      <Link href={`/posts/${post.slug}`} className="block">
         {post.thumbnail && (
           <div className="mb-4 overflow-hidden rounded-lg">
             <img
