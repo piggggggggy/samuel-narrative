@@ -98,12 +98,13 @@ export default async function PostPage({ params }: PostPageProps) {
   const readingTime = getReadingTimeMinutes(post.content);
   const postUrl = `${BASE_URL}/posts/${slug}`;
   const tocItems = extractToc(post.content);
+  const showToc = tocItems.length >= 3;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
-      <div className="lg:grid lg:grid-cols-[1fr_220px] lg:gap-8">
+    <div className={`mx-auto px-4 py-12 ${showToc ? "max-w-6xl" : "max-w-3xl"}`}>
+      <div className={showToc ? "lg:grid lg:grid-cols-[1fr_220px] lg:gap-8" : ""}>
         {/* 메인 콘텐츠 */}
-        <div className="max-w-3xl">
+        <div className={showToc ? "max-w-3xl" : ""}>
           <article>
             <header className="mb-8 border-b border-gray-200 pb-8 dark:border-gray-800">
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
@@ -172,9 +173,11 @@ export default async function PostPage({ params }: PostPageProps) {
         </div>
 
         {/* 목차 사이드바 */}
-        <aside className="hidden lg:block self-start sticky top-24">
-          <TableOfContents items={tocItems} />
-        </aside>
+        {showToc && (
+          <aside className="hidden lg:block self-start sticky top-24">
+            <TableOfContents items={tocItems} />
+          </aside>
+        )}
       </div>
     </div>
   );
