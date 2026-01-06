@@ -11,7 +11,9 @@
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
 		"generate-index": "npx tsx scripts/generate-posts-index.ts",
-		"schema:validate": "npx tsx scripts/validate-posts.ts"
+		"schema:validate": "npx tsx scripts/validate-posts.ts",
+		"images:cleanup": "npx tsx scripts/cleanup-orphan-images.ts",
+		"images:cleanup:dry": "npx tsx scripts/cleanup-orphan-images.ts --dry-run"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.19",

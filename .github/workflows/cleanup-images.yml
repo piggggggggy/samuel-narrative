@@ -1,0 +1,47 @@
+name: Cleanup Orphan Images
+
+on:
+  schedule:
+    # 매월 1일 자정 (UTC)
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (삭제 없이 프리뷰만)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run cleanup (dry run)
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: pnpm images:cleanup:dry
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Run cleanup
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: pnpm images:cleanup
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
