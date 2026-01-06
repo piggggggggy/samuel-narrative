@@ -16,11 +16,42 @@ const SKIP_COMPRESSION_TYPES = ["image/gif", "image/svg+xml"];
 // GIF 최대 용량 (2MB)
 const GIF_MAX_SIZE = 2 * 1024 * 1024;
 
+export interface ImageMetadata {
+  width: number;
+  height: number;
+}
+
 export interface CompressResult {
   file: File;
   wasCompressed: boolean;
   originalSize: number;
   compressedSize: number;
+  metadata: ImageMetadata;
+}
+
+/**
+ * 이미지 파일에서 width/height 메타데이터를 추출합니다.
+ */
+export function getImageMetadata(file: File): Promise<ImageMetadata> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve({
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+      });
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to load image"));
+    };
+
+    img.src = url;
+  });
 }
 
 /**
@@ -42,11 +73,15 @@ export async function compressImage(
       );
     }
 
+    // 메타데이터 추출
+    const metadata = await getImageMetadata(file);
+
     return {
       file,
       wasCompressed: false,
       originalSize,
       compressedSize: originalSize,
+      metadata,
     };
   }
 
@@ -64,20 +99,26 @@ export async function compressImage(
     const newName = file.name.replace(/\.[^/.]+$/, ".webp");
     const webpFile = new File([compressed], newName, { type: "image/webp" });
 
+    // 압축된 이미지의 메타데이터 추출
+    const metadata = await getImageMetadata(webpFile);
+
     return {
       file: webpFile,
       wasCompressed: true,
       originalSize,
       compressedSize: webpFile.size,
+      metadata,
     };
   } catch (error) {
     // 압축 실패 시 원본 반환 (WebP 미지원 브라우저 등)
     console.warn("Image compression failed, using original:", error);
+    const metadata = await getImageMetadata(file);
     return {
       file,
       wasCompressed: false,
       originalSize,
       compressedSize: originalSize,
+      metadata,
     };
   }
 }

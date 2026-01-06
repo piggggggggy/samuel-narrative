@@ -6,7 +6,11 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import { Spinner, SpinnerOverlay } from "@/components/common";
-import { compressImage, logCompressionResult } from "@/lib/utils";
+import {
+  compressImage,
+  logCompressionResult,
+  type ImageMetadata,
+} from "@/lib/utils";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -52,8 +56,12 @@ export function MarkdownEditor({
   }, []);
 
   const insertImageAtCursor = useCallback(
-    (imageUrl: string, altText: string = "image") => {
-      const imageMarkdown = `![${altText}](${imageUrl})`;
+    (imageUrl: string, altText: string = "image", metadata?: ImageMetadata) => {
+      // URL에 width/height 쿼리 파라미터 추가 (CLS 방지용)
+      const urlWithMeta = metadata
+        ? `${imageUrl}#w=${metadata.width}&h=${metadata.height}`
+        : imageUrl;
+      const imageMarkdown = `![${altText}](${urlWithMeta})`;
       // Insert at the end of content (cursor position handling is complex with MDEditor)
       onChange(value + "\n" + imageMarkdown);
     },
@@ -75,7 +83,7 @@ export function MarkdownEditor({
 
         const url = await uploadImage(result.file);
         const altText = file.name.replace(/\.[^/.]+$/, "");
-        insertImageAtCursor(url, altText);
+        insertImageAtCursor(url, altText, result.metadata);
       } catch (error) {
         console.error("Image upload failed:", error);
         alert(
