@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { PostCard } from "./PostCard";
 import { Spinner } from "@/components/common";
-import type { Post } from "@/lib/content/types";
+import type { PostMeta } from "@/lib/content/types";
 
 interface TagCount {
   name: string;
@@ -12,7 +12,7 @@ interface TagCount {
 }
 
 interface InfinitePostListProps {
-  initialPosts: Post[];
+  initialPosts: PostMeta[];
   allTags?: TagCount[];
   postsPerPage?: number;
   emptyMessage?: string;
@@ -26,7 +26,7 @@ export function InfinitePostList({
   emptyMessage = "아직 작성된 포스트가 없습니다.",
   maxFilterTags = 6,
 }: InfinitePostListProps) {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<PostMeta[]>(initialPosts);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(initialPosts.length >= postsPerPage);
   const [isLoading, setIsLoading] = useState(false);

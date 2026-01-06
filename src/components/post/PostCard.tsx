@@ -1,9 +1,8 @@
 import Link from "next/link";
-import type { Post } from "@/lib/content";
-import { getReadingTimeMinutes } from "@/lib/utils";
+import type { PostMeta } from "@/lib/content/types";
 
 interface PostCardProps {
-  post: Post;
+  post: PostMeta;
 }
 
 export function PostCard({ post }: PostCardProps) {
@@ -13,7 +12,7 @@ export function PostCard({ post }: PostCardProps) {
     day: "numeric",
   });
 
-  const readingTime = getReadingTimeMinutes(post.content);
+  const readingTime = post.readingTime ?? 1;
 
   return (
     <article className="group -mx-4 rounded-xl p-4 transition-all duration-200 hover:bg-bg-secondary">

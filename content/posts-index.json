@@ -1,0 +1,139 @@
+{
+  "posts": [
+    {
+      "slug": "api-github-local",
+      "title": "깃헙 API 테스트",
+      "excerpt": "qwe",
+      "publishedAt": "2026-01-03",
+      "tags": [
+        "q"
+      ],
+      "readingTime": 1
+    },
+    {
+      "slug": "phase2-last-post",
+      "title": "phase2 마지막 테스트",
+      "excerpt": "adsf",
+      "publishedAt": "2026-01-03",
+      "tags": [
+        "aaaaa"
+      ],
+      "readingTime": 1
+    },
+    {
+      "slug": "production-test",
+      "title": "상용 테스트",
+      "excerpt": "qweqweqw",
+      "publishedAt": "2026-01-03",
+      "tags": [
+        "하위",
+        "위"
+      ],
+      "readingTime": 1
+    },
+    {
+      "slug": "test-20260103-01",
+      "title": "테스트 포스트",
+      "excerpt": "테스트 포스팅이에요",
+      "publishedAt": "2026-01-03",
+      "tags": [
+        "ㅂㅈㄷ",
+        "ㄷ"
+      ],
+      "readingTime": 1
+    },
+    {
+      "slug": "test-for-deploy",
+      "title": "테스트2 ",
+      "excerpt": "deploy 테스트",
+      "publishedAt": "2026-01-03",
+      "tags": [
+        "deploy"
+      ],
+      "readingTime": 1
+    },
+    {
+      "slug": "hello-world",
+      "title": "Hello World",
+      "excerpt": "첫 번째 블로그 포스트입니다. 블로그를 시작하며 간단한 인사를 전합니다.",
+      "publishedAt": "2025-01-03",
+      "tags": [
+        "blog",
+        "intro"
+      ],
+      "readingTime": 1
+    },
+    {
+      "slug": "getting-started-nextjs",
+      "title": "Next.js 시작하기",
+      "excerpt": "Next.js의 기본 개념과 App Router를 활용한 프로젝트 구성 방법을 알아봅니다.",
+      "publishedAt": "2025-01-02",
+      "tags": [
+        "next.js",
+        "react",
+        "tutorial"
+      ],
+      "readingTime": 1
+    },
+    {
+      "slug": "content-provider-pattern",
+      "title": "Content Provider 패턴으로 유연한 블로그 만들기",
+      "excerpt": "어댑터 패턴을 활용하여 다양한 컨텐츠 소스를 지원하는 블로그 아키텍처를 설계합니다.",
+      "publishedAt": "2025-01-01",
+      "tags": [
+        "architecture",
+        "design-pattern",
+        "blog"
+      ],
+      "thumbnail": "https://k3jh9gln3mqp1fvi.public.blob.vercel-storage.com/uploads/1767622570931-FBF2809D-EA27-4490-A272-68B884223440_1_102_o.jpeg",
+      "readingTime": 1
+    }
+  ],
+  "byTag": {
+    "q": [
+      "api-github-local"
+    ],
+    "aaaaa": [
+      "phase2-last-post"
+    ],
+    "하위": [
+      "production-test"
+    ],
+    "위": [
+      "production-test"
+    ],
+    "ㅂㅈㄷ": [
+      "test-20260103-01"
+    ],
+    "ㄷ": [
+      "test-20260103-01"
+    ],
+    "deploy": [
+      "test-for-deploy"
+    ],
+    "blog": [
+      "hello-world",
+      "content-provider-pattern"
+    ],
+    "intro": [
+      "hello-world"
+    ],
+    "next.js": [
+      "getting-started-nextjs"
+    ],
+    "react": [
+      "getting-started-nextjs"
+    ],
+    "tutorial": [
+      "getting-started-nextjs"
+    ],
+    "architecture": [
+      "content-provider-pattern"
+    ],
+    "design-pattern": [
+      "content-provider-pattern"
+    ]
+  },
+  "totalCount": 8,
+  "updatedAt": "2026-01-06T08:43:49.925Z"
+}

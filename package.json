@@ -4,12 +4,13 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build",
+		"build": "pnpm generate-index && next build",
 		"start": "next start",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write .",
-		"format:check": "prettier --check ."
+		"format:check": "prettier --check .",
+		"generate-index": "npx tsx scripts/generate-posts-index.ts"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.19",
@@ -46,6 +47,7 @@
 		"postcss": "^8.5.6",
 		"prettier": "^3.7.4",
 		"tailwindcss": "^4.1.18",
+		"tsx": "^4.21.0",
 		"typescript": "5.9.3"
 	}
 }

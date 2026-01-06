@@ -12,12 +12,11 @@ export async function GET(request: NextRequest) {
     const tag = searchParams.get("tag"); // 태그 필터
 
     const provider = await getContentProvider();
-    let posts = await provider.getAllPosts();
 
-    // 태그 필터링
-    if (tag) {
-      posts = posts.filter((post) => post.tags.includes(tag));
-    }
+    // 태그 필터가 있으면 인덱스의 태그별 조회, 없으면 전체 메타 조회
+    let posts = tag
+      ? await provider.getPostsByTag(tag)
+      : await provider.getAllPostMetas();
 
     // 페이지네이션이 요청된 경우
     if (limit > 0) {

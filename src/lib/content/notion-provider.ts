@@ -1,6 +1,11 @@
-import type { ContentProvider, Post } from "./types";
+import type { ContentProvider, Post, PostMeta } from "./types";
 
 export class NotionProvider implements ContentProvider {
+  async getAllPostMetas(): Promise<PostMeta[]> {
+    // TODO: Implement in Phase 1.4
+    return [];
+  }
+
   async getAllPosts(): Promise<Post[]> {
     // TODO: Implement in Phase 1.4
     return [];
@@ -12,7 +17,7 @@ export class NotionProvider implements ContentProvider {
     return null;
   }
 
-  async getPostsByTag(tag: string): Promise<Post[]> {
+  async getPostsByTag(tag: string): Promise<PostMeta[]> {
     // TODO: Implement in Phase 1.4
     console.log("getPostsByTag:", tag);
     return [];
