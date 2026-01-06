@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { Spinner } from "@/components/common";
+import { compressImage, logCompressionResult } from "@/lib/utils";
 
 interface ThumbnailUploadProps {
   value: string;
@@ -40,16 +41,15 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
         return;
       }
 
-      if (file.size > 5 * 1024 * 1024) {
-        setError("파일 크기는 5MB를 초과할 수 없습니다.");
-        return;
-      }
-
       setIsUploading(true);
       setError(null);
 
       try {
-        const url = await uploadImage(file);
+        // 이미지 압축 (GIF/SVG는 자동으로 건너뜀)
+        const result = await compressImage(file);
+        logCompressionResult(result);
+
+        const url = await uploadImage(result.file);
         onChange(url);
       } catch (err) {
         console.error("Thumbnail upload failed:", err);

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import { Spinner } from "@/components/common";
+import { compressImage, logCompressionResult } from "@/lib/utils";
 
 interface ImageUploadProps {
   onUpload: (url: string) => void;
@@ -26,8 +27,12 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
     setState({ isUploading: true, progress: 0, error: null });
 
     try {
+      // 이미지 압축 (GIF/SVG는 자동으로 건너뜀)
+      const result = await compressImage(file);
+      logCompressionResult(result);
+
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", result.file);
 
       const response = await fetch("/api/upload", {
         method: "POST",

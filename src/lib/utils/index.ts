@@ -8,3 +8,10 @@ export {
 export { getRelatedPosts, type RelatedPostResult } from "./related-posts";
 
 export { extractToc, slugify, type TocItem } from "./toc";
+
+export {
+  compressImage,
+  logCompressionResult,
+  type CompressionOptions,
+  type CompressResult,
+} from "./image";

@@ -14,6 +14,9 @@ const ALLOWED_TYPES = [
 // 최대 파일 크기 (5MB)
 const MAX_SIZE = 5 * 1024 * 1024;
 
+// GIF 최대 파일 크기 (2MB) - GIF는 압축되지 않으므로 더 엄격하게 제한
+const GIF_MAX_SIZE = 2 * 1024 * 1024;
+
 export async function POST(request: Request) {
   try {
     // 인증 확인
@@ -37,10 +40,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // 파일 크기 검증
-    if (file.size > MAX_SIZE) {
+    // 파일 크기 검증 (GIF는 더 엄격하게)
+    const maxSize = file.type === "image/gif" ? GIF_MAX_SIZE : MAX_SIZE;
+    const maxSizeLabel = file.type === "image/gif" ? "2MB" : "5MB";
+
+    if (file.size > maxSize) {
       return NextResponse.json(
-        { error: "File too large. Maximum size is 5MB" },
+        { error: `File too large. Maximum size for ${file.type === "image/gif" ? "GIF" : "this type"} is ${maxSizeLabel}` },
         { status: 400 }
       );
     }
