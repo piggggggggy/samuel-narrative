@@ -1,24 +1,18 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import type {
-  ContentProvider,
-  Post,
-  CreatePostInput,
-  UpdatePostInput,
-} from "./types";
+import type { ContentProvider } from "./types";
+import type { Post, PostMeta, PostsIndex, CreatePostInput, UpdatePostInput } from "@/lib/schemas";
+import {
+  parseFrontmatter,
+  toPost,
+  formatValidationError,
+} from "./schemas";
+import { getReadingTimeMinutes } from "@/lib/utils/reading-time";
 
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const POSTS_PATH = "content/posts";
-
-interface PostFrontmatter {
-  title: string;
-  excerpt: string;
-  publishedAt: string;
-  updatedAt?: string;
-  tags: string[];
-  thumbnail?: string;
-}
+const INDEX_PATH = path.join(process.cwd(), "content/posts-index.json");
 
 interface GitHubFileResponse {
   sha: string;
@@ -78,6 +72,115 @@ async function githubApiRequest<T>(
 }
 
 export class GitHubProvider implements ContentProvider {
+  private indexCache: PostsIndex | null = null;
+
+  /**
+   * 인덱스 파일 로드 (캐싱)
+   */
+  private loadIndex(): PostsIndex {
+    if (this.indexCache) {
+      return this.indexCache;
+    }
+
+    if (!fs.existsSync(INDEX_PATH)) {
+      console.warn("posts-index.json not found. Run: pnpm generate-index");
+      // 빈 인덱스 반환
+      return {
+        posts: [],
+        byTag: {},
+        totalCount: 0,
+        updatedAt: new Date().toISOString(),
+      };
+    }
+
+    const indexContent = fs.readFileSync(INDEX_PATH, "utf-8");
+    this.indexCache = JSON.parse(indexContent) as PostsIndex;
+    return this.indexCache;
+  }
+
+  /**
+   * 인덱스 캐시 무효화 (CRUD 작업 후 호출)
+   */
+  private invalidateIndexCache(): void {
+    this.indexCache = null;
+  }
+
+  /**
+   * 인덱스에 새 포스트 추가
+   */
+  private addPostToIndex(post: Post): void {
+    const index = this.loadIndex();
+
+    const meta: PostMeta = {
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      publishedAt: post.publishedAt,
+      updatedAt: post.updatedAt,
+      tags: post.tags,
+      thumbnail: post.thumbnail,
+      readingTime: getReadingTimeMinutes(post.content),
+    };
+
+    // 기존 포스트가 있으면 제거
+    index.posts = index.posts.filter((p) => p.slug !== post.slug);
+
+    // 새 포스트 추가 후 정렬
+    index.posts.push(meta);
+    index.posts.sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    );
+
+    // 태그 인덱스 재구성
+    index.byTag = this.buildTagIndex(index.posts);
+    index.totalCount = index.posts.length;
+    index.updatedAt = new Date().toISOString();
+
+    this.saveIndex(index);
+  }
+
+  /**
+   * 인덱스에서 포스트 삭제
+   */
+  private removePostFromIndex(slug: string): void {
+    const index = this.loadIndex();
+
+    index.posts = index.posts.filter((p) => p.slug !== slug);
+    index.byTag = this.buildTagIndex(index.posts);
+    index.totalCount = index.posts.length;
+    index.updatedAt = new Date().toISOString();
+
+    this.saveIndex(index);
+  }
+
+  /**
+   * 태그 인덱스 구성
+   */
+  private buildTagIndex(posts: PostMeta[]): Record<string, string[]> {
+    const byTag: Record<string, string[]> = {};
+
+    posts.forEach((post) => {
+      post.tags.forEach((tag) => {
+        const normalizedTag = tag.toLowerCase();
+        if (!byTag[normalizedTag]) {
+          byTag[normalizedTag] = [];
+        }
+        byTag[normalizedTag].push(post.slug);
+      });
+    });
+
+    return byTag;
+  }
+
+  /**
+   * 인덱스 파일 저장
+   */
+  private saveIndex(index: PostsIndex): void {
+    fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 2));
+    this.indexCache = index;
+  }
+
   private getPostFiles(): string[] {
     if (!fs.existsSync(POSTS_DIRECTORY)) {
       return [];
@@ -100,20 +203,43 @@ export class GitHubProvider implements ContentProvider {
 
   private parseMarkdownContent(slug: string, fileContent: string): Post {
     const { data, content } = matter(fileContent);
-    const frontmatter = data as PostFrontmatter;
+    const cleanSlug = slug.replace(/\.md$/, "");
 
-    return {
-      slug: slug.replace(/\.md$/, ""),
-      title: frontmatter.title,
-      content,
-      excerpt: frontmatter.excerpt,
-      publishedAt: frontmatter.publishedAt,
-      updatedAt: frontmatter.updatedAt,
-      tags: frontmatter.tags || [],
-      thumbnail: frontmatter.thumbnail,
-    };
+    // Frontmatter 스키마 검증
+    const result = parseFrontmatter(data);
+
+    if (!result.success) {
+      const errorMsg = formatValidationError(result.error!);
+      console.error(`[${cleanSlug}] Frontmatter validation failed: ${errorMsg}`);
+      // 검증 실패 시에도 기본값으로 파싱 시도 (빌드 중단 방지)
+      return {
+        slug: cleanSlug,
+        title: (data as Record<string, unknown>).title as string || "Untitled",
+        content,
+        excerpt: (data as Record<string, unknown>).excerpt as string || "",
+        publishedAt: (data as Record<string, unknown>).publishedAt as string || new Date().toISOString().split("T")[0],
+        tags: Array.isArray((data as Record<string, unknown>).tags) ? (data as Record<string, unknown>).tags as string[] : [],
+        thumbnail: (data as Record<string, unknown>).thumbnail as string | undefined,
+      };
+    }
+
+    return toPost(cleanSlug, result.data!, content);
   }
 
+  /**
+   * 인덱스에서 모든 포스트 메타데이터 조회 (content 제외)
+   * 빠름: 인덱스 파일 1회 읽기
+   */
+  async getAllPostMetas(): Promise<PostMeta[]> {
+    const index = this.loadIndex();
+    return index.posts;
+  }
+
+  /**
+   * 모든 포스트 조회 (content 포함)
+   * 느림: 모든 파일을 개별 fetch
+   * @deprecated 가능하면 getAllPostMetas() 사용 권장
+   */
   async getAllPosts(): Promise<Post[]> {
     const directoryItems = await githubApiRequest<GitHubDirectoryItem[]>(
       `/contents/${POSTS_PATH}`
@@ -153,22 +279,28 @@ export class GitHubProvider implements ContentProvider {
     }
   }
 
-  async getPostsByTag(tag: string): Promise<Post[]> {
-    const allPosts = await this.getAllPosts();
-    return allPosts.filter((post) =>
-      post.tags.map((t) => t.toLowerCase()).includes(tag.toLowerCase())
-    );
+  /**
+   * 인덱스에서 태그별 포스트 조회 (content 제외)
+   * 빠름: 인덱스의 byTag 맵 사용
+   */
+  async getPostsByTag(tag: string): Promise<PostMeta[]> {
+    const index = this.loadIndex();
+    const normalizedTag = tag.toLowerCase();
+    const slugs = index.byTag[normalizedTag] || [];
+
+    // 인덱스에서 해당 slug의 메타데이터 반환
+    return slugs
+      .map((slug) => index.posts.find((p) => p.slug === slug))
+      .filter((post): post is PostMeta => post !== undefined);
   }
 
+  /**
+   * 인덱스에서 모든 태그 조회
+   * 빠름: 인덱스의 byTag 키 사용
+   */
   async getAllTags(): Promise<string[]> {
-    const allPosts = await this.getAllPosts();
-    const tagSet = new Set<string>();
-
-    allPosts.forEach((post) => {
-      post.tags.forEach((tag) => tagSet.add(tag));
-    });
-
-    return Array.from(tagSet).sort();
+    const index = this.loadIndex();
+    return Object.keys(index.byTag).sort();
   }
 
   private generateMarkdown(
@@ -247,7 +379,7 @@ export class GitHubProvider implements ContentProvider {
     });
 
     // Return the created post
-    return {
+    const post: Post = {
       slug: input.slug,
       title: input.title,
       content: input.content,
@@ -256,6 +388,11 @@ export class GitHubProvider implements ContentProvider {
       tags: input.tags || [],
       thumbnail: input.thumbnail,
     };
+
+    // Update local index
+    this.addPostToIndex(post);
+
+    return post;
   }
 
   async updatePost(slug: string, input: UpdatePostInput): Promise<Post> {
@@ -294,11 +431,16 @@ export class GitHubProvider implements ContentProvider {
     });
 
     // Return updated post
-    return {
+    const updatedPost: Post = {
       ...existingPost,
       ...input,
       slug,
     };
+
+    // Update local index
+    this.addPostToIndex(updatedPost);
+
+    return updatedPost;
   }
 
   async deletePost(slug: string): Promise<void> {
@@ -324,5 +466,8 @@ export class GitHubProvider implements ContentProvider {
         branch,
       }),
     });
+
+    // Update local index
+    this.removePostFromIndex(slug);
   }
 }

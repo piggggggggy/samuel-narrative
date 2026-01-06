@@ -7,7 +7,7 @@ const POSTS_PER_PAGE = 10;
 
 export default async function HomePage() {
   const provider = await getContentProvider();
-  const allPosts = await provider.getAllPosts();
+  const allPosts = await provider.getAllPostMetas();
   const allTags = await provider.getAllTags();
 
   // 초기 로드: 첫 페이지만 (SEO용 SSR)

@@ -1,6 +1,6 @@
 import type { ContentProvider } from "./types";
 
-export type { Post, ContentProvider, CreatePostInput, UpdatePostInput } from "./types";
+export type { Post, PostMeta, ContentProvider, CreatePostInput, UpdatePostInput } from "./types";
 
 type ProviderType = "github" | "notion";
 

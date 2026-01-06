@@ -4,12 +4,16 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build",
+		"build": "pnpm generate-index && next build",
 		"start": "next start",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write .",
-		"format:check": "prettier --check ."
+		"format:check": "prettier --check .",
+		"generate-index": "npx tsx scripts/generate-posts-index.ts",
+		"schema:validate": "npx tsx scripts/validate-posts.ts",
+		"images:cleanup": "npx tsx scripts/cleanup-orphan-images.ts",
+		"images:cleanup:dry": "npx tsx scripts/cleanup-orphan-images.ts --dry-run"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.19",
@@ -18,6 +22,7 @@
 		"@uiw/react-md-editor": "^4.0.11",
 		"@vercel/blob": "^2.0.0",
 		"@vercel/og": "^0.8.6",
+		"browser-image-compression": "^2.0.2",
 		"gray-matter": "^4.0.3",
 		"next": "^16.1.1",
 		"next-auth": "5.0.0-beta.30",
@@ -45,6 +50,7 @@
 		"postcss": "^8.5.6",
 		"prettier": "^3.7.4",
 		"tailwindcss": "^4.1.18",
+		"tsx": "^4.21.0",
 		"typescript": "5.9.3"
 	}
 }

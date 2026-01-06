@@ -1,8 +1,8 @@
-import type { Post } from "@/lib/content";
+import type { PostMeta } from "@/lib/content/types";
 import { PostCard } from "./PostCard";
 
 interface PostListProps {
-  posts: Post[];
+  posts: PostMeta[];
   emptyMessage?: string;
 }
 

@@ -101,10 +101,17 @@ export default async function PostPage({ params }: PostPageProps) {
   const showToc = tocItems.length >= 3;
 
   return (
-    <div className={`mx-auto px-4 py-12 ${showToc ? "max-w-6xl" : "max-w-3xl"}`}>
-      <div className={showToc ? "lg:grid lg:grid-cols-[1fr_220px] lg:gap-8" : ""}>
+    <div className="relative">
+      {/* TOC 사이드바 - 뷰포트 기준 고정 위치 */}
+      {showToc && (
+        <aside className="hidden xl:block fixed top-24 right-[max(1rem,calc((100vw-896px)/2-220px-2rem))] w-[200px]">
+          <TableOfContents items={tocItems} />
+        </aside>
+      )}
+
+      <div className="mx-auto max-w-3xl px-4 py-12">
         {/* 메인 콘텐츠 */}
-        <div className={showToc ? "max-w-3xl" : ""}>
+        <div>
           <article>
             <header className="mb-8 border-b border-border-default pb-8">
               <h1 className="text-3xl font-bold text-text-primary md:text-4xl">
@@ -171,13 +178,6 @@ export default async function PostPage({ params }: PostPageProps) {
             </Link>
           </div>
         </div>
-
-        {/* 목차 사이드바 */}
-        {showToc && (
-          <aside className="hidden lg:block self-start sticky top-24">
-            <TableOfContents items={tocItems} />
-          </aside>
-        )}
       </div>
     </div>
   );
