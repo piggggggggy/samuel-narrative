@@ -1,28 +1,18 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import type {
-  ContentProvider,
-  Post,
-  PostMeta,
-  PostsIndex,
-  CreatePostInput,
-  UpdatePostInput,
-} from "./types";
+import type { ContentProvider } from "./types";
+import type { Post, PostMeta, PostsIndex, CreatePostInput, UpdatePostInput } from "@/lib/schemas";
+import {
+  parseFrontmatter,
+  toPost,
+  formatValidationError,
+} from "./schemas";
 import { getReadingTimeMinutes } from "@/lib/utils/reading-time";
 
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const POSTS_PATH = "content/posts";
 const INDEX_PATH = path.join(process.cwd(), "content/posts-index.json");
-
-interface PostFrontmatter {
-  title: string;
-  excerpt: string;
-  publishedAt: string;
-  updatedAt?: string;
-  tags: string[];
-  thumbnail?: string;
-}
 
 interface GitHubFileResponse {
   sha: string;
@@ -213,18 +203,27 @@ export class GitHubProvider implements ContentProvider {
 
   private parseMarkdownContent(slug: string, fileContent: string): Post {
     const { data, content } = matter(fileContent);
-    const frontmatter = data as PostFrontmatter;
+    const cleanSlug = slug.replace(/\.md$/, "");
 
-    return {
-      slug: slug.replace(/\.md$/, ""),
-      title: frontmatter.title,
-      content,
-      excerpt: frontmatter.excerpt,
-      publishedAt: frontmatter.publishedAt,
-      updatedAt: frontmatter.updatedAt,
-      tags: frontmatter.tags || [],
-      thumbnail: frontmatter.thumbnail,
-    };
+    // Frontmatter 스키마 검증
+    const result = parseFrontmatter(data);
+
+    if (!result.success) {
+      const errorMsg = formatValidationError(result.error!);
+      console.error(`[${cleanSlug}] Frontmatter validation failed: ${errorMsg}`);
+      // 검증 실패 시에도 기본값으로 파싱 시도 (빌드 중단 방지)
+      return {
+        slug: cleanSlug,
+        title: (data as Record<string, unknown>).title as string || "Untitled",
+        content,
+        excerpt: (data as Record<string, unknown>).excerpt as string || "",
+        publishedAt: (data as Record<string, unknown>).publishedAt as string || new Date().toISOString().split("T")[0],
+        tags: Array.isArray((data as Record<string, unknown>).tags) ? (data as Record<string, unknown>).tags as string[] : [],
+        thumbnail: (data as Record<string, unknown>).thumbnail as string | undefined,
+      };
+    }
+
+    return toPost(cleanSlug, result.data!, content);
   }
 
   /**

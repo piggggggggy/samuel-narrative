@@ -10,7 +10,8 @@
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
-		"generate-index": "npx tsx scripts/generate-posts-index.ts"
+		"generate-index": "npx tsx scripts/generate-posts-index.ts",
+		"schema:validate": "npx tsx scripts/validate-posts.ts"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.19",

@@ -1,56 +1,22 @@
-export interface Post {
-  slug: string;
-  title: string;
-  content: string;
-  excerpt: string;
-  publishedAt: string;
-  updatedAt?: string;
-  tags: string[];
-  thumbnail?: string;
-}
-
 /**
- * 포스트 메타데이터 (content 제외)
- * 목록 조회 시 사용 - 인덱스 기반 최적화
+ * Content Provider Types
+ *
+ * 데이터 타입은 @/lib/schemas에서 정의하고 여기서 re-export
  */
-export interface PostMeta {
-  slug: string;
-  title: string;
-  excerpt: string;
-  publishedAt: string;
-  updatedAt?: string;
-  tags: string[];
-  thumbnail?: string;
-  readingTime?: number; // 분 단위 읽기 시간
-}
+import type {
+  Post,
+  PostMeta,
+  CreatePostInput,
+  UpdatePostInput,
+} from "@/lib/schemas";
 
-/**
- * 포스트 인덱스 구조
- */
-export interface PostsIndex {
-  posts: PostMeta[];
-  byTag: Record<string, string[]>; // tag -> slug[]
-  totalCount: number;
-  updatedAt: string;
-}
-
-export interface CreatePostInput {
-  slug: string;
-  title: string;
-  content: string;
-  excerpt: string;
-  tags: string[];
-  thumbnail?: string;
-  publishedAt?: string;
-}
-
-export interface UpdatePostInput {
-  title?: string;
-  content?: string;
-  excerpt?: string;
-  tags?: string[];
-  thumbnail?: string;
-}
+export type {
+  Post,
+  PostMeta,
+  PostsIndex,
+  CreatePostInput,
+  UpdatePostInput,
+} from "@/lib/schemas";
 
 export interface ContentProvider {
   /**
