@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { siteConfig } from "@/lib/config/site";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Samuel에 대해 알아보세요. 웹 개발자로서의 여정과 기술 스택을 소개합니다.",
+  description: `${siteConfig.author.name}에 대해 알아보세요. 웹 개발자로서의 여정과 기술 스택을 소개합니다.`,
 };
 
 const skills = {
@@ -15,7 +16,7 @@ const skills = {
 const socialLinks = [
   {
     name: "GitHub",
-    href: "https://github.com",
+    href: siteConfig.social.github,
     icon: (
       <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
         <path
@@ -28,7 +29,7 @@ const socialLinks = [
   },
   {
     name: "LinkedIn",
-    href: "https://linkedin.com",
+    href: siteConfig.social.linkedin,
     icon: (
       <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -37,20 +38,10 @@ const socialLinks = [
   },
   {
     name: "Email",
-    href: "mailto:hello@example.com",
+    href: `mailto:${siteConfig.social.email}`,
     icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-        />
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
       </svg>
     ),
   },
@@ -67,10 +58,10 @@ export default function AboutPage() {
           </div>
         </div>
         <h1 className="text-3xl font-bold text-text-primary">
-          Samuel
+          {siteConfig.author.name}
         </h1>
         <p className="mt-2 text-lg text-text-secondary">
-          Web Developer
+          {siteConfig.author.role}
         </p>
       </section>
 
@@ -81,7 +72,7 @@ export default function AboutPage() {
         </h2>
         <div className="prose prose-gray dark:prose-invert">
           <p className="text-text-secondary">
-            안녕하세요! 웹 개발을 사랑하는 개발자 Samuel입니다.
+            안녕하세요! 웹 개발을 사랑하는 개발자 {siteConfig.author.name}입니다.
           </p>
           <p className="mt-4 text-text-secondary">
             사용자 경험을 중시하며, 깔끔하고 유지보수하기 좋은 코드를 작성하려고
