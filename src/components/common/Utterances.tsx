@@ -22,7 +22,7 @@ export function Utterances({
   useEffect(() => {
     if (!mounted || !ref.current) return;
 
-    const theme = resolvedTheme === "dark" ? "github-dark" : "github-light";
+    const theme = resolvedTheme === "light" ? "github-light" : "github-dark";
 
     // Check if utterances iframe already exists
     const existingIframe = ref.current.querySelector<HTMLIFrameElement>(

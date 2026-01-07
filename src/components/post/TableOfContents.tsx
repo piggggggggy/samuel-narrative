@@ -45,7 +45,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   }
 
   return (
-    <nav>
+    <nav className="glass-panel rounded-xl p-4">
       <h2 className="mb-4 text-sm font-semibold text-text-primary">
         목차
       </h2>

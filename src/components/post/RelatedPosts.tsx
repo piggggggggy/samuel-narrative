@@ -20,7 +20,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
           <Link
             key={post.slug}
             href={`/posts/${post.slug}`}
-            className="group rounded-lg border border-border-default p-4 transition-colors hover:border-border-muted hover:bg-bg-secondary"
+            className="group rounded-xl p-4 glass-card"
           >
             <h3 className="line-clamp-2 font-medium text-text-primary transition-colors group-hover:text-accent-primary">
               {post.title}
