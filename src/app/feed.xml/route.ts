@@ -19,7 +19,7 @@ export async function GET() {
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Samuel's Blog</title>
+    <title>Samuel Narrative</title>
     <link>${BASE_URL}</link>
     <description>개인 기술 블로그 - 웹 개발, 아키텍처, 그리고 개발 경험을 공유합니다.</description>
     <language>ko</language>
