@@ -34,11 +34,11 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
   };
 
   return (
-    <div className="group relative">
+    <div className="group relative glass-code">
       <button
         type="button"
         onClick={handleCopy}
-        className="absolute right-2 top-2 z-10 rounded-md bg-gray-700 px-2 py-1 text-xs text-gray-300 opacity-0 transition-opacity hover:bg-gray-600 hover:text-white focus:opacity-100 group-hover:opacity-100"
+        className="absolute right-3 top-3 z-10 rounded-lg px-2.5 py-1.5 text-xs text-gray-400 opacity-0 transition-all glass-hover hover:text-white focus:opacity-100 group-hover:opacity-100"
         aria-label={copied ? "복사됨" : "코드 복사"}
       >
         {copied ? (

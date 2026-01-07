@@ -15,7 +15,7 @@ export function PostCard({ post }: PostCardProps) {
   const readingTime = post.readingTime ?? 1;
 
   return (
-    <article className="group -mx-4 rounded-xl p-4 transition-all duration-200 hover:bg-bg-secondary">
+    <article className="group -mx-4 rounded-xl p-4 glass-card">
       <Link href={`/posts/${post.slug}`} className="block">
         {post.thumbnail && (
           <div className="mb-4 overflow-hidden rounded-lg">
@@ -43,7 +43,7 @@ export function PostCard({ post }: PostCardProps) {
               <Link
                 key={tag}
                 href={`/tags/${tag}`}
-                className="rounded-full bg-tag-bg px-2 py-0.5 text-xs text-tag-text transition-colors hover:bg-tag-bg-hover"
+                className="rounded-full px-2 py-0.5 text-xs text-tag-text glass-tag"
               >
                 {tag}
               </Link>

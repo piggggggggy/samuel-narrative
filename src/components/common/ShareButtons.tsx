@@ -38,7 +38,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         href={shareLinks.twitter}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-full p-2 text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-[#1DA1F2]"
+        className="rounded-full p-2 text-text-secondary glass-hover hover:text-[#1DA1F2]"
         aria-label="Twitter에 공유"
       >
         <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -51,7 +51,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         href={shareLinks.facebook}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-full p-2 text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-[#1877F2]"
+        className="rounded-full p-2 text-text-secondary glass-hover hover:text-[#1877F2]"
         aria-label="Facebook에 공유"
       >
         <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -64,7 +64,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         href={shareLinks.linkedin}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-full p-2 text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-[#0A66C2]"
+        className="rounded-full p-2 text-text-secondary glass-hover hover:text-[#0A66C2]"
         aria-label="LinkedIn에 공유"
       >
         <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
       {/* Copy Link */}
       <button
         onClick={copyToClipboard}
-        className="rounded-full p-2 text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-text-primary"
+        className="rounded-full p-2 text-text-secondary glass-hover"
         aria-label={copied ? "링크 복사됨" : "링크 복사"}
       >
         {copied ? (

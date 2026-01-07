@@ -15,7 +15,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border-default bg-bg-elevated backdrop-blur-sm relative">
+    <header className="sticky top-0 z-50 glass relative">
       <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
         <Link
           href="/"
@@ -45,7 +45,7 @@ export function Header() {
           <UserMenu />
           <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md p-2 text-text-secondary hover:bg-bg-tertiary hover:text-text-primary md:hidden"
+          className="inline-flex items-center justify-center rounded-lg p-2 text-text-secondary glass-hover md:hidden"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-expanded={isMobileMenuOpen}
           aria-label="Toggle menu"
@@ -85,7 +85,7 @@ export function Header() {
 
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="border-t border-border-default bg-bg-primary md:hidden">
+        <div className="border-t border-border-default glass-panel md:hidden">
           <div className="mx-auto max-w-4xl space-y-1 px-4 py-3">
             {navigation.map((item) => (
               <Link
