@@ -101,8 +101,8 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
         onDrop={handleDrop}
         className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
           isDragging
-            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-            : "border-gray-300 hover:border-gray-400 dark:border-gray-700 dark:hover:border-gray-600"
+            ? "border-accent-primary bg-accent-primary/10"
+            : "border-border-default hover:border-text-muted"
         } ${state.isUploading ? "pointer-events-none opacity-50" : ""}`}
       >
         <input
@@ -116,14 +116,14 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
         {state.isUploading ? (
           <div className="flex flex-col items-center gap-2">
             <Spinner size="lg" />
-            <span className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-sm text-text-secondary">
               업로드 중...
             </span>
           </div>
         ) : (
           <>
             <svg
-              className="h-8 w-8 text-gray-400"
+              className="h-8 w-8 text-text-muted"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -135,10 +135,10 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm text-text-secondary">
               클릭하거나 이미지를 드래그해서 업로드
             </p>
-            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+            <p className="mt-1 text-xs text-text-muted">
               PNG, JPG, GIF, WebP (최대 5MB)
             </p>
           </>

@@ -75,10 +75,10 @@ export function PostTable({ posts }: PostTableProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="포스트 검색..."
-            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 pl-10 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+            className="w-full rounded-md border border-border-default bg-bg-primary px-4 py-2 pl-10 text-sm text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
           />
           <svg
-            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -93,7 +93,7 @@ export function PostTable({ posts }: PostTableProps) {
         </div>
         <Link
           href="/admin/posts/new"
-          className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+          className="inline-flex items-center justify-center rounded-md bg-accent-primary px-4 py-2 text-sm font-medium text-text-inverted shadow-sm hover:opacity-90"
         >
           <svg
             className="mr-2 h-4 w-4"
@@ -113,30 +113,30 @@ export function PostTable({ posts }: PostTableProps) {
       </div>
 
       {/* 테이블 */}
-      <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-800">
+      <div className="overflow-hidden rounded-lg border border-border-default">
+        <table className="min-w-full divide-y divide-border-default">
+          <thead className="bg-bg-secondary">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
                 제목
               </th>
-              <th className="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 sm:table-cell">
+              <th className="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary sm:table-cell">
                 태그
               </th>
-              <th className="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 md:table-cell">
+              <th className="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary md:table-cell">
                 작성일
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-text-secondary">
                 액션
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+          <tbody className="divide-y divide-border-default bg-bg-primary">
             {filteredPosts.length === 0 ? (
               <tr>
                 <td
                   colSpan={4}
-                  className="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400"
+                  className="px-6 py-8 text-center text-sm text-text-secondary"
                 >
                   {search ? "검색 결과가 없습니다." : "포스트가 없습니다."}
                 </td>
@@ -145,17 +145,17 @@ export function PostTable({ posts }: PostTableProps) {
               filteredPosts.map((post) => (
                 <tr
                   key={post.slug}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                  className="hover:bg-bg-secondary"
                 >
                   <td className="px-6 py-4">
                     <div>
                       <Link
                         href={`/posts/${post.slug}`}
-                        className="font-medium text-gray-900 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                        className="font-medium text-text-primary hover:text-accent-primary"
                       >
                         {post.title}
                       </Link>
-                      <p className="mt-1 line-clamp-1 text-sm text-gray-500 dark:text-gray-400">
+                      <p className="mt-1 line-clamp-1 text-sm text-text-secondary">
                         {post.excerpt}
                       </p>
                     </div>
@@ -165,40 +165,40 @@ export function PostTable({ posts }: PostTableProps) {
                       {post.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                          className="inline-flex rounded-full bg-tag-bg px-2 py-0.5 text-xs text-tag-text"
                         >
                           {tag}
                         </span>
                       ))}
                       {post.tags.length > 3 && (
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-text-muted">
                           +{post.tags.length - 3}
                         </span>
                       )}
                     </div>
                   </td>
-                  <td className="hidden whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400 md:table-cell">
+                  <td className="hidden whitespace-nowrap px-6 py-4 text-sm text-text-secondary md:table-cell">
                     {formatDate(post.publishedAt)}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
                     <div className="flex items-center justify-end gap-2">
                       <Link
                         href={`/admin/posts/${post.slug}/edit`}
-                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        className="text-accent-primary hover:opacity-80"
                       >
                         수정
                       </Link>
-                      <span className="text-gray-300 dark:text-gray-600">
+                      <span className="text-border-default">
                         |
                       </span>
                       <Link
                         href={`/posts/${post.slug}`}
-                        className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                        className="text-text-secondary hover:text-text-primary"
                         target="_blank"
                       >
                         보기
                       </Link>
-                      <span className="text-gray-300 dark:text-gray-600">
+                      <span className="text-border-default">
                         |
                       </span>
                       <button
@@ -219,7 +219,7 @@ export function PostTable({ posts }: PostTableProps) {
 
       {/* 결과 수 */}
       {filteredPosts.length > 0 && (
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-text-secondary">
           {search
             ? `${filteredPosts.length}개의 검색 결과`
             : `총 ${filteredPosts.length}개의 포스트`}
@@ -228,7 +228,7 @@ export function PostTable({ posts }: PostTableProps) {
 
       {/* 에러 메시지 */}
       {error && (
-        <div className="rounded-md bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-md bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
           {error}
           <button
             onClick={() => setError(null)}

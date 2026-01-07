@@ -105,7 +105,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
     <div className="space-y-2">
       {value ? (
         <div className="relative inline-block">
-          <div className="relative h-40 w-64 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="relative h-40 w-64 overflow-hidden rounded-lg border border-border-default">
             <Image
               src={value}
               alt="썸네일 미리보기"
@@ -136,7 +136,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="mt-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            className="mt-2 text-sm text-accent-primary hover:opacity-80"
           >
             이미지 변경
           </button>
@@ -149,21 +149,21 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
           onClick={() => fileInputRef.current?.click()}
           className={`flex h-40 w-64 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
             isDragOver
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-              : "border-gray-300 bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+              ? "border-accent-primary bg-accent-primary/10"
+              : "border-border-default bg-bg-secondary hover:border-text-muted"
           }`}
         >
           {isUploading ? (
             <div className="flex flex-col items-center">
               <Spinner size="lg" />
-              <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <span className="mt-2 text-sm text-text-secondary">
                 업로드 중...
               </span>
             </div>
           ) : (
             <>
               <svg
-                className="h-10 w-10 text-gray-400"
+                className="h-10 w-10 text-text-muted"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -176,10 +176,10 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
                   d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <span className="mt-2 text-sm text-text-secondary">
                 클릭 또는 드래그하여 업로드
               </span>
-              <span className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+              <span className="mt-1 text-xs text-text-muted">
                 최대 5MB
               </span>
             </>

@@ -33,17 +33,17 @@ export function TagInput({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-800">
+    <div className="flex flex-wrap items-center gap-2 rounded-md border border-border-default bg-bg-primary px-3 py-2">
       {value.map((tag) => (
         <span
           key={tag}
-          className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-0.5 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+          className="inline-flex items-center gap-1 rounded-full bg-tag-bg px-2.5 py-0.5 text-sm text-tag-text"
         >
           {tag}
           <button
             type="button"
             onClick={() => removeTag(tag)}
-            className="ml-1 text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
+            className="ml-1 text-accent-primary hover:opacity-70"
           >
             <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -57,7 +57,7 @@ export function TagInput({
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={value.length === 0 ? placeholder : ""}
-        className="min-w-[120px] flex-1 border-none bg-transparent p-0 text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-500"
+        className="min-w-[120px] flex-1 border-none bg-transparent p-0 text-sm text-text-primary placeholder-text-muted outline-none"
       />
     </div>
   );

@@ -137,7 +137,7 @@ export function PostForm({ post, mode }: PostFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="rounded-md bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
+        <div className="rounded-md bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
           {error}
         </div>
       )}
@@ -146,7 +146,7 @@ export function PostForm({ post, mode }: PostFormProps) {
       <div>
         <label
           htmlFor="title"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-text-secondary"
         >
           제목
         </label>
@@ -155,7 +155,7 @@ export function PostForm({ post, mode }: PostFormProps) {
           id="title"
           value={form.title}
           onChange={(e) => updateField("title", e.target.value)}
-          className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          className="mt-1 block w-full rounded-md border border-border-default bg-bg-primary px-3 py-2 text-text-primary shadow-sm focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
           required
         />
       </div>
@@ -164,12 +164,12 @@ export function PostForm({ post, mode }: PostFormProps) {
       <div>
         <label
           htmlFor="slug"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-text-secondary"
         >
           Slug
         </label>
         <div className="mt-1 flex rounded-md shadow-sm">
-          <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400">
+          <span className="inline-flex items-center rounded-l-md border border-r-0 border-border-default bg-bg-secondary px-3 text-sm text-text-muted">
             /posts/
           </span>
           <input
@@ -177,13 +177,13 @@ export function PostForm({ post, mode }: PostFormProps) {
             id="slug"
             value={form.slug}
             onChange={(e) => updateField("slug", e.target.value)}
-            className="block w-full rounded-none rounded-r-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="block w-full rounded-none rounded-r-md border border-border-default bg-bg-primary px-3 py-2 text-text-primary focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
             required
             pattern="^[a-z0-9-]+$"
             title="영문 소문자, 숫자, 하이픈만 사용할 수 있습니다"
           />
         </div>
-        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-xs text-text-muted">
           영문 소문자, 숫자, 하이픈만 사용 가능
         </p>
       </div>
@@ -192,7 +192,7 @@ export function PostForm({ post, mode }: PostFormProps) {
       <div>
         <label
           htmlFor="excerpt"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="block text-sm font-medium text-text-secondary"
         >
           요약
         </label>
@@ -201,14 +201,14 @@ export function PostForm({ post, mode }: PostFormProps) {
           value={form.excerpt}
           onChange={(e) => updateField("excerpt", e.target.value)}
           rows={2}
-          className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          className="mt-1 block w-full rounded-md border border-border-default bg-bg-primary px-3 py-2 text-text-primary shadow-sm focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
           required
         />
       </div>
 
       {/* Thumbnail */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="block text-sm font-medium text-text-secondary">
           썸네일
         </label>
         <div className="mt-1">
@@ -221,7 +221,7 @@ export function PostForm({ post, mode }: PostFormProps) {
 
       {/* Tags */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="block text-sm font-medium text-text-secondary">
           태그
         </label>
         <div className="mt-1">
@@ -234,7 +234,7 @@ export function PostForm({ post, mode }: PostFormProps) {
 
       {/* Content */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="block text-sm font-medium text-text-secondary">
           내용
         </label>
         <div className="mt-1">
@@ -246,13 +246,13 @@ export function PostForm({ post, mode }: PostFormProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center justify-between border-t border-gray-200 pt-6 dark:border-gray-800">
+      <div className="flex items-center justify-between border-t border-border-default pt-6">
         <div>
           {mode === "create" && (
             <button
               type="button"
               onClick={clearDraft}
-              className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              className="text-sm text-text-muted hover:text-text-secondary"
             >
               임시저장 삭제
             </button>
@@ -262,14 +262,14 @@ export function PostForm({ post, mode }: PostFormProps) {
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="rounded-md border border-border-default bg-bg-primary px-4 py-2 text-sm font-medium text-text-secondary shadow-sm hover:bg-bg-secondary"
           >
             취소
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-md bg-accent-primary px-4 py-2 text-sm font-medium text-text-inverted shadow-sm hover:opacity-90 disabled:opacity-50"
           >
             {isSubmitting && <ButtonSpinner />}
             {isSubmitting
