@@ -15,13 +15,15 @@ import { getReadingTimeMinutes } from "../src/lib/utils/reading-time";
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const INDEX_OUTPUT_PATH = path.join(process.cwd(), "content/posts-index.json");
 
+type Category = "dev" | "life" | "review";
+
 interface PostFrontmatter {
   title: string;
   excerpt: string;
   publishedAt: string;
   updatedAt?: string;
   tags: string[];
-  thumbnail?: string;
+  category: Category;
 }
 
 function getPostFiles(): string[] {
@@ -50,7 +52,7 @@ function parsePostMeta(filename: string): PostMeta | null {
       publishedAt: frontmatter.publishedAt,
       updatedAt: frontmatter.updatedAt,
       tags: frontmatter.tags || [],
-      thumbnail: frontmatter.thumbnail,
+      category: frontmatter.category || "dev",
       readingTime: getReadingTimeMinutes(content),
     };
   } catch (error) {
@@ -88,6 +90,33 @@ function buildTagIndex(posts: PostMeta[]): Record<string, string[]> {
   return byTag;
 }
 
+function buildCategoryIndex(posts: PostMeta[]): Record<Category, string[]> {
+  const byCategory: Record<Category, string[]> = {
+    dev: [],
+    life: [],
+    review: [],
+  };
+
+  posts.forEach((post) => {
+    byCategory[post.category].push(post.slug);
+  });
+
+  // 각 카테고리의 slug 배열을 날짜순으로 정렬
+  (Object.keys(byCategory) as Category[]).forEach((category) => {
+    byCategory[category].sort((a, b) => {
+      const postA = posts.find((p) => p.slug === a);
+      const postB = posts.find((p) => p.slug === b);
+      if (!postA || !postB) return 0;
+      return (
+        new Date(postB.publishedAt).getTime() -
+        new Date(postA.publishedAt).getTime()
+      );
+    });
+  });
+
+  return byCategory;
+}
+
 function generateIndex(): PostsIndex {
   console.log("Generating posts index...");
 
@@ -103,10 +132,12 @@ function generateIndex(): PostsIndex {
     );
 
   const byTag = buildTagIndex(posts);
+  const byCategory = buildCategoryIndex(posts);
 
   const index: PostsIndex = {
     posts,
     byTag,
+    byCategory,
     totalCount: posts.length,
     updatedAt: new Date().toISOString(),
   };
@@ -128,6 +159,7 @@ function main() {
   console.log(`\nIndex generated successfully!`);
   console.log(`  - Posts: ${index.totalCount}`);
   console.log(`  - Tags: ${Object.keys(index.byTag).length}`);
+  console.log(`  - Categories: dev(${index.byCategory.dev.length}), life(${index.byCategory.life.length}), review(${index.byCategory.review.length})`);
   console.log(`  - Output: ${INDEX_OUTPUT_PATH}`);
 }
 

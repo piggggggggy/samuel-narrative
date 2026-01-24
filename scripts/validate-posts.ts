@@ -43,7 +43,7 @@ const GitHubFrontmatterSchema = z.object({
       return val;
     })
     .default([]),
-  thumbnail: z.string().optional(),
+  category: z.enum(["dev", "life", "review"]),
   draft: z.boolean().default(false),
 });
 

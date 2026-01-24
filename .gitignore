@@ -21,3 +21,7 @@ docs/
 
 .vercel
 .env*.local
+
+
+.husky/
+.playwright-mcp/

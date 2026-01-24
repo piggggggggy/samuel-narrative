@@ -7,6 +7,7 @@
 
 import { z } from "zod";
 import type { Post, PostMeta } from "@/lib/schemas";
+import { CategorySchema } from "@/lib/schemas";
 
 /**
  * GitHub Provider용 Frontmatter 스키마
@@ -45,7 +46,7 @@ export const GitHubFrontmatterSchema = z.object({
       return val;
     })
     .default([]),
-  thumbnail: z.string().optional(),
+  category: CategorySchema,
   draft: z.boolean().default(false),
 });
 
@@ -91,7 +92,7 @@ export function toPost(
     publishedAt: frontmatter.publishedAt,
     updatedAt: frontmatter.updatedAt,
     tags: frontmatter.tags,
-    thumbnail: frontmatter.thumbnail,
+    category: frontmatter.category,
   };
 }
 
@@ -110,7 +111,7 @@ export function toPostMeta(
     publishedAt: frontmatter.publishedAt,
     updatedAt: frontmatter.updatedAt,
     tags: frontmatter.tags,
-    thumbnail: frontmatter.thumbnail,
+    category: frontmatter.category,
     readingTime,
   };
 }

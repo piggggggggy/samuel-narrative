@@ -64,16 +64,11 @@ function getUsedImageUrls(): Set<string> {
   for (const file of files) {
     const filePath = path.join(POSTS_DIRECTORY, file);
     const fileContent = fs.readFileSync(filePath, "utf-8");
-    const { data, content } = matter(fileContent);
+    const { content } = matter(fileContent);
 
     // content에서 Blob URL 추출
     const contentUrls = content.match(BLOB_URL_PATTERN) || [];
     contentUrls.forEach((url) => usedUrls.add(normalizeUrl(url)));
-
-    // thumbnail에서 URL 추출
-    if (data.thumbnail && data.thumbnail.includes("blob.vercel-storage.com")) {
-      usedUrls.add(normalizeUrl(data.thumbnail));
-    }
   }
 
   return usedUrls;

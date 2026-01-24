@@ -8,6 +8,27 @@
 import { z } from "zod";
 
 /**
+ * 카테고리 스키마
+ * - dev: 개발, 기술, 프로그래밍
+ * - life: 일상, 일기, 회고, 생각
+ * - review: 책, 영화, 제품 리뷰
+ */
+export const CategorySchema = z.enum(["dev", "life", "review"]);
+export type Category = z.infer<typeof CategorySchema>;
+
+export const CATEGORY_LABELS: Record<Category, string> = {
+  dev: "Dev",
+  life: "Life",
+  review: "Review",
+};
+
+export const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
+  dev: "개발 관련 글을 적어요",
+  life: "일상이랑 생각을 적어요",
+  review: "책이랑 영화, 컨텐츠 리뷰를 적어요",
+};
+
+/**
  * 포스트 스키마 (전체 데이터)
  */
 export const PostSchema = z.object({
@@ -24,7 +45,7 @@ export const PostSchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/, "날짜 형식: YYYY-MM-DD")
     .optional(),
   tags: z.array(z.string()).default([]),
-  thumbnail: z.string().url("올바른 URL 형식이 아닙니다").optional(),
+  category: CategorySchema,
 });
 
 export type Post = z.infer<typeof PostSchema>;
@@ -51,7 +72,7 @@ export const CreatePostInputSchema = z.object({
   content: z.string().min(1, "내용은 필수입니다"),
   excerpt: z.string().min(1, "요약은 필수입니다"),
   tags: z.array(z.string()).default([]),
-  thumbnail: z.string().url().optional(),
+  category: CategorySchema,
   publishedAt: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -68,7 +89,7 @@ export const UpdatePostInputSchema = z.object({
   content: z.string().optional(),
   excerpt: z.string().min(1).optional(),
   tags: z.array(z.string()).optional(),
-  thumbnail: z.string().url().optional(),
+  category: CategorySchema.optional(),
 });
 
 export type UpdatePostInput = z.infer<typeof UpdatePostInputSchema>;
@@ -79,6 +100,7 @@ export type UpdatePostInput = z.infer<typeof UpdatePostInputSchema>;
 export const PostsIndexSchema = z.object({
   posts: z.array(PostMetaSchema),
   byTag: z.record(z.string(), z.array(z.string())),
+  byCategory: z.record(CategorySchema, z.array(z.string())),
   totalCount: z.number(),
   updatedAt: z.string(),
 });

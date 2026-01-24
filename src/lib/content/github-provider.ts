@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import type { ContentProvider } from "./types";
-import type { Post, PostMeta, PostsIndex, CreatePostInput, UpdatePostInput } from "@/lib/schemas";
+import type { Post, PostMeta, PostsIndex, CreatePostInput, UpdatePostInput, Category } from "@/lib/schemas";
 import {
   parseFrontmatter,
   toPost,
@@ -88,6 +88,7 @@ export class GitHubProvider implements ContentProvider {
       return {
         posts: [],
         byTag: {},
+        byCategory: { dev: [], life: [], review: [] },
         totalCount: 0,
         updatedAt: new Date().toISOString(),
       };
@@ -118,7 +119,7 @@ export class GitHubProvider implements ContentProvider {
       publishedAt: post.publishedAt,
       updatedAt: post.updatedAt,
       tags: post.tags,
-      thumbnail: post.thumbnail,
+      category: post.category,
       readingTime: getReadingTimeMinutes(post.content),
     };
 
@@ -132,8 +133,9 @@ export class GitHubProvider implements ContentProvider {
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     );
 
-    // 태그 인덱스 재구성
+    // 태그/카테고리 인덱스 재구성
     index.byTag = this.buildTagIndex(index.posts);
+    index.byCategory = this.buildCategoryIndex(index.posts);
     index.totalCount = index.posts.length;
     index.updatedAt = new Date().toISOString();
 
@@ -148,6 +150,7 @@ export class GitHubProvider implements ContentProvider {
 
     index.posts = index.posts.filter((p) => p.slug !== slug);
     index.byTag = this.buildTagIndex(index.posts);
+    index.byCategory = this.buildCategoryIndex(index.posts);
     index.totalCount = index.posts.length;
     index.updatedAt = new Date().toISOString();
 
@@ -171,6 +174,23 @@ export class GitHubProvider implements ContentProvider {
     });
 
     return byTag;
+  }
+
+  /**
+   * 카테고리 인덱스 구성
+   */
+  private buildCategoryIndex(posts: PostMeta[]): Record<Category, string[]> {
+    const byCategory: Record<Category, string[]> = {
+      dev: [],
+      life: [],
+      review: [],
+    };
+
+    posts.forEach((post) => {
+      byCategory[post.category].push(post.slug);
+    });
+
+    return byCategory;
   }
 
   /**
@@ -212,6 +232,7 @@ export class GitHubProvider implements ContentProvider {
       const errorMsg = formatValidationError(result.error!);
       console.error(`[${cleanSlug}] Frontmatter validation failed: ${errorMsg}`);
       // 검증 실패 시에도 기본값으로 파싱 시도 (빌드 중단 방지)
+      const rawCategory = (data as Record<string, unknown>).category as string;
       return {
         slug: cleanSlug,
         title: (data as Record<string, unknown>).title as string || "Untitled",
@@ -219,7 +240,7 @@ export class GitHubProvider implements ContentProvider {
         excerpt: (data as Record<string, unknown>).excerpt as string || "",
         publishedAt: (data as Record<string, unknown>).publishedAt as string || new Date().toISOString().split("T")[0],
         tags: Array.isArray((data as Record<string, unknown>).tags) ? (data as Record<string, unknown>).tags as string[] : [],
-        thumbnail: (data as Record<string, unknown>).thumbnail as string | undefined,
+        category: (rawCategory === "dev" || rawCategory === "life" || rawCategory === "review") ? rawCategory : "dev",
       };
     }
 
@@ -303,6 +324,34 @@ export class GitHubProvider implements ContentProvider {
     return Object.keys(index.byTag).sort();
   }
 
+  /**
+   * 인덱스에서 카테고리별 포스트 조회 (content 제외)
+   * 빠름: 인덱스의 byCategory 맵 사용
+   */
+  async getPostsByCategory(category: Category): Promise<PostMeta[]> {
+    const index = this.loadIndex();
+    const slugs = index.byCategory[category] || [];
+
+    // 인덱스에서 해당 slug의 메타데이터 반환
+    return slugs
+      .map((slug) => index.posts.find((p) => p.slug === slug))
+      .filter((post): post is PostMeta => post !== undefined);
+  }
+
+  /**
+   * 사용 중인 모든 카테고리 조회
+   * 포스트가 있는 카테고리만 반환
+   */
+  async getAllCategories(): Promise<Category[]> {
+    const index = this.loadIndex();
+    const categories: Category[] = ["dev", "life", "review"];
+
+    // 포스트가 있는 카테고리만 필터링
+    return categories.filter(
+      (category) => index.byCategory[category]?.length > 0
+    );
+  }
+
   private generateMarkdown(
     input: CreatePostInput | (UpdatePostInput & { slug?: string }),
     existingPost?: Post
@@ -322,11 +371,11 @@ export class GitHubProvider implements ContentProvider {
           : existingPost?.publishedAt || now,
       tags:
         "tags" in input && input.tags ? input.tags : existingPost?.tags || [],
+      category:
+        "category" in input && input.category
+          ? input.category
+          : existingPost?.category || "dev",
     };
-
-    if (input.thumbnail || existingPost?.thumbnail) {
-      frontmatter.thumbnail = input.thumbnail || existingPost?.thumbnail;
-    }
 
     const content =
       "content" in input && input.content !== undefined
@@ -386,7 +435,7 @@ export class GitHubProvider implements ContentProvider {
       excerpt: input.excerpt,
       publishedAt: input.publishedAt || new Date().toISOString().split("T")[0],
       tags: input.tags || [],
-      thumbnail: input.thumbnail,
+      category: input.category,
     };
 
     // Update local index

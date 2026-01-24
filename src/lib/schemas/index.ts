@@ -5,11 +5,15 @@
  */
 
 export {
+  CategorySchema,
+  CATEGORY_LABELS,
+  CATEGORY_DESCRIPTIONS,
   PostSchema,
   PostMetaSchema,
   CreatePostInputSchema,
   UpdatePostInputSchema,
   PostsIndexSchema,
+  type Category,
   type Post,
   type PostMeta,
   type CreatePostInput,

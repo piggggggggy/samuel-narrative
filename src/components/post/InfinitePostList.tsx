@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
 import { PostCard } from "./PostCard";
 import { Spinner } from "@/components/common";
-import type { PostMeta } from "@/lib/content/types";
+import type { PostMeta, Category } from "@/lib/content/types";
 
 interface TagCount {
   name: string;
@@ -14,6 +13,7 @@ interface TagCount {
 interface InfinitePostListProps {
   initialPosts: PostMeta[];
   allTags?: TagCount[];
+  category?: Category; // 고정된 카테고리 (카테고리 페이지에서 사용)
   postsPerPage?: number;
   emptyMessage?: string;
   maxFilterTags?: number;
@@ -22,6 +22,7 @@ interface InfinitePostListProps {
 export function InfinitePostList({
   initialPosts,
   allTags = [],
+  category,
   postsPerPage = 10,
   emptyMessage = "아직 작성된 포스트가 없습니다.",
   maxFilterTags = 6,
@@ -38,36 +39,48 @@ export function InfinitePostList({
     .sort((a, b) => b.count - a.count)
     .slice(0, maxFilterTags);
 
-  // 태그 변경 시 포스트 목록 초기화 및 다시 로드
-  const handleTagSelect = useCallback(async (tag: string | null) => {
-    setSelectedTag(tag);
-    setPage(1);
-    setIsLoading(true);
+  // API URL 생성 헬퍼
+  const buildApiUrl = useCallback(
+    (pageNum: number, tag: string | null) => {
+      const params = new URLSearchParams();
+      params.set("page", String(pageNum));
+      params.set("limit", String(postsPerPage));
+      if (tag) params.set("tag", tag);
+      if (category) params.set("category", category);
+      return `/api/posts?${params.toString()}`;
+    },
+    [postsPerPage, category]
+  );
 
-    try {
-      const url = tag
-        ? `/api/posts?page=1&limit=${postsPerPage}&tag=${encodeURIComponent(tag)}`
-        : `/api/posts?page=1&limit=${postsPerPage}`;
-      const response = await fetch(url);
-      const data = await response.json();
+  // 태그 선택 핸들러
+  const handleTagSelect = useCallback(
+    async (tag: string | null) => {
+      setSelectedTag(tag);
+      setPage(1);
+      setIsLoading(true);
 
-      setPosts(data.posts || []);
-      setHasMore(data.hasMore);
-    } catch (error) {
-      console.error("Failed to load posts:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [postsPerPage]);
+      try {
+        const url = buildApiUrl(1, tag);
+        const response = await fetch(url);
+        const data = await response.json();
+
+        setPosts(data.posts || []);
+        setHasMore(data.hasMore);
+      } catch (error) {
+        console.error("Failed to load posts:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [buildApiUrl]
+  );
 
   const loadMore = useCallback(async () => {
     if (isLoading || !hasMore) return;
 
     setIsLoading(true);
     try {
-      const url = selectedTag
-        ? `/api/posts?page=${page + 1}&limit=${postsPerPage}&tag=${encodeURIComponent(selectedTag)}`
-        : `/api/posts?page=${page + 1}&limit=${postsPerPage}`;
+      const url = buildApiUrl(page + 1, selectedTag);
       const response = await fetch(url);
       const data = await response.json();
 
@@ -83,7 +96,7 @@ export function InfinitePostList({
     } finally {
       setIsLoading(false);
     }
-  }, [page, isLoading, hasMore, postsPerPage, selectedTag]);
+  }, [page, isLoading, hasMore, buildApiUrl, selectedTag]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -108,6 +121,14 @@ export function InfinitePostList({
   }, [loadMore, hasMore, isLoading]);
 
   const showTagFilter = allTags.length > 0;
+
+  // 빈 상태 메시지 생성
+  const getEmptyMessage = () => {
+    if (selectedTag) {
+      return `"${selectedTag}" 태그의 포스트가 없습니다.`;
+    }
+    return emptyMessage;
+  };
 
   return (
     <div>
@@ -137,26 +158,16 @@ export function InfinitePostList({
               {tag.name}
             </button>
           ))}
-          {allTags.length > maxFilterTags && (
-            <Link
-              href="/tags"
-              className="ml-1 text-sm text-text-muted transition-colors hover:text-accent-primary"
-            >
-              모든 태그 →
-            </Link>
-          )}
         </div>
       )}
 
       {/* 포스트 목록 */}
       {posts.length === 0 ? (
         <div className="py-16 text-center">
-          <p className="text-text-muted">
-            {selectedTag ? `"${selectedTag}" 태그의 포스트가 없습니다.` : emptyMessage}
-          </p>
+          <p className="text-text-muted">{getEmptyMessage()}</p>
         </div>
       ) : (
-        <div className="grid gap-8 md:gap-10">
+        <div className="grid gap-5 md:gap-6">
           {posts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}

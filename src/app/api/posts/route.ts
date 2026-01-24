@@ -3,6 +3,7 @@ import { getContentProvider } from "@/lib/content";
 import { isAdmin } from "@/lib/auth";
 import { createPostSchema } from "@/lib/validations/post";
 import { revalidatePost } from "@/lib/revalidate";
+import { CategorySchema } from "@/lib/schemas";
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,13 +11,38 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "0"); // 0 = 전체
     const tag = searchParams.get("tag"); // 태그 필터
+    const categoryParam = searchParams.get("category"); // 카테고리 필터
 
     const provider = await getContentProvider();
 
-    // 태그 필터가 있으면 인덱스의 태그별 조회, 없으면 전체 메타 조회
-    let posts = tag
-      ? await provider.getPostsByTag(tag)
-      : await provider.getAllPostMetas();
+    // 카테고리 파라미터 검증
+    const category = categoryParam
+      ? CategorySchema.safeParse(categoryParam).success
+        ? CategorySchema.parse(categoryParam)
+        : null
+      : null;
+
+    // 인덱스 기반 조회 (Phase 5 원칙 준수)
+    // 1. 카테고리/태그 단독 필터: Provider 인덱스 메서드 활용
+    // 2. 카테고리 + 태그 조합: 더 적은 결과셋에서 필터링
+    let posts;
+
+    if (category && tag) {
+      // 카테고리로 먼저 조회 (인덱스 활용), 그 후 태그 필터링
+      const categoryPosts = await provider.getPostsByCategory(category);
+      posts = categoryPosts.filter((post) =>
+        post.tags.some((t) => t.toLowerCase() === tag.toLowerCase())
+      );
+    } else if (category) {
+      // 카테고리 인덱스 활용
+      posts = await provider.getPostsByCategory(category);
+    } else if (tag) {
+      // 태그 인덱스 활용
+      posts = await provider.getPostsByTag(tag);
+    } else {
+      // 전체 조회
+      posts = await provider.getAllPostMetas();
+    }
 
     // 페이지네이션이 요청된 경우
     if (limit > 0) {

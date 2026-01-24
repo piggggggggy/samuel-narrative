@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { PostMeta } from "@/lib/content/types";
+import { CATEGORY_LABELS } from "@/lib/schemas";
 
 interface PostCardProps {
   post: PostMeta;
@@ -17,15 +18,6 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <article className="group -mx-4 rounded-xl p-4 glass-card">
       <Link href={`/posts/${post.slug}`} className="block">
-        {post.thumbnail && (
-          <div className="mb-4 overflow-hidden rounded-lg">
-            <img
-              src={post.thumbnail}
-              alt={post.title}
-              className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-        )}
         <h2 className="text-xl font-semibold text-text-primary transition-colors duration-200 group-hover:text-accent-primary">
           {post.title}
         </h2>
@@ -34,9 +26,15 @@ export function PostCard({ post }: PostCardProps) {
         </p>
       </Link>
       <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
-        <span className="text-xs text-text-muted">
-          {formattedDate} · {readingTime}분 읽기
-        </span>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="font-medium text-accent-primary">
+            {CATEGORY_LABELS[post.category]}
+          </span>
+          <span className="text-text-muted">·</span>
+          <span className="text-text-muted">
+            {formattedDate} · {readingTime}분 읽기
+          </span>
+        </div>
         {post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {post.tags.map((tag) => (

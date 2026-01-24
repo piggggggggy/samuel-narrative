@@ -1,13 +1,15 @@
 import { MetadataRoute } from "next";
 import { getContentProvider } from "@/lib/content";
+import type { Category } from "@/lib/schemas";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://samuel-narrative.vercel.app";
 
+const CATEGORIES: Category[] = ["dev", "life", "review"];
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const provider = await getContentProvider();
   const posts = await provider.getAllPosts();
-  const tags = await provider.getAllTags();
 
   const postUrls: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${BASE_URL}/posts/${post.slug}`,
@@ -16,10 +18,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const tagUrls: MetadataRoute.Sitemap = tags.map((tag) => ({
-    url: `${BASE_URL}/tags/${tag}`,
+  const categoryUrls: MetadataRoute.Sitemap = CATEGORIES.map((category) => ({
+    url: `${BASE_URL}/category/${category}`,
     changeFrequency: "weekly",
-    priority: 0.5,
+    priority: 0.7,
   }));
 
   return [
@@ -34,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    ...categoryUrls,
     ...postUrls,
-    ...tagUrls,
   ];
 }

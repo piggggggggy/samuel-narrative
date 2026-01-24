@@ -19,7 +19,7 @@ export function PostList({
   }
 
   return (
-    <div className="grid gap-8 md:gap-10">
+    <div className="grid gap-5 md:gap-6">
       {posts.map((post) => (
         <PostCard key={post.slug} post={post} />
       ))}

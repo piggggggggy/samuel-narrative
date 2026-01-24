@@ -3,6 +3,7 @@ title: "Hello World"
 excerpt: "첫 번째 블로그 포스트입니다. 블로그를 시작하며 간단한 인사를 전합니다."
 publishedAt: "2025-01-03"
 tags: ["blog", "intro"]
+category: "life"
 ---
 
 # Hello World
