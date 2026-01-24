@@ -118,6 +118,7 @@ export class GitHubProvider implements ContentProvider {
       publishedAt: post.publishedAt,
       updatedAt: post.updatedAt,
       tags: post.tags,
+      category: post.category,
       readingTime: getReadingTimeMinutes(post.content),
     };
 
@@ -211,6 +212,7 @@ export class GitHubProvider implements ContentProvider {
       const errorMsg = formatValidationError(result.error!);
       console.error(`[${cleanSlug}] Frontmatter validation failed: ${errorMsg}`);
       // 검증 실패 시에도 기본값으로 파싱 시도 (빌드 중단 방지)
+      const rawCategory = (data as Record<string, unknown>).category as string;
       return {
         slug: cleanSlug,
         title: (data as Record<string, unknown>).title as string || "Untitled",
@@ -218,6 +220,7 @@ export class GitHubProvider implements ContentProvider {
         excerpt: (data as Record<string, unknown>).excerpt as string || "",
         publishedAt: (data as Record<string, unknown>).publishedAt as string || new Date().toISOString().split("T")[0],
         tags: Array.isArray((data as Record<string, unknown>).tags) ? (data as Record<string, unknown>).tags as string[] : [],
+        category: (rawCategory === "dev" || rawCategory === "life" || rawCategory === "review") ? rawCategory : "dev",
       };
     }
 
@@ -320,6 +323,10 @@ export class GitHubProvider implements ContentProvider {
           : existingPost?.publishedAt || now,
       tags:
         "tags" in input && input.tags ? input.tags : existingPost?.tags || [],
+      category:
+        "category" in input && input.category
+          ? input.category
+          : existingPost?.category || "dev",
     };
 
     const content =
@@ -380,6 +387,7 @@ export class GitHubProvider implements ContentProvider {
       excerpt: input.excerpt,
       publishedAt: input.publishedAt || new Date().toISOString().split("T")[0],
       tags: input.tags || [],
+      category: input.category,
     };
 
     // Update local index

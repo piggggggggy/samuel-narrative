@@ -3,6 +3,7 @@ title: "Next.js 시작하기"
 excerpt: "Next.js의 기본 개념과 App Router를 활용한 프로젝트 구성 방법을 알아봅니다."
 publishedAt: "2025-01-02"
 tags: ["next.js", "react", "tutorial"]
+category: "dev"
 ---
 
 # Next.js 시작하기

@@ -10,6 +10,7 @@
         "dev",
         "image"
       ],
+      "category": "dev",
       "readingTime": 2
     },
     {
@@ -20,6 +21,7 @@
       "tags": [
         "q"
       ],
+      "category": "dev",
       "readingTime": 1
     },
     {
@@ -30,6 +32,7 @@
       "tags": [
         "aaaaa"
       ],
+      "category": "dev",
       "readingTime": 1
     },
     {
@@ -41,6 +44,7 @@
         "하위",
         "위"
       ],
+      "category": "dev",
       "readingTime": 1
     },
     {
@@ -52,6 +56,7 @@
         "ㅂㅈㄷ",
         "ㄷ"
       ],
+      "category": "dev",
       "readingTime": 1
     },
     {
@@ -62,6 +67,7 @@
       "tags": [
         "deploy"
       ],
+      "category": "dev",
       "readingTime": 1
     },
     {
@@ -73,6 +79,7 @@
         "blog",
         "intro"
       ],
+      "category": "life",
       "readingTime": 1
     },
     {
@@ -85,6 +92,7 @@
         "react",
         "tutorial"
       ],
+      "category": "dev",
       "readingTime": 1
     },
     {
@@ -97,6 +105,7 @@
         "design-pattern",
         "blog"
       ],
+      "category": "dev",
       "readingTime": 1
     }
   ],
@@ -153,5 +162,5 @@
     ]
   },
   "totalCount": 9,
-  "updatedAt": "2026-01-24T08:23:07.912Z"
+  "updatedAt": "2026-01-24T08:33:25.796Z"
 }

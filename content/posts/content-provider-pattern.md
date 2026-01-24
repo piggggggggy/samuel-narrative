@@ -3,6 +3,7 @@ title: "Content Provider 패턴으로 유연한 블로그 만들기"
 excerpt: "어댑터 패턴을 활용하여 다양한 컨텐츠 소스를 지원하는 블로그 아키텍처를 설계합니다."
 publishedAt: "2025-01-01"
 tags: ["architecture", "design-pattern", "blog"]
+category: "dev"
 ---
 
 

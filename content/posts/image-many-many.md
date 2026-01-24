@@ -3,6 +3,7 @@ title: "이미지를 잔뜩 활용한 포스팅"
 excerpt: "이미지 많이 활용한다. "
 publishedAt: "2026-01-06"
 tags: ["blog", "dev", "image"]
+category: "dev"
 ---
 
 ## 마크다운 이미지는 얼마나 못생겼을까?

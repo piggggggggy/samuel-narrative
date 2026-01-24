@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CategorySchema } from "@/lib/schemas";
 
 export const createPostSchema = z.object({
   title: z.string().min(1, "제목을 입력해주세요").max(200, "제목은 200자 이내로 입력해주세요"),
@@ -9,6 +10,7 @@ export const createPostSchema = z.object({
   content: z.string().min(1, "내용을 입력해주세요"),
   excerpt: z.string().max(500, "요약은 500자 이내로 입력해주세요"),
   tags: z.array(z.string()).default([]),
+  category: CategorySchema,
   publishedAt: z.string().optional(),
 });
 
@@ -17,6 +19,7 @@ export const updatePostSchema = z.object({
   content: z.string().min(1).optional(),
   excerpt: z.string().max(500).optional(),
   tags: z.array(z.string()).optional(),
+  category: CategorySchema.optional(),
 });
 
 export type CreatePostInput = z.infer<typeof createPostSchema>;

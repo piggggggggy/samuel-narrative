@@ -15,12 +15,15 @@ import { getReadingTimeMinutes } from "../src/lib/utils/reading-time";
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const INDEX_OUTPUT_PATH = path.join(process.cwd(), "content/posts-index.json");
 
+type Category = "dev" | "life" | "review";
+
 interface PostFrontmatter {
   title: string;
   excerpt: string;
   publishedAt: string;
   updatedAt?: string;
   tags: string[];
+  category: Category;
 }
 
 function getPostFiles(): string[] {
@@ -49,6 +52,7 @@ function parsePostMeta(filename: string): PostMeta | null {
       publishedAt: frontmatter.publishedAt,
       updatedAt: frontmatter.updatedAt,
       tags: frontmatter.tags || [],
+      category: frontmatter.category || "dev",
       readingTime: getReadingTimeMinutes(content),
     };
   } catch (error) {
