@@ -161,6 +161,22 @@
       "content-provider-pattern"
     ]
   },
+  "byCategory": {
+    "dev": [
+      "image-many-many",
+      "api-github-local",
+      "phase2-last-post",
+      "production-test",
+      "test-20260103-01",
+      "test-for-deploy",
+      "getting-started-nextjs",
+      "content-provider-pattern"
+    ],
+    "life": [
+      "hello-world"
+    ],
+    "review": []
+  },
   "totalCount": 9,
-  "updatedAt": "2026-01-24T08:33:25.796Z"
+  "updatedAt": "2026-01-24T08:42:56.149Z"
 }

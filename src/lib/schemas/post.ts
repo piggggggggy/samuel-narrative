@@ -94,6 +94,7 @@ export type UpdatePostInput = z.infer<typeof UpdatePostInputSchema>;
 export const PostsIndexSchema = z.object({
   posts: z.array(PostMetaSchema),
   byTag: z.record(z.string(), z.array(z.string())),
+  byCategory: z.record(CategorySchema, z.array(z.string())),
   totalCount: z.number(),
   updatedAt: z.string(),
 });

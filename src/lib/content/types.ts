@@ -8,6 +8,7 @@ import type {
   PostMeta,
   CreatePostInput,
   UpdatePostInput,
+  Category,
 } from "@/lib/schemas";
 
 export type {
@@ -16,6 +17,7 @@ export type {
   PostsIndex,
   CreatePostInput,
   UpdatePostInput,
+  Category,
 } from "@/lib/schemas";
 
 export interface ContentProvider {
@@ -34,6 +36,10 @@ export interface ContentProvider {
   getPostBySlug(slug: string): Promise<Post | null>;
   getPostsByTag(tag: string): Promise<PostMeta[]>;
   getAllTags(): Promise<string[]>;
+
+  // Phase 7: Category support
+  getPostsByCategory(category: Category): Promise<PostMeta[]>;
+  getAllCategories(): Promise<Category[]>;
 
   // Phase 2: Content management (optional)
   createPost?(post: CreatePostInput): Promise<Post>;
