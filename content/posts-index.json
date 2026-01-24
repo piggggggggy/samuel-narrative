@@ -10,7 +10,6 @@
         "dev",
         "image"
       ],
-      "thumbnail": "https://k3jh9gln3mqp1fvi.public.blob.vercel-storage.com/uploads/1767663160555-_____.png",
       "readingTime": 2
     },
     {
@@ -98,7 +97,6 @@
         "design-pattern",
         "blog"
       ],
-      "thumbnail": "https://k3jh9gln3mqp1fvi.public.blob.vercel-storage.com/uploads/1767622570931-FBF2809D-EA27-4490-A272-68B884223440_1_102_o.jpeg",
       "readingTime": 1
     }
   ],
@@ -155,5 +153,5 @@
     ]
   },
   "totalCount": 9,
-  "updatedAt": "2026-01-07T05:21:28.024Z"
+  "updatedAt": "2026-01-24T08:23:07.912Z"
 }

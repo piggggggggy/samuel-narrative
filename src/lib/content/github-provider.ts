@@ -118,7 +118,6 @@ export class GitHubProvider implements ContentProvider {
       publishedAt: post.publishedAt,
       updatedAt: post.updatedAt,
       tags: post.tags,
-      thumbnail: post.thumbnail,
       readingTime: getReadingTimeMinutes(post.content),
     };
 
@@ -219,7 +218,6 @@ export class GitHubProvider implements ContentProvider {
         excerpt: (data as Record<string, unknown>).excerpt as string || "",
         publishedAt: (data as Record<string, unknown>).publishedAt as string || new Date().toISOString().split("T")[0],
         tags: Array.isArray((data as Record<string, unknown>).tags) ? (data as Record<string, unknown>).tags as string[] : [],
-        thumbnail: (data as Record<string, unknown>).thumbnail as string | undefined,
       };
     }
 
@@ -324,10 +322,6 @@ export class GitHubProvider implements ContentProvider {
         "tags" in input && input.tags ? input.tags : existingPost?.tags || [],
     };
 
-    if (input.thumbnail || existingPost?.thumbnail) {
-      frontmatter.thumbnail = input.thumbnail || existingPost?.thumbnail;
-    }
-
     const content =
       "content" in input && input.content !== undefined
         ? input.content
@@ -386,7 +380,6 @@ export class GitHubProvider implements ContentProvider {
       excerpt: input.excerpt,
       publishedAt: input.publishedAt || new Date().toISOString().split("T")[0],
       tags: input.tags || [],
-      thumbnail: input.thumbnail,
     };
 
     // Update local index

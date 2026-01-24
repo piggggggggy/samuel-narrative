@@ -37,10 +37,8 @@ export async function generateMetadata({
     return {};
   }
 
-  // Use thumbnail if available, otherwise generate OG image
-  const ogImage = post.thumbnail
-    ? post.thumbnail
-    : `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(post.excerpt)}`;
+  // Generate OG image dynamically
+  const ogImage = `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(post.excerpt)}`;
 
   return {
     title: post.title,

@@ -45,7 +45,6 @@ export const GitHubFrontmatterSchema = z.object({
       return val;
     })
     .default([]),
-  thumbnail: z.string().optional(),
   draft: z.boolean().default(false),
 });
 
@@ -91,7 +90,6 @@ export function toPost(
     publishedAt: frontmatter.publishedAt,
     updatedAt: frontmatter.updatedAt,
     tags: frontmatter.tags,
-    thumbnail: frontmatter.thumbnail,
   };
 }
 
@@ -110,7 +108,6 @@ export function toPostMeta(
     publishedAt: frontmatter.publishedAt,
     updatedAt: frontmatter.updatedAt,
     tags: frontmatter.tags,
-    thumbnail: frontmatter.thumbnail,
     readingTime,
   };
 }

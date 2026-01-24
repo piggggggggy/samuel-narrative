@@ -21,7 +21,6 @@ interface PostFrontmatter {
   publishedAt: string;
   updatedAt?: string;
   tags: string[];
-  thumbnail?: string;
 }
 
 function getPostFiles(): string[] {
@@ -50,7 +49,6 @@ function parsePostMeta(filename: string): PostMeta | null {
       publishedAt: frontmatter.publishedAt,
       updatedAt: frontmatter.updatedAt,
       tags: frontmatter.tags || [],
-      thumbnail: frontmatter.thumbnail,
       readingTime: getReadingTimeMinutes(content),
     };
   } catch (error) {

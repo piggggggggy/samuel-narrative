@@ -9,7 +9,6 @@ export const createPostSchema = z.object({
   content: z.string().min(1, "내용을 입력해주세요"),
   excerpt: z.string().max(500, "요약은 500자 이내로 입력해주세요"),
   tags: z.array(z.string()).default([]),
-  thumbnail: z.string().optional(),
   publishedAt: z.string().optional(),
 });
 
@@ -18,7 +17,6 @@ export const updatePostSchema = z.object({
   content: z.string().min(1).optional(),
   excerpt: z.string().max(500).optional(),
   tags: z.array(z.string()).optional(),
-  thumbnail: z.string().optional(),
 });
 
 export type CreatePostInput = z.infer<typeof createPostSchema>;

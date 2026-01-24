@@ -17,15 +17,6 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <article className="group -mx-4 rounded-xl p-4 glass-card">
       <Link href={`/posts/${post.slug}`} className="block">
-        {post.thumbnail && (
-          <div className="mb-4 overflow-hidden rounded-lg">
-            <img
-              src={post.thumbnail}
-              alt={post.title}
-              className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-        )}
         <h2 className="text-xl font-semibold text-text-primary transition-colors duration-200 group-hover:text-accent-primary">
           {post.title}
         </h2>

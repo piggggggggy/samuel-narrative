@@ -24,7 +24,6 @@ export const PostSchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/, "날짜 형식: YYYY-MM-DD")
     .optional(),
   tags: z.array(z.string()).default([]),
-  thumbnail: z.string().url("올바른 URL 형식이 아닙니다").optional(),
 });
 
 export type Post = z.infer<typeof PostSchema>;
@@ -51,7 +50,6 @@ export const CreatePostInputSchema = z.object({
   content: z.string().min(1, "내용은 필수입니다"),
   excerpt: z.string().min(1, "요약은 필수입니다"),
   tags: z.array(z.string()).default([]),
-  thumbnail: z.string().url().optional(),
   publishedAt: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -68,7 +66,6 @@ export const UpdatePostInputSchema = z.object({
   content: z.string().optional(),
   excerpt: z.string().min(1).optional(),
   tags: z.array(z.string()).optional(),
-  thumbnail: z.string().url().optional(),
 });
 
 export type UpdatePostInput = z.infer<typeof UpdatePostInputSchema>;
