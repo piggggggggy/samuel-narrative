@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
 import { PostCard } from "./PostCard";
-import { CategoryFilter, buildCategoryCounts } from "./CategoryFilter";
 import { Spinner } from "@/components/common";
 import type { PostMeta, Category } from "@/lib/content/types";
 
@@ -15,8 +13,7 @@ interface TagCount {
 interface InfinitePostListProps {
   initialPosts: PostMeta[];
   allTags?: TagCount[];
-  allPosts?: PostMeta[]; // 카테고리 카운트 계산용
-  initialCategory?: Category | null;
+  category?: Category; // 고정된 카테고리 (카테고리 페이지에서 사용)
   postsPerPage?: number;
   emptyMessage?: string;
   maxFilterTags?: number;
@@ -25,8 +22,7 @@ interface InfinitePostListProps {
 export function InfinitePostList({
   initialPosts,
   allTags = [],
-  allPosts,
-  initialCategory = null,
+  category,
   postsPerPage = 10,
   emptyMessage = "아직 작성된 포스트가 없습니다.",
   maxFilterTags = 6,
@@ -36,12 +32,7 @@ export function InfinitePostList({
   const [hasMore, setHasMore] = useState(initialPosts.length >= postsPerPage);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(initialCategory);
   const observerRef = useRef<HTMLDivElement>(null);
-
-  // 카테고리 카운트 계산 (전체 포스트 기준)
-  const categoryCounts = buildCategoryCounts(allPosts || initialPosts);
-  const totalPostCount = allPosts?.length || initialPosts.length;
 
   // 상위 태그만 표시
   const topTags = allTags
@@ -50,7 +41,7 @@ export function InfinitePostList({
 
   // API URL 생성 헬퍼
   const buildApiUrl = useCallback(
-    (pageNum: number, tag: string | null, category: Category | null) => {
+    (pageNum: number, tag: string | null) => {
       const params = new URLSearchParams();
       params.set("page", String(pageNum));
       params.set("limit", String(postsPerPage));
@@ -58,19 +49,18 @@ export function InfinitePostList({
       if (category) params.set("category", category);
       return `/api/posts?${params.toString()}`;
     },
-    [postsPerPage]
+    [postsPerPage, category]
   );
 
-  // 필터 변경 시 포스트 목록 초기화 및 다시 로드
-  const handleFilterChange = useCallback(
-    async (tag: string | null, category: Category | null) => {
+  // 태그 선택 핸들러
+  const handleTagSelect = useCallback(
+    async (tag: string | null) => {
       setSelectedTag(tag);
-      setSelectedCategory(category);
       setPage(1);
       setIsLoading(true);
 
       try {
-        const url = buildApiUrl(1, tag, category);
+        const url = buildApiUrl(1, tag);
         const response = await fetch(url);
         const data = await response.json();
 
@@ -85,28 +75,12 @@ export function InfinitePostList({
     [buildApiUrl]
   );
 
-  // 카테고리 선택 핸들러
-  const handleCategorySelect = useCallback(
-    (category: Category | null) => {
-      handleFilterChange(selectedTag, category);
-    },
-    [handleFilterChange, selectedTag]
-  );
-
-  // 태그 선택 핸들러
-  const handleTagSelect = useCallback(
-    (tag: string | null) => {
-      handleFilterChange(tag, selectedCategory);
-    },
-    [handleFilterChange, selectedCategory]
-  );
-
   const loadMore = useCallback(async () => {
     if (isLoading || !hasMore) return;
 
     setIsLoading(true);
     try {
-      const url = buildApiUrl(page + 1, selectedTag, selectedCategory);
+      const url = buildApiUrl(page + 1, selectedTag);
       const response = await fetch(url);
       const data = await response.json();
 
@@ -122,7 +96,7 @@ export function InfinitePostList({
     } finally {
       setIsLoading(false);
     }
-  }, [page, isLoading, hasMore, buildApiUrl, selectedTag, selectedCategory]);
+  }, [page, isLoading, hasMore, buildApiUrl, selectedTag]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -147,16 +121,9 @@ export function InfinitePostList({
   }, [loadMore, hasMore, isLoading]);
 
   const showTagFilter = allTags.length > 0;
-  const showCategoryFilter = categoryCounts.length > 0;
 
   // 빈 상태 메시지 생성
   const getEmptyMessage = () => {
-    if (selectedCategory && selectedTag) {
-      return `"${selectedTag}" 태그의 포스트가 없습니다.`;
-    }
-    if (selectedCategory) {
-      return `이 카테고리에 포스트가 없습니다.`;
-    }
     if (selectedTag) {
       return `"${selectedTag}" 태그의 포스트가 없습니다.`;
     }
@@ -165,16 +132,6 @@ export function InfinitePostList({
 
   return (
     <div>
-      {/* 카테고리 필터 */}
-      {showCategoryFilter && (
-        <CategoryFilter
-          categories={categoryCounts}
-          selected={selectedCategory}
-          onSelect={handleCategorySelect}
-          totalCount={totalPostCount}
-        />
-      )}
-
       {/* 태그 필터 */}
       {showTagFilter && (
         <div className="mb-8 flex flex-wrap items-center gap-2">
@@ -201,14 +158,6 @@ export function InfinitePostList({
               {tag.name}
             </button>
           ))}
-          {allTags.length > maxFilterTags && (
-            <Link
-              href="/tags"
-              className="ml-1 text-sm text-text-muted transition-colors hover:text-accent-primary"
-            >
-              모든 태그 →
-            </Link>
-          )}
         </div>
       )}
 
@@ -218,7 +167,7 @@ export function InfinitePostList({
           <p className="text-text-muted">{getEmptyMessage()}</p>
         </div>
       ) : (
-        <div className="grid gap-8 md:gap-10">
+        <div className="grid gap-5 md:gap-6">
           {posts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}

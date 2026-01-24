@@ -6,6 +6,7 @@ import slugify from "slugify";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { TagInput } from "./TagInput";
 import { ButtonSpinner } from "@/components/common";
+import { CATEGORY_LABELS, type Category } from "@/lib/schemas";
 import type { Post } from "@/lib/content/types";
 
 interface PostFormProps {
@@ -19,9 +20,12 @@ interface FormState {
   excerpt: string;
   content: string;
   tags: string[];
+  category: Category;
 }
 
 const STORAGE_KEY = "post-draft";
+
+const CATEGORIES: Category[] = ["dev", "life", "review"];
 
 export function PostForm({ post, mode }: PostFormProps) {
   const router = useRouter();
@@ -35,6 +39,7 @@ export function PostForm({ post, mode }: PostFormProps) {
     excerpt: post?.excerpt || "",
     content: post?.content || "",
     tags: post?.tags || [],
+    category: post?.category || "dev",
   });
 
   // Load draft from localStorage (only for create mode)
@@ -126,6 +131,7 @@ export function PostForm({ post, mode }: PostFormProps) {
       excerpt: "",
       content: "",
       tags: [],
+      category: "dev",
     });
     setSlugEdited(false);
   };
@@ -182,6 +188,29 @@ export function PostForm({ post, mode }: PostFormProps) {
         <p className="mt-1 text-xs text-text-muted">
           영문 소문자, 숫자, 하이픈만 사용 가능
         </p>
+      </div>
+
+      {/* Category */}
+      <div>
+        <label
+          htmlFor="category"
+          className="block text-sm font-medium text-text-secondary"
+        >
+          카테고리
+        </label>
+        <select
+          id="category"
+          value={form.category}
+          onChange={(e) => updateField("category", e.target.value as Category)}
+          className="mt-1 block w-full rounded-md border border-border-default bg-bg-primary px-3 py-2 text-text-primary shadow-sm focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
+          required
+        >
+          {CATEGORIES.map((category) => (
+            <option key={category} value={category}>
+              {CATEGORY_LABELS[category]}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Excerpt */}

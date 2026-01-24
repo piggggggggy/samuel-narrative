@@ -7,6 +7,7 @@
 export {
   CategorySchema,
   CATEGORY_LABELS,
+  CATEGORY_DESCRIPTIONS,
   PostSchema,
   PostMetaSchema,
   CreatePostInputSchema,

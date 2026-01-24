@@ -23,9 +23,9 @@ export const CATEGORY_LABELS: Record<Category, string> = {
 };
 
 export const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
-  dev: "개발과 기술",
-  life: "일상과 생각",
-  review: "리뷰와 감상",
+  dev: "개발 관련 글을 적어요",
+  life: "일상이랑 생각을 적어요",
+  review: "책이랑 영화, 컨텐츠 리뷰를 적어요",
 };
 
 /**

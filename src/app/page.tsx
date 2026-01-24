@@ -1,5 +1,6 @@
 import { getContentProvider } from "@/lib/content";
-import { InfinitePostList } from "@/components/post";
+import { PostList, CategoryCards } from "@/components/post";
+import type { Category } from "@/lib/schemas";
 
 export const revalidate = 3600; // 1시간마다 재생성
 
@@ -8,16 +9,16 @@ const POSTS_PER_PAGE = 10;
 export default async function HomePage() {
   const provider = await getContentProvider();
   const allPosts = await provider.getAllPostMetas();
-  const allTags = await provider.getAllTags();
 
-  // 초기 로드: 첫 페이지만 (SEO용 SSR)
-  const initialPosts = allPosts.slice(0, POSTS_PER_PAGE);
+  // 최신 10개만 표시
+  const latestPosts = allPosts.slice(0, POSTS_PER_PAGE);
 
-  // 태그별 포스트 개수 계산
-  const tagCounts = allTags.map((tag) => ({
-    name: tag,
-    count: allPosts.filter((post) => post.tags.includes(tag)).length,
-  }));
+  // 카테고리별 포스트 개수 계산
+  const categoryCounts: { category: Category; count: number }[] = [
+    { category: "dev", count: allPosts.filter((p) => p.category === "dev").length },
+    { category: "life", count: allPosts.filter((p) => p.category === "life").length },
+    { category: "review", count: allPosts.filter((p) => p.category === "review").length },
+  ];
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
@@ -30,12 +31,9 @@ export default async function HomePage() {
         </p>
       </section>
 
-      <InfinitePostList
-        initialPosts={initialPosts}
-        allPosts={allPosts}
-        allTags={tagCounts}
-        postsPerPage={POSTS_PER_PAGE}
-      />
+      <PostList posts={latestPosts} />
+
+      <CategoryCards categoryCounts={categoryCounts} />
     </div>
   );
 }
