@@ -22,6 +22,12 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   review: "Review",
 };
 
+export const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
+  dev: "개발과 기술",
+  life: "일상과 생각",
+  review: "리뷰와 감상",
+};
+
 /**
  * 포스트 스키마 (전체 데이터)
  */
