@@ -32,6 +32,7 @@ export default async function HomePage() {
 
       <InfinitePostList
         initialPosts={initialPosts}
+        allPosts={allPosts}
         allTags={tagCounts}
         postsPerPage={POSTS_PER_PAGE}
       />
