@@ -1,16 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/config/site";
+import {
+  HeroSection,
+  CareerTimeline,
+  CompanyCard,
+  CertificationSection,
+  EducationSection,
+} from "./_components";
+import {
+  introduction,
+  careers,
+  experiences,
+  certifications,
+  educations,
+} from "./_data/content";
 
 export const metadata: Metadata = {
   title: "About",
   description: `${siteConfig.author.name}에 대해 알아보세요. 웹 개발자로서의 여정과 기술 스택을 소개합니다.`,
-};
-
-const skills = {
-  frontend: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-  backend: ["Node.js", "Express", "PostgreSQL", "MongoDB"],
-  tools: ["Git", "Docker", "VS Code", "Vercel"],
 };
 
 const socialLinks = [
@@ -40,8 +48,18 @@ const socialLinks = [
     name: "Email",
     href: `mailto:${siteConfig.social.email}`,
     icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+      <svg
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="1.5"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+        />
       </svg>
     ),
   },
@@ -50,95 +68,29 @@ const socialLinks = [
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      {/* Profile Section */}
-      <section className="mb-12 text-center">
-        <div className="mx-auto mb-6 h-32 w-32 overflow-hidden rounded-full bg-gradient-to-br from-blue-500 to-purple-600">
-          <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-white">
-            S
-          </div>
-        </div>
-        <h1 className="text-3xl font-bold text-text-primary">
-          {siteConfig.author.name}
-        </h1>
-        <p className="mt-2 text-lg text-text-secondary">
-          {siteConfig.author.role}
-        </p>
-      </section>
+      {/* Introduction */}
+      <HeroSection paragraphs={introduction.paragraphs} />
 
-      {/* Bio Section */}
+      {/* Career Timeline */}
+      <CareerTimeline careers={careers} />
+
+      {/* Company Experiences */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-text-primary">
-          소개
+        <h2 className="mb-6 text-2xl font-bold text-text-primary">
+          주요 경험
         </h2>
-        <div className="prose prose-gray dark:prose-invert">
-          <p className="text-text-secondary">
-            안녕하세요! 웹 개발을 사랑하는 개발자 {siteConfig.author.name}입니다.
-          </p>
-          <p className="mt-4 text-text-secondary">
-            사용자 경험을 중시하며, 깔끔하고 유지보수하기 좋은 코드를 작성하려고
-            노력합니다. 새로운 기술을 배우고 적용하는 것을 좋아하며, 이 블로그를
-            통해 개발 경험과 지식을 공유하고 있습니다.
-          </p>
-          <p className="mt-4 text-text-secondary">
-            주로 React와 Next.js를 사용한 프론트엔드 개발을 하고 있으며,
-            백엔드와 인프라에도 관심을 가지고 있습니다.
-          </p>
+        <div className="space-y-6">
+          {experiences.map((experience) => (
+            <CompanyCard key={experience.company} experience={experience} />
+          ))}
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-text-primary">
-          기술 스택
-        </h2>
-        <div className="grid gap-6 md:grid-cols-3">
-          <div>
-            <h3 className="mb-2 font-medium text-text-primary">
-              Frontend
-            </h3>
-            <ul className="space-y-1">
-              {skills.frontend.map((skill) => (
-                <li
-                  key={skill}
-                  className="text-text-secondary"
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-2 font-medium text-text-primary">
-              Backend
-            </h3>
-            <ul className="space-y-1">
-              {skills.backend.map((skill) => (
-                <li
-                  key={skill}
-                  className="text-text-secondary"
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-2 font-medium text-text-primary">
-              Tools
-            </h3>
-            <ul className="space-y-1">
-              {skills.tools.map((skill) => (
-                <li
-                  key={skill}
-                  className="text-text-secondary"
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
+      {/* Certifications */}
+      <CertificationSection certifications={certifications} />
+
+      {/* Education */}
+      <EducationSection educations={educations} />
 
       {/* Contact Section */}
       <section className="mb-12">
