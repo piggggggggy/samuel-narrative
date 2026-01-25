@@ -288,3 +288,39 @@ export const experiences: CompanyExperience[] = [
   megazoneExperience,
   myNormalExperience,
 ];
+
+// 자격증 섹션
+export interface CertificationItem {
+  name: string;
+  year: string;
+}
+
+export const certifications: CertificationItem[] = [
+  { name: "AWS Certified Solutions Architect - Professional", year: "2026" },
+  { name: "AWS Certified AI Practitioner", year: "2025" },
+];
+
+// 교육 섹션
+export interface EducationItem {
+  institution: string;
+  description: string;
+  period: string;
+}
+
+export const educations: EducationItem[] = [
+  {
+    institution: "항해99 플러스",
+    description: "프론트엔드 코스",
+    period: "2025.09 ~ 2025.12",
+  },
+  {
+    institution: "항해99",
+    description: "프론트엔드 코스",
+    period: "2021.05 ~ 2021.09",
+  },
+  {
+    institution: "국민대학교",
+    description: "산림환경시스템학과",
+    period: "2012 ~ 2019",
+  },
+];

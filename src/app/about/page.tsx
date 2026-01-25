@@ -1,8 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/config/site";
-import { HeroSection, CareerTimeline, CompanyCard } from "./_components";
-import { introduction, careers, experiences } from "./_data/content";
+import {
+  HeroSection,
+  CareerTimeline,
+  CompanyCard,
+  CertificationSection,
+  EducationSection,
+} from "./_components";
+import {
+  introduction,
+  careers,
+  experiences,
+  certifications,
+  educations,
+} from "./_data/content";
 
 export const metadata: Metadata = {
   title: "About",
@@ -73,6 +85,12 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+
+      {/* Certifications */}
+      <CertificationSection certifications={certifications} />
+
+      {/* Education */}
+      <EducationSection educations={educations} />
 
       {/* Contact Section */}
       <section className="mb-12">
