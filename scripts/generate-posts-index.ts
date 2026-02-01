@@ -6,11 +6,15 @@
  * - pnpm run generate-index
  */
 
+import { loadEnvConfig } from "@next/env";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import type { PostMeta, PostsIndex } from "../src/lib/content/types";
 import { getReadingTimeMinutes } from "../src/lib/utils/reading-time";
+
+// .env, .env.local 등을 Next.js와 동일하게 로드
+loadEnvConfig(process.cwd());
 
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const INDEX_OUTPUT_PATH = path.join(process.cwd(), "content/posts-index.json");
@@ -152,8 +156,13 @@ async function syncToBlob(index: PostsIndex): Promise<void> {
   }
 
   try {
-    const { saveIndexToBlob } = await import("../src/lib/content/blob-storage");
-    await saveIndexToBlob(index);
+    const { put } = await import("@vercel/blob");
+    await put("posts-index.json", JSON.stringify(index, null, 2), {
+      access: "public",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: "application/json",
+    });
     console.log("  - Blob sync: uploaded");
   } catch (error) {
     console.error("  - Blob sync: failed", error);

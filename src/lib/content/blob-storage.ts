@@ -28,6 +28,7 @@ export async function saveIndexToBlob(index: PostsIndex): Promise<void> {
   await put(BLOB_INDEX_KEY, JSON.stringify(index, null, 2), {
     access: "public",
     addRandomSuffix: false,
+    allowOverwrite: true,
     contentType: "application/json",
   });
 }
