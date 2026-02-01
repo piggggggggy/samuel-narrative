@@ -1,7 +1,7 @@
-import type { Post } from "@/lib/content";
+import type { Post, PostMeta } from "@/lib/content";
 
 export interface RelatedPostResult {
-  post: Post;
+  postMeta: PostMeta;
   score: number;
   commonTags: string[];
 }
@@ -12,21 +12,21 @@ export interface RelatedPostResult {
  */
 export function getRelatedPosts(
   currentPost: Post,
-  allPosts: Post[],
+  allPostMetas: PostMeta[],
   limit = 3
-): Post[] {
+): PostMeta[] {
   if (currentPost.tags.length === 0) {
     return [];
   }
 
-  const results: RelatedPostResult[] = allPosts
-    .filter((post) => post.slug !== currentPost.slug)
-    .map((post) => {
-      const commonTags = post.tags.filter((tag) =>
+  const results: RelatedPostResult[] = allPostMetas
+    .filter((postMeta) => postMeta.slug !== currentPost.slug)
+    .map((postMeta) => {
+      const commonTags = postMeta.tags.filter((tag) =>
         currentPost.tags.includes(tag)
       );
       return {
-        post,
+        postMeta,
         score: commonTags.length,
         commonTags,
       };
@@ -39,10 +39,10 @@ export function getRelatedPosts(
       }
       // 2차: 최신 포스트 우선
       return (
-        new Date(b.post.publishedAt).getTime() -
-        new Date(a.post.publishedAt).getTime()
+        new Date(b.postMeta.publishedAt).getTime() -
+        new Date(a.postMeta.publishedAt).getTime()
       );
     });
 
-  return results.slice(0, limit).map(({ post }) => post);
+  return results.slice(0, limit).map(({ postMeta }) => postMeta);
 }

@@ -1,22 +1,25 @@
 import Link from "next/link";
-import type { Post } from "@/lib/content";
+import type { PostMeta } from "@/lib/content";
 
 interface PostNavigationProps {
-  prevPost: Post | null;
-  nextPost: Post | null;
+  prevPostMeta: PostMeta | null;
+  nextPostMeta: PostMeta | null;
 }
 
-export function PostNavigation({ prevPost, nextPost }: PostNavigationProps) {
-  if (!prevPost && !nextPost) {
+export function PostNavigation({
+  prevPostMeta,
+  nextPostMeta,
+}: PostNavigationProps) {
+  if (!prevPostMeta && !nextPostMeta) {
     return null;
   }
 
   return (
     <nav className="mt-12 grid gap-4 border-t border-border-default pt-8 sm:grid-cols-2">
       {/* 이전 글 (더 오래된 글) */}
-      {prevPost ? (
+      {prevPostMeta ? (
         <Link
-          href={`/posts/${prevPost.slug}`}
+          href={`/posts/${prevPostMeta.slug}`}
           className="group flex flex-col rounded-lg border border-border-default p-4 transition-colors hover:border-border-muted hover:bg-bg-secondary"
         >
           <span className="flex items-center gap-1 text-sm text-text-muted">
@@ -36,7 +39,7 @@ export function PostNavigation({ prevPost, nextPost }: PostNavigationProps) {
             이전 글
           </span>
           <span className="mt-2 line-clamp-2 font-medium text-text-primary transition-colors group-hover:text-accent-primary">
-            {prevPost.title}
+            {prevPostMeta.title}
           </span>
         </Link>
       ) : (
@@ -44,9 +47,9 @@ export function PostNavigation({ prevPost, nextPost }: PostNavigationProps) {
       )}
 
       {/* 다음 글 (더 최신 글) */}
-      {nextPost ? (
+      {nextPostMeta ? (
         <Link
-          href={`/posts/${nextPost.slug}`}
+          href={`/posts/${nextPostMeta.slug}`}
           className="group flex flex-col rounded-lg border border-border-default p-4 text-right transition-colors hover:border-border-muted hover:bg-bg-secondary sm:col-start-2"
         >
           <span className="flex items-center justify-end gap-1 text-sm text-text-muted">
@@ -66,7 +69,7 @@ export function PostNavigation({ prevPost, nextPost }: PostNavigationProps) {
             </svg>
           </span>
           <span className="mt-2 line-clamp-2 font-medium text-text-primary transition-colors group-hover:text-accent-primary">
-            {nextPost.title}
+            {nextPostMeta.title}
           </span>
         </Link>
       ) : (

@@ -1,6 +1,39 @@
 {
   "posts": [
     {
+      "slug": "review-book-the-five-dysfunctions-of-a-team",
+      "title": "'팀워크의 부활' 감상문",
+      "excerpt": "'팀워크의 부활'을 읽음.",
+      "publishedAt": "2026-02-01",
+      "tags": [
+        "독후감"
+      ],
+      "category": "review",
+      "readingTime": 2
+    },
+    {
+      "slug": "review-book-how-trust-works",
+      "title": "'신뢰의 과학' 감상문",
+      "excerpt": "'신뢰의 과학'을 읽음",
+      "publishedAt": "2026-02-01",
+      "tags": [
+        "독후감"
+      ],
+      "category": "review",
+      "readingTime": 3
+    },
+    {
+      "slug": "review-book-rebel-ideas",
+      "title": "'다이버시티 파워' 감상문",
+      "excerpt": "'다이버시티 파워' 읽었음",
+      "publishedAt": "2026-02-01",
+      "tags": [
+        "독후감"
+      ],
+      "category": "review",
+      "readingTime": 2
+    },
+    {
       "slug": "image-many-many",
       "title": "이미지를 잔뜩 활용한 포스팅",
       "excerpt": "이미지 많이 활용한다. ",
@@ -110,6 +143,11 @@
     }
   ],
   "byTag": {
+    "독후감": [
+      "review-book-the-five-dysfunctions-of-a-team",
+      "review-book-how-trust-works",
+      "review-book-rebel-ideas"
+    ],
     "blog": [
       "image-many-many",
       "hello-world",
@@ -175,8 +213,12 @@
     "life": [
       "hello-world"
     ],
-    "review": []
+    "review": [
+      "review-book-the-five-dysfunctions-of-a-team",
+      "review-book-how-trust-works",
+      "review-book-rebel-ideas"
+    ]
   },
-  "totalCount": 9,
-  "updatedAt": "2026-02-01T15:09:07.035Z"
+  "totalCount": 12,
+  "updatedAt": "2026-02-01T16:22:33.923Z"
 }

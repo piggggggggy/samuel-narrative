@@ -1,5 +1,9 @@
 import { getContentProvider } from "@/lib/content";
-import { getReadingTimeMinutes, getRelatedPosts, extractToc } from "@/lib/utils";
+import {
+  getReadingTimeMinutes,
+  getRelatedPosts,
+  extractToc,
+} from "@/lib/utils";
 import {
   PostContent,
   RelatedPosts,
@@ -21,7 +25,7 @@ interface PostPageProps {
 
 export async function generateStaticParams() {
   const provider = await getContentProvider();
-  const posts = await provider.getAllPosts();
+  const posts = await provider.getAllPostMetas();
   return posts.map((post) => ({ slug: post.slug }));
 }
 
@@ -73,17 +77,19 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  const allPosts = await provider.getAllPosts();
-  const relatedPosts = getRelatedPosts(post, allPosts, 3);
+  const allPostMetas = await provider.getAllPostMetas();
+  const relatedPostMetas = getRelatedPosts(post, allPostMetas, 3);
 
   // 날짜순 정렬 (최신순)
-  const sortedPosts = [...allPosts].sort(
+  const sortedPostMetas = [...allPostMetas].sort(
     (a, b) =>
       new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
-  const currentIndex = sortedPosts.findIndex((p) => p.slug === slug);
-  const prevPost = sortedPosts[currentIndex + 1] || null; // 이전 글 (더 오래된)
-  const nextPost = sortedPosts[currentIndex - 1] || null; // 다음 글 (더 최신)
+  const currentIndex = sortedPostMetas.findIndex(
+    (postMeta) => postMeta.slug === slug
+  );
+  const prevPostMeta = sortedPostMetas[currentIndex + 1] || null; // 이전 글 (더 오래된)
+  const nextPostMeta = sortedPostMetas[currentIndex - 1] || null; // 다음 글 (더 최신)
 
   const formattedDate = new Date(post.publishedAt).toLocaleDateString("ko-KR", {
     year: "numeric",
@@ -113,9 +119,7 @@ export default async function PostPage({ params }: PostPageProps) {
               <h1 className="text-3xl font-bold text-text-primary md:text-4xl">
                 {post.title}
               </h1>
-              <p className="mt-4 text-lg text-text-secondary">
-                {post.excerpt}
-              </p>
+              <p className="mt-4 text-lg text-text-secondary">{post.excerpt}</p>
               <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-text-muted">
                 <time dateTime={post.publishedAt}>{formattedDate}</time>
                 <span className="text-border-default">·</span>
@@ -146,9 +150,12 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
           </article>
 
-          <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+          <PostNavigation
+            prevPostMeta={prevPostMeta}
+            nextPostMeta={nextPostMeta}
+          />
 
-          <RelatedPosts posts={relatedPosts} />
+          <RelatedPosts postMetas={relatedPostMetas} />
 
           <Utterances repo="piggggggggy/samuel-narrative" />
 

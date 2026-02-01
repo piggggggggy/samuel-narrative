@@ -1,12 +1,12 @@
 import Link from "next/link";
-import type { Post } from "@/lib/content";
+import type { PostMeta } from "@/lib/content";
 
 interface RelatedPostsProps {
-  posts: Post[];
+  postMetas: PostMeta[];
 }
 
-export function RelatedPosts({ posts }: RelatedPostsProps) {
-  if (posts.length === 0) {
+export function RelatedPosts({ postMetas }: RelatedPostsProps) {
+  if (postMetas.length === 0) {
     return null;
   }
 
@@ -16,21 +16,21 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
         관련 포스트
       </h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
+        {postMetas.map((postMeta) => (
           <Link
-            key={post.slug}
-            href={`/posts/${post.slug}`}
+            key={postMeta.slug}
+            href={`/posts/${postMeta.slug}`}
             className="group rounded-xl p-4 glass-card"
           >
             <h3 className="line-clamp-2 font-medium text-text-primary transition-colors group-hover:text-accent-primary">
-              {post.title}
+              {postMeta.title}
             </h3>
             <p className="mt-2 line-clamp-2 text-sm text-text-secondary">
-              {post.excerpt}
+              {postMeta.excerpt}
             </p>
-            {post.tags.length > 0 && (
+            {postMeta.tags.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1">
-                {post.tags.slice(0, 3).map((tag) => (
+                {postMeta.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
                     className="rounded-full bg-tag-bg px-2 py-0.5 text-xs text-tag-text"
