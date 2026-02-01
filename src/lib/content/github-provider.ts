@@ -1,14 +1,16 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { put, list } from "@vercel/blob";
 import type { ContentProvider } from "./types";
-import type { Post, PostMeta, PostsIndex, CreatePostInput, UpdatePostInput, Category } from "@/lib/schemas";
-import {
-  parseFrontmatter,
-  toPost,
-  formatValidationError,
-} from "./schemas";
+import type {
+  Post,
+  PostMeta,
+  PostsIndex,
+  CreatePostInput,
+  UpdatePostInput,
+  Category,
+} from "@/lib/schemas";
+import { parseFrontmatter, toPost, formatValidationError } from "./schemas";
 import { getReadingTimeMinutes } from "@/lib/utils/reading-time";
 
 const BLOB_INDEX_KEY = "posts-index.json";
@@ -115,16 +117,12 @@ export class GitHubProvider implements ContentProvider {
 
   /**
    * Vercel Blob에서 인덱스 로드
+   * blob-storage 모듈을 동적 import하여 page context에서 @vercel/blob 의존성 제거
    */
   private async loadIndexFromBlob(): Promise<PostsIndex | null> {
     try {
-      const { blobs } = await list({ prefix: BLOB_INDEX_KEY, limit: 1 });
-      if (blobs.length === 0) return null;
-
-      const response = await fetch(blobs[0].downloadUrl);
-      if (!response.ok) return null;
-
-      return (await response.json()) as PostsIndex;
+      const { loadIndexFromBlob } = await import("./blob-storage");
+      return await loadIndexFromBlob();
     } catch {
       return null;
     }
@@ -231,11 +229,8 @@ export class GitHubProvider implements ContentProvider {
    */
   private async saveIndex(index: PostsIndex): Promise<void> {
     if (isProduction()) {
-      await put(BLOB_INDEX_KEY, JSON.stringify(index, null, 2), {
-        access: "public",
-        addRandomSuffix: false,
-        contentType: "application/json",
-      });
+      const { saveIndexToBlob } = await import("./blob-storage");
+      await saveIndexToBlob(index);
     } else {
       fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 2));
     }
@@ -271,17 +266,29 @@ export class GitHubProvider implements ContentProvider {
 
     if (!result.success) {
       const errorMsg = formatValidationError(result.error!);
-      console.error(`[${cleanSlug}] Frontmatter validation failed: ${errorMsg}`);
+      console.error(
+        `[${cleanSlug}] Frontmatter validation failed: ${errorMsg}`
+      );
       // 검증 실패 시에도 기본값으로 파싱 시도 (빌드 중단 방지)
       const rawCategory = (data as Record<string, unknown>).category as string;
       return {
         slug: cleanSlug,
-        title: (data as Record<string, unknown>).title as string || "Untitled",
+        title:
+          ((data as Record<string, unknown>).title as string) || "Untitled",
         content,
-        excerpt: (data as Record<string, unknown>).excerpt as string || "",
-        publishedAt: (data as Record<string, unknown>).publishedAt as string || new Date().toISOString().split("T")[0],
-        tags: Array.isArray((data as Record<string, unknown>).tags) ? (data as Record<string, unknown>).tags as string[] : [],
-        category: (rawCategory === "dev" || rawCategory === "life" || rawCategory === "review") ? rawCategory : "dev",
+        excerpt: ((data as Record<string, unknown>).excerpt as string) || "",
+        publishedAt:
+          ((data as Record<string, unknown>).publishedAt as string) ||
+          new Date().toISOString().split("T")[0],
+        tags: Array.isArray((data as Record<string, unknown>).tags)
+          ? ((data as Record<string, unknown>).tags as string[])
+          : [],
+        category:
+          rawCategory === "dev" ||
+          rawCategory === "life" ||
+          rawCategory === "review"
+            ? rawCategory
+            : "dev",
       };
     }
 
