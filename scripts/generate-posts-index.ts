@@ -6,15 +6,11 @@
  * - pnpm run generate-index
  */
 
-import { loadEnvConfig } from "@next/env";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import type { PostMeta, PostsIndex } from "../src/lib/content/types";
 import { getReadingTimeMinutes } from "../src/lib/utils/reading-time";
-
-// .env, .env.local 등을 Next.js와 동일하게 로드
-loadEnvConfig(process.cwd());
 
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const INDEX_OUTPUT_PATH = path.join(process.cwd(), "content/posts-index.json");
