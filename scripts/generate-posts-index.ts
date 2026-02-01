@@ -145,7 +145,22 @@ function generateIndex(): PostsIndex {
   return index;
 }
 
-function main() {
+async function syncToBlob(index: PostsIndex): Promise<void> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    console.log("  - Blob sync: skipped (no BLOB_READ_WRITE_TOKEN)");
+    return;
+  }
+
+  try {
+    const { saveIndexToBlob } = await import("../src/lib/content/blob-storage");
+    await saveIndexToBlob(index);
+    console.log("  - Blob sync: uploaded");
+  } catch (error) {
+    console.error("  - Blob sync: failed", error);
+  }
+}
+
+async function main() {
   const index = generateIndex();
 
   // Ensure content directory exists
@@ -161,6 +176,8 @@ function main() {
   console.log(`  - Tags: ${Object.keys(index.byTag).length}`);
   console.log(`  - Categories: dev(${index.byCategory.dev.length}), life(${index.byCategory.life.length}), review(${index.byCategory.review.length})`);
   console.log(`  - Output: ${INDEX_OUTPUT_PATH}`);
+
+  await syncToBlob(index);
 }
 
 main();
