@@ -1,8 +1,37 @@
 import { getContentProvider } from "@/lib/content";
 import { PostList, CategoryCards } from "@/components/post";
 import type { Category } from "@/lib/schemas";
+import type { Metadata } from "next";
+import { siteConfig } from "@/lib/config/site";
+import { getDefaultOgImageUrl } from "@/lib/og";
 
 export const revalidate = 3600; // 1시간마다 재생성
+
+export const metadata: Metadata = {
+  title: {
+    absolute: siteConfig.name,
+  },
+  description: siteConfig.description,
+  openGraph: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    images: [
+      {
+        url: getDefaultOgImageUrl(),
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [getDefaultOgImageUrl()],
+  },
+};
 
 const POSTS_PER_PAGE = 10;
 

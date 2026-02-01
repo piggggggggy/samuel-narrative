@@ -24,11 +24,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 glass relative">
       <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
-        <Link
-          href="/"
-          className="text-xl font-bold text-text-primary"
-        >
-          Samuel&apos;s Blog
+        <Link href="/" className="text-xl font-bold text-text-primary">
+          Samuel Narrative
         </Link>
 
         {/* Desktop Navigation */}

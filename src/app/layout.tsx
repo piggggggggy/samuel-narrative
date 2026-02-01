@@ -7,6 +7,8 @@ import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { SessionProvider } from "@/components/providers";
 import { ProgressBar } from "@/components/common";
+import { siteConfig } from "@/lib/config/site";
+import { getDefaultOgImageUrl } from "@/lib/og";
 
 // 코드용 모노스페이스 폰트만 Next.js 최적화로 로드
 // 본문 폰트 Pretendard는 CSS CDN에서 Dynamic Subset으로 로드
@@ -16,20 +18,31 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://samuel-narrative.vercel.app";
-
 export const metadata: Metadata = {
   title: {
-    default: "Samuel Narrative",
-    template: "%s | Samuel Narrative",
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
   },
-  description:
-    "개인 기술 블로그 - 웹 개발, 아키텍처, 그리고 개발 경험을 공유합니다.",
+  description: siteConfig.description,
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    siteName: "Samuel Narrative",
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    images: [
+      {
+        url: getDefaultOgImageUrl(),
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [getDefaultOgImageUrl()],
   },
   robots: {
     index: true,
@@ -37,7 +50,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     types: {
-      "application/rss+xml": `${BASE_URL}/feed.xml`,
+      "application/rss+xml": `${siteConfig.url}/feed.xml`,
     },
   },
 };

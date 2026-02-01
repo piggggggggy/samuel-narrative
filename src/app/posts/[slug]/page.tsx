@@ -10,11 +10,10 @@ import { Utterances, ShareButtons } from "@/components/common";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { siteConfig } from "@/lib/config/site";
+import { getOgImageUrl } from "@/lib/og";
 
 export const revalidate = 3600;
-
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://samuel-narrative.vercel.app";
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -37,8 +36,7 @@ export async function generateMetadata({
     return {};
   }
 
-  // Generate OG image dynamically
-  const ogImage = `${BASE_URL}/api/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(post.excerpt)}`;
+  const ogImage = getOgImageUrl(slug);
 
   return {
     title: post.title,
@@ -94,7 +92,7 @@ export default async function PostPage({ params }: PostPageProps) {
   });
 
   const readingTime = getReadingTimeMinutes(post.content);
-  const postUrl = `${BASE_URL}/posts/${slug}`;
+  const postUrl = `${siteConfig.url}/posts/${slug}`;
   const tocItems = extractToc(post.content);
   const showToc = tocItems.length >= 3;
 
