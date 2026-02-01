@@ -8,6 +8,8 @@ import {
   CATEGORY_DESCRIPTIONS,
   type Category,
 } from "@/lib/schemas";
+import { siteConfig } from "@/lib/config/site";
+import { getDefaultOgImageUrl } from "@/lib/og";
 
 export const revalidate = 3600;
 
@@ -37,9 +39,32 @@ export async function generateMetadata({
 
   const label = CATEGORY_LABELS[parseResult.data];
   const description = CATEGORY_DESCRIPTIONS[parseResult.data];
+  const title = `${label} - ${description}`;
+  const fullDescription = `${label} 카테고리의 포스트 목록입니다. ${description}`;
+  const ogImage = getDefaultOgImageUrl();
+
   return {
-    title: `${label} - ${description}`,
-    description: `${label} 카테고리의 포스트 목록입니다. ${description}`,
+    title,
+    description: fullDescription,
+    openGraph: {
+      title,
+      description: fullDescription,
+      url: `${siteConfig.url}/category/${category}`,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${siteConfig.name} - ${label}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: fullDescription,
+      images: [ogImage],
+    },
   };
 }
 

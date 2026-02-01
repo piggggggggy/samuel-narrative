@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/config/site";
+import { getDefaultOgImageUrl } from "@/lib/og";
 import {
   HeroSection,
   CareerTimeline,
@@ -16,9 +17,30 @@ import {
   educations,
 } from "./_data/content";
 
+const aboutDescription = `${siteConfig.author.name}에 대해 알아보세요. 웹 개발자로서의 여정과 기술 스택을 소개합니다.`;
+
 export const metadata: Metadata = {
   title: "About",
-  description: `${siteConfig.author.name}에 대해 알아보세요. 웹 개발자로서의 여정과 기술 스택을 소개합니다.`,
+  description: aboutDescription,
+  openGraph: {
+    title: `About - ${siteConfig.name}`,
+    description: aboutDescription,
+    url: `${siteConfig.url}/about`,
+    images: [
+      {
+        url: getDefaultOgImageUrl(),
+        width: 1200,
+        height: 630,
+        alt: `About ${siteConfig.author.name}`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `About - ${siteConfig.name}`,
+    description: aboutDescription,
+    images: [getDefaultOgImageUrl()],
+  },
 };
 
 const socialLinks = [
