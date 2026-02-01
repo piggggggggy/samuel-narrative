@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { put } from "@vercel/blob";
+import { uploadFileToBlob } from "@/lib/content/blob-storage";
 import { isAdmin } from "@/lib/auth";
 
 // 허용되는 이미지 타입
@@ -57,10 +57,7 @@ export async function POST(request: Request) {
     const filename = `uploads/${timestamp}-${sanitizedName}`;
 
     // Vercel Blob에 업로드
-    const blob = await put(filename, file, {
-      access: "public",
-      addRandomSuffix: false,
-    });
+    const blob = await uploadFileToBlob(filename, file);
 
     return NextResponse.json({
       url: blob.url,

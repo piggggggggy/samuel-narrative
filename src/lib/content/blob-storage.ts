@@ -1,11 +1,14 @@
 /**
- * Vercel Blob 기반 인덱스 스토리지
- * API Route에서만 호출되어 Turbopack의 page context와 분리됨
+ * Vercel Blob 스토리지 통합 모듈
+ * @vercel/blob 호출을 한 곳에서 관리하여 의존성을 격리
  */
 import { put, list } from "@vercel/blob";
+import type { PutBlobResult } from "@vercel/blob";
 import type { PostsIndex } from "@/lib/schemas";
 
 const BLOB_INDEX_KEY = "posts-index.json";
+
+// --- Index 관련 ---
 
 export async function loadIndexFromBlob(): Promise<PostsIndex | null> {
   try {
@@ -26,5 +29,17 @@ export async function saveIndexToBlob(index: PostsIndex): Promise<void> {
     access: "public",
     addRandomSuffix: false,
     contentType: "application/json",
+  });
+}
+
+// --- 파일 업로드 ---
+
+export async function uploadFileToBlob(
+  pathname: string,
+  file: File | Blob,
+): Promise<PutBlobResult> {
+  return put(pathname, file, {
+    access: "public",
+    addRandomSuffix: false,
   });
 }
