@@ -129,13 +129,6 @@ export class GitHubProvider implements ContentProvider {
   }
 
   /**
-   * 인덱스 캐시 무효화 (CRUD 작업 후 호출)
-   */
-  private invalidateIndexCache(): void {
-    this.indexCache = null;
-  }
-
-  /**
    * 인덱스에 새 포스트 추가
    */
   private async addPostToIndex(post: Post): Promise<void> {
