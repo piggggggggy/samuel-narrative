@@ -195,9 +195,15 @@ export class GitHubProvider implements ContentProvider {
 
   /**
    * 인덱스 파일 저장
+   * Vercel 서버리스 환경에서는 파일시스템이 읽기 전용이므로
+   * 파일 쓰기 실패 시 인메모리 캐시만 갱신한다.
    */
   private saveIndex(index: PostsIndex): void {
-    fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 2));
+    try {
+      fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 2));
+    } catch {
+      // 배포 환경(Vercel)에서는 읽기 전용 파일시스템이므로 무시
+    }
     this.indexCache = index;
   }
 
