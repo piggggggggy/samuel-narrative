@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { put, list } from "@vercel/blob";
 import type { ContentProvider } from "./types";
 import type { Post, PostMeta, PostsIndex, CreatePostInput, UpdatePostInput, Category } from "@/lib/schemas";
 import {
@@ -9,6 +10,8 @@ import {
   formatValidationError,
 } from "./schemas";
 import { getReadingTimeMinutes } from "@/lib/utils/reading-time";
+
+const BLOB_INDEX_KEY = "posts-index.json";
 
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const POSTS_PATH = "content/posts";
@@ -76,15 +79,26 @@ export class GitHubProvider implements ContentProvider {
 
   /**
    * 인덱스 파일 로드 (캐싱)
+   * 상용: Vercel Blob → 번들 파일 폴백
+   * 로컬: 파일시스템
    */
-  private loadIndex(): PostsIndex {
+  private async loadIndex(): Promise<PostsIndex> {
     if (this.indexCache) {
       return this.indexCache;
     }
 
+    // 상용 환경: Vercel Blob에서 먼저 시도
+    if (isProduction()) {
+      const blobIndex = await this.loadIndexFromBlob();
+      if (blobIndex) {
+        this.indexCache = blobIndex;
+        return blobIndex;
+      }
+    }
+
+    // 로컬 또는 Blob 폴백: 파일시스템
     if (!fs.existsSync(INDEX_PATH)) {
       console.warn("posts-index.json not found. Run: pnpm generate-index");
-      // 빈 인덱스 반환
       return {
         posts: [],
         byTag: {},
@@ -100,6 +114,23 @@ export class GitHubProvider implements ContentProvider {
   }
 
   /**
+   * Vercel Blob에서 인덱스 로드
+   */
+  private async loadIndexFromBlob(): Promise<PostsIndex | null> {
+    try {
+      const { blobs } = await list({ prefix: BLOB_INDEX_KEY, limit: 1 });
+      if (blobs.length === 0) return null;
+
+      const response = await fetch(blobs[0].downloadUrl);
+      if (!response.ok) return null;
+
+      return (await response.json()) as PostsIndex;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
    * 인덱스 캐시 무효화 (CRUD 작업 후 호출)
    */
   private invalidateIndexCache(): void {
@@ -109,8 +140,8 @@ export class GitHubProvider implements ContentProvider {
   /**
    * 인덱스에 새 포스트 추가
    */
-  private addPostToIndex(post: Post): void {
-    const index = this.loadIndex();
+  private async addPostToIndex(post: Post): Promise<void> {
+    const index = await this.loadIndex();
 
     const meta: PostMeta = {
       slug: post.slug,
@@ -139,14 +170,14 @@ export class GitHubProvider implements ContentProvider {
     index.totalCount = index.posts.length;
     index.updatedAt = new Date().toISOString();
 
-    this.saveIndex(index);
+    await this.saveIndex(index);
   }
 
   /**
    * 인덱스에서 포스트 삭제
    */
-  private removePostFromIndex(slug: string): void {
-    const index = this.loadIndex();
+  private async removePostFromIndex(slug: string): Promise<void> {
+    const index = await this.loadIndex();
 
     index.posts = index.posts.filter((p) => p.slug !== slug);
     index.byTag = this.buildTagIndex(index.posts);
@@ -154,7 +185,7 @@ export class GitHubProvider implements ContentProvider {
     index.totalCount = index.posts.length;
     index.updatedAt = new Date().toISOString();
 
-    this.saveIndex(index);
+    await this.saveIndex(index);
   }
 
   /**
@@ -194,15 +225,19 @@ export class GitHubProvider implements ContentProvider {
   }
 
   /**
-   * 인덱스 파일 저장
-   * Vercel 서버리스 환경에서는 파일시스템이 읽기 전용이므로
-   * 파일 쓰기 실패 시 인메모리 캐시만 갱신한다.
+   * 인덱스 저장
+   * 상용: Vercel Blob에 저장
+   * 로컬: 파일시스템에 저장
    */
-  private saveIndex(index: PostsIndex): void {
-    try {
+  private async saveIndex(index: PostsIndex): Promise<void> {
+    if (isProduction()) {
+      await put(BLOB_INDEX_KEY, JSON.stringify(index, null, 2), {
+        access: "public",
+        addRandomSuffix: false,
+        contentType: "application/json",
+      });
+    } else {
       fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 2));
-    } catch {
-      // 배포 환경(Vercel)에서는 읽기 전용 파일시스템이므로 무시
     }
     this.indexCache = index;
   }
@@ -258,7 +293,7 @@ export class GitHubProvider implements ContentProvider {
    * 빠름: 인덱스 파일 1회 읽기
    */
   async getAllPostMetas(): Promise<PostMeta[]> {
-    const index = this.loadIndex();
+    const index = await this.loadIndex();
     return index.posts;
   }
 
@@ -311,7 +346,7 @@ export class GitHubProvider implements ContentProvider {
    * 빠름: 인덱스의 byTag 맵 사용
    */
   async getPostsByTag(tag: string): Promise<PostMeta[]> {
-    const index = this.loadIndex();
+    const index = await this.loadIndex();
     const normalizedTag = tag.toLowerCase();
     const slugs = index.byTag[normalizedTag] || [];
 
@@ -326,7 +361,7 @@ export class GitHubProvider implements ContentProvider {
    * 빠름: 인덱스의 byTag 키 사용
    */
   async getAllTags(): Promise<string[]> {
-    const index = this.loadIndex();
+    const index = await this.loadIndex();
     return Object.keys(index.byTag).sort();
   }
 
@@ -335,7 +370,7 @@ export class GitHubProvider implements ContentProvider {
    * 빠름: 인덱스의 byCategory 맵 사용
    */
   async getPostsByCategory(category: Category): Promise<PostMeta[]> {
-    const index = this.loadIndex();
+    const index = await this.loadIndex();
     const slugs = index.byCategory[category] || [];
 
     // 인덱스에서 해당 slug의 메타데이터 반환
@@ -349,7 +384,7 @@ export class GitHubProvider implements ContentProvider {
    * 포스트가 있는 카테고리만 반환
    */
   async getAllCategories(): Promise<Category[]> {
-    const index = this.loadIndex();
+    const index = await this.loadIndex();
     const categories: Category[] = ["dev", "life", "review"];
 
     // 포스트가 있는 카테고리만 필터링
@@ -444,8 +479,8 @@ export class GitHubProvider implements ContentProvider {
       category: input.category,
     };
 
-    // Update local index
-    this.addPostToIndex(post);
+    // Update index (Blob in production, filesystem locally)
+    await this.addPostToIndex(post);
 
     return post;
   }
@@ -492,8 +527,8 @@ export class GitHubProvider implements ContentProvider {
       slug,
     };
 
-    // Update local index
-    this.addPostToIndex(updatedPost);
+    // Update index (Blob in production, filesystem locally)
+    await this.addPostToIndex(updatedPost);
 
     return updatedPost;
   }
@@ -522,7 +557,7 @@ export class GitHubProvider implements ContentProvider {
       }),
     });
 
-    // Update local index
-    this.removePostFromIndex(slug);
+    // Update index (Blob in production, filesystem locally)
+    await this.removePostFromIndex(slug);
   }
 }
