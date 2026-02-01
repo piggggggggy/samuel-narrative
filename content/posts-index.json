@@ -1,34 +1,13 @@
 {
   "posts": [
     {
-      "slug": "review-book-the-five-dysfunctions-of-a-team",
-      "title": "'팀워크의 부활' 감상문",
-      "excerpt": "'팀워크의 부활'을 읽음.",
-      "publishedAt": "2026-02-01",
-      "tags": [
-        "독후감"
-      ],
-      "category": "review",
-      "readingTime": 2
-    },
-    {
-      "slug": "review-book-how-trust-works",
-      "title": "'신뢰의 과학' 감상문",
-      "excerpt": "'신뢰의 과학'을 읽음",
-      "publishedAt": "2026-02-01",
-      "tags": [
-        "독후감"
-      ],
-      "category": "review",
-      "readingTime": 3
-    },
-    {
       "slug": "review-book-rebel-ideas",
-      "title": "'다이버시티 파워' 감상문",
-      "excerpt": "'다이버시티 파워' 읽었음",
-      "publishedAt": "2026-02-01",
+      "title": "'다이버시티 파워'",
+      "excerpt": "'다이버시티 파워' 독후감",
+      "publishedAt": "2026-01-19",
       "tags": [
-        "독후감"
+        "독후감",
+        "책"
       ],
       "category": "review",
       "readingTime": 2
@@ -104,16 +83,52 @@
       "readingTime": 1
     },
     {
-      "slug": "hello-world",
-      "title": "Hello World",
-      "excerpt": "첫 번째 블로그 포스트입니다. 블로그를 시작하며 간단한 인사를 전합니다.",
-      "publishedAt": "2025-01-03",
+      "slug": "review-book-the-five-dysfunctions-of-a-team",
+      "title": "'팀워크의 부활'",
+      "excerpt": "'팀워크의 부활' 독후감",
+      "publishedAt": "2025-12-15",
       "tags": [
-        "blog",
-        "intro"
+        "독후감",
+        "책"
       ],
-      "category": "life",
-      "readingTime": 1
+      "category": "review",
+      "readingTime": 2
+    },
+    {
+      "slug": "review-book-how-trust-works",
+      "title": "'신뢰의 과학'",
+      "excerpt": "'신뢰의 과학' 독후감",
+      "publishedAt": "2025-11-17",
+      "tags": [
+        "독후감",
+        "책"
+      ],
+      "category": "review",
+      "readingTime": 3
+    },
+    {
+      "slug": "review-book-the-power-of-the-collective",
+      "title": "'집단의 힘'",
+      "excerpt": "'집단의 힘' 독후감",
+      "publishedAt": "2025-10-20",
+      "tags": [
+        "독후감",
+        "책"
+      ],
+      "category": "review",
+      "readingTime": 2
+    },
+    {
+      "slug": "review-book-whole-brain-living",
+      "title": "책, '나를 알고 싶을 때 뇌과학을 공부합니다'",
+      "excerpt": "'나를 알고 싶을 때 뇌과학을 공부합니다' 독후감",
+      "publishedAt": "2025-09-15",
+      "tags": [
+        "독후감",
+        "책"
+      ],
+      "category": "review",
+      "readingTime": 3
     },
     {
       "slug": "getting-started-nextjs",
@@ -144,13 +159,21 @@
   ],
   "byTag": {
     "독후감": [
+      "review-book-rebel-ideas",
       "review-book-the-five-dysfunctions-of-a-team",
       "review-book-how-trust-works",
-      "review-book-rebel-ideas"
+      "review-book-the-power-of-the-collective",
+      "review-book-whole-brain-living"
+    ],
+    "책": [
+      "review-book-rebel-ideas",
+      "review-book-the-five-dysfunctions-of-a-team",
+      "review-book-how-trust-works",
+      "review-book-the-power-of-the-collective",
+      "review-book-whole-brain-living"
     ],
     "blog": [
       "image-many-many",
-      "hello-world",
       "content-provider-pattern"
     ],
     "dev": [
@@ -180,9 +203,6 @@
     "deploy": [
       "test-for-deploy"
     ],
-    "intro": [
-      "hello-world"
-    ],
     "next.js": [
       "getting-started-nextjs"
     ],
@@ -210,15 +230,15 @@
       "getting-started-nextjs",
       "content-provider-pattern"
     ],
-    "life": [
-      "hello-world"
-    ],
+    "life": [],
     "review": [
+      "review-book-rebel-ideas",
       "review-book-the-five-dysfunctions-of-a-team",
       "review-book-how-trust-works",
-      "review-book-rebel-ideas"
+      "review-book-the-power-of-the-collective",
+      "review-book-whole-brain-living"
     ]
   },
-  "totalCount": 12,
-  "updatedAt": "2026-02-01T16:22:33.923Z"
+  "totalCount": 13,
+  "updatedAt": "2026-02-01T16:45:47.865Z"
 }
