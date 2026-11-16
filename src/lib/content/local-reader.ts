@@ -1,8 +1,8 @@
 /**
  * 로컬 checkout의 Markdown 읽기
  *
- * GitHub 설정이 없는 개발 환경에서 content/posts를 직접 읽는다.
- * 인덱스는 매번 파일에서 계산하며 content/posts-index.json은 읽거나 쓰지 않는다.
+ * content/posts의 파일에서 글과 인덱스를 계산한다.
+ * 인덱스는 파일로 저장하지 않는다.
  */
 import fs from "fs";
 import path from "path";
