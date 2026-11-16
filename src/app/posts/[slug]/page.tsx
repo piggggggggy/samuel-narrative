@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr/ArrowLeft";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -169,20 +170,7 @@ export default async function PostPage({ params }: PostPageProps) {
             href="/"
             className="inline-flex items-center gap-2 body-5 text-text-secondary transition-colors hover:text-text-primary"
           >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-              />
-            </svg>
+            <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
             목록으로 돌아가기
           </Link>
         </div>

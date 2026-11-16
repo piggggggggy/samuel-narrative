@@ -25,39 +25,35 @@ export function DashboardStats({ posts }: DashboardStatsProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {/* 전체 포스트 */}
-      <div className="glass-card rounded-lg p-6">
-        <div className="text-sm font-medium text-text-secondary">
-          전체 포스트
-        </div>
-        <div className="mt-2 text-3xl font-bold text-text-primary">
-          {totalPosts}
-        </div>
+      <div className="rounded-2xl border border-border-default bg-bg-secondary p-6">
+        <div className="caption-1 text-text-secondary">전체 포스트</div>
+        <div className="mt-2 heading-4 text-text-primary">{totalPosts}</div>
       </div>
 
       {/* 태그 수 */}
-      <div className="glass-card rounded-lg p-6">
-        <div className="text-sm font-medium text-text-secondary">태그</div>
-        <div className="mt-2 text-3xl font-bold text-text-primary">
+      <div className="rounded-2xl border border-border-default bg-bg-secondary p-6">
+        <div className="caption-1 text-text-secondary">태그</div>
+        <div className="mt-2 heading-4 text-text-primary">
           {Object.keys(tagCounts).length}
         </div>
       </div>
 
       {/* 인기 태그 */}
-      <div className="glass-card rounded-lg p-6 sm:col-span-2 lg:col-span-1">
-        <div className="text-sm font-medium text-text-secondary">인기 태그</div>
+      <div className="rounded-2xl border border-border-default bg-bg-secondary p-6 sm:col-span-2 lg:col-span-1">
+        <div className="caption-1 text-text-secondary">인기 태그</div>
         <div className="mt-2 flex flex-wrap gap-2">
           {topTags.length > 0 ? (
             topTags.map(([tag, count]) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 rounded-full bg-tag-bg px-2.5 py-0.5 text-sm text-tag-text"
+                className="inline-flex items-center gap-1 rounded-full bg-tag-bg px-3 py-1 caption-4 text-tag-text"
               >
                 {tag}
-                <span className="text-accent-primary">({count})</span>
+                <span className="text-text-muted">{count}</span>
               </span>
             ))
           ) : (
-            <span className="text-text-muted">태그 없음</span>
+            <span className="body-6 text-text-muted">태그 없음</span>
           )}
         </div>
       </div>

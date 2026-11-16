@@ -18,17 +18,15 @@ export default async function AdminDashboardPage({
   const posts = await store.listPosts();
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-        대시보드
-      </h1>
+    <div className="flex flex-col gap-8">
+      <h1 className="heading-5 text-text-primary">대시보드</h1>
 
       {saved && (
         <p
           role="status"
-          className="rounded-md border border-border-default bg-bg-secondary px-4 py-3 text-sm text-text-primary"
+          className="rounded-lg border border-border-default bg-bg-secondary px-4 py-3 body-6 text-text-primary"
         >
-          <span className="font-medium">{saved}</span> 글을 저장했습니다. 공개
+          <span className="body-4">{saved}</span> 글을 저장했습니다. 공개
           화면에는 다음 배포가 끝난 뒤에 반영됩니다.
         </p>
       )}
@@ -38,9 +36,7 @@ export default async function AdminDashboardPage({
 
       {/* Posts Table */}
       <div>
-        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-          포스트 관리
-        </h2>
+        <h2 className="mb-4 heading-6 text-text-primary">포스트 관리</h2>
         <PostTable posts={posts} />
       </div>
     </div>

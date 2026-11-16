@@ -1,5 +1,6 @@
 "use client";
 
+import { CaretRightIcon } from "@phosphor-icons/react/dist/ssr/CaretRight";
 import { useState, useId } from "react";
 import type { ExperienceSection as ExperienceSectionType } from "../_data/content";
 import { parseText } from "../_utils/parseText";
@@ -32,22 +33,12 @@ export function ExperienceSection({
           <h4 className="body-1 text-text-primary">{section.title}</h4>
           <p className="caption-2 text-text-muted">{section.summary}</p>
         </div>
-        <svg
+        <CaretRightIcon
           aria-hidden="true"
           className={`h-4 w-4 shrink-0 text-text-muted transition-transform duration-500 ${
             isOpen ? "rotate-90" : ""
           }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="2"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M8.25 4.5l7.5 7.5-7.5 7.5"
-          />
-        </svg>
+        />
       </button>
 
       {/* 컨텐츠 목록 */}

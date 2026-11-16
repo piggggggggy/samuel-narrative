@@ -1,5 +1,7 @@
 "use client";
 
+import { XIcon } from "@phosphor-icons/react/dist/ssr/X";
+import { ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
 import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { Spinner } from "@/components/common";
@@ -117,21 +119,10 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
           <button
             type="button"
             onClick={handleRemove}
-            className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white shadow-md hover:bg-red-600"
+            className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-danger text-bg-primary transition-colors hover:bg-danger-hover"
             title="썸네일 삭제"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <XIcon aria-hidden="true" className="h-4 w-4" />
           </button>
           <button
             type="button"
@@ -149,7 +140,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
           onClick={() => fileInputRef.current?.click()}
           className={`flex h-40 w-64 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
             isDragOver
-              ? "border-accent-primary bg-accent-primary/10"
+              ? "border-accent-primary bg-bg-tertiary"
               : "border-border-default bg-bg-secondary hover:border-text-muted"
           }`}
         >
@@ -162,20 +153,10 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
             </div>
           ) : (
             <>
-              <svg
+              <ImageIcon
+                aria-hidden="true"
                 className="h-10 w-10 text-text-muted"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
+              />
               <span className="mt-2 text-sm text-text-secondary">
                 클릭 또는 드래그하여 업로드
               </span>
@@ -194,7 +175,9 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
       />
 
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <p role="alert" className="body-6 text-danger">
+          {error}
+        </p>
       )}
     </div>
   );

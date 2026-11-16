@@ -1,3 +1,5 @@
+import { CaretLeftIcon } from "@phosphor-icons/react/dist/ssr/CaretLeft";
+import { CaretRightIcon } from "@phosphor-icons/react/dist/ssr/CaretRight";
 import Link from "next/link";
 import type { PostMeta } from "@/lib/content";
 
@@ -26,20 +28,7 @@ export function PostNavigation({
           className="group flex flex-col gap-2 rounded-2xl p-4 glass-card"
         >
           <span className="flex items-center gap-1 caption-2 text-text-muted">
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-              />
-            </svg>
+            <CaretLeftIcon aria-hidden="true" className="h-4 w-4" />
             이전 글
           </span>
           <span className="line-clamp-2 title-3 text-text-primary">
@@ -58,20 +47,7 @@ export function PostNavigation({
         >
           <span className="flex items-center justify-end gap-1 caption-2 text-text-muted">
             다음 글
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-              />
-            </svg>
+            <CaretRightIcon aria-hidden="true" className="h-4 w-4" />
           </span>
           <span className="line-clamp-2 title-3 text-text-primary">
             {nextPostMeta.title}

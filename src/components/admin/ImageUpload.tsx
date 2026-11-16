@@ -1,5 +1,6 @@
 "use client";
 
+import { ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
 import { useState, useRef, useCallback } from "react";
 import { Spinner } from "@/components/common";
 import { compressImage, logCompressionResult } from "@/lib/utils";
@@ -101,7 +102,7 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
         onDrop={handleDrop}
         className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
           isDragging
-            ? "border-accent-primary bg-accent-primary/10"
+            ? "border-accent-primary bg-bg-tertiary"
             : "border-border-default hover:border-text-muted"
         } ${state.isUploading ? "pointer-events-none opacity-50" : ""}`}
       >
@@ -120,19 +121,7 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
           </div>
         ) : (
           <>
-            <svg
-              className="h-8 w-8 text-text-muted"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
+            <ImageIcon aria-hidden="true" className="h-8 w-8 text-text-muted" />
             <p className="mt-2 text-sm text-text-secondary">
               클릭하거나 이미지를 드래그해서 업로드
             </p>
@@ -144,7 +133,9 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
       </div>
 
       {state.error && (
-        <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>
+        <p role="alert" className="body-6 text-danger">
+          {state.error}
+        </p>
       )}
     </div>
   );

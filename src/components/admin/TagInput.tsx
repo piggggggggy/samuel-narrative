@@ -1,5 +1,6 @@
 "use client";
 
+import { XIcon } from "@phosphor-icons/react/dist/ssr/X";
 import { useState, KeyboardEvent } from "react";
 
 interface TagInputProps {
@@ -33,41 +34,31 @@ export function TagInput({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-md border border-border-default bg-bg-primary px-3 py-2">
+    <div className="field flex flex-wrap items-center gap-2 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-accent-primary">
       {value.map((tag) => (
         <span
           key={tag}
-          className="inline-flex items-center gap-1 rounded-full bg-tag-bg px-2.5 py-0.5 text-sm text-tag-text"
+          className="inline-flex items-center gap-1 rounded-full bg-tag-bg py-0.5 pl-3 pr-1 caption-1 text-tag-text"
         >
           {tag}
           <button
             type="button"
             onClick={() => removeTag(tag)}
-            className="ml-1 text-accent-primary hover:opacity-70"
+            aria-label={`${tag} 태그 지우기`}
+            className="rounded-full p-1 text-text-muted transition-colors hover:bg-tag-bg-hover hover:text-text-primary"
           >
-            <svg
-              className="h-3 w-3"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <XIcon aria-hidden="true" className="h-3 w-3" />
           </button>
         </span>
       ))}
       <input
         type="text"
+        aria-label="태그"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={value.length === 0 ? placeholder : ""}
-        className="min-w-[120px] flex-1 border-none bg-transparent p-0 text-sm text-text-primary placeholder-text-muted outline-none"
+        className="min-w-32 flex-1 border-none bg-transparent p-0 body-6 text-text-primary outline-none placeholder:text-text-muted"
       />
     </div>
   );

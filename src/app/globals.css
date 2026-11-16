@@ -34,6 +34,12 @@
   --p-gray-870: #181818;
   --p-gray-1000: #000000;
 
+  /* Red: 오류와 삭제에만 쓴다 */
+  --p-red-300: #f97066;
+  --p-red-400: #f04438;
+  --p-red-700: #b42318;
+  --p-red-800: #912018;
+
   /* Terracotta: 포인트 색 하나 */
   --p-terracotta-300: #dba07a;
   --p-terracotta-400: #d18a5e;
@@ -68,6 +74,9 @@
   --accent-hover: var(--p-terracotta-800);
   /* 장식용 (진행 막대, 강조선) */
   --accent-decorative: var(--p-terracotta-500);
+
+  --danger: var(--p-red-700);
+  --danger-hover: var(--p-red-800);
 
   --tag-bg: var(--p-cloud-200);
   --tag-bg-hover: var(--p-cloud-300);
@@ -106,6 +115,9 @@
   --accent-primary: var(--p-terracotta-400);
   --accent-hover: var(--p-terracotta-300);
   --accent-decorative: var(--p-terracotta-400);
+
+  --danger: var(--p-red-300);
+  --danger-hover: var(--p-red-400);
 
   --tag-bg: var(--p-gray-800);
   --tag-bg-hover: var(--p-gray-750);
@@ -156,6 +168,9 @@
   --color-accent-primary: var(--accent-primary);
   --color-accent-hover: var(--accent-hover);
   --color-accent-decorative: var(--accent-decorative);
+
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
 
   --color-tag-bg: var(--tag-bg);
   --color-tag-bg-hover: var(--tag-bg-hover);
@@ -624,6 +639,86 @@ code.hljs {
     transform: scale(0.98);
   }
 
+  .button-primary:disabled,
+  .button-secondary:disabled,
+  .button-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* 보조 버튼: 테두리만 있는 버튼 */
+  .button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-default);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition:
+      transform 500ms var(--ease-base),
+      background-color 300ms var(--ease-base);
+  }
+
+  .button-secondary:hover:not(:disabled) {
+    background: var(--bg-tertiary);
+  }
+
+  /* 삭제처럼 되돌릴 수 없는 동작 */
+  .button-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--danger);
+    color: var(--bg-primary);
+    transition:
+      transform 500ms var(--ease-base),
+      background-color 300ms var(--ease-base);
+  }
+
+  .button-danger:hover:not(:disabled) {
+    background: var(--danger-hover);
+  }
+
+  .button-secondary:active:not(:disabled),
+  .button-danger:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  /* 입력란 */
+  .field {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-default);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 300ms var(--ease-base);
+  }
+
+  .field::placeholder {
+    color: var(--text-muted);
+  }
+
+  .field:hover {
+    border-color: var(--border-muted);
+  }
+
+  /* 오류 안내 */
+  .notice-danger {
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+    background: color-mix(in srgb, var(--danger) 8%, transparent);
+    color: var(--danger);
+  }
+
   /* 히어로 제목: 글자에만 왼쪽에서 오른쪽으로 그라데이션 */
   .hero-heading {
     background-image: linear-gradient(
@@ -716,7 +811,34 @@ code.hljs {
 
   .glass-card:active,
   .glass-button:active,
-  .button-primary:active {
+  .button-primary:active,
+  .button-secondary:active:not(:disabled),
+  .button-danger:active:not(:disabled) {
     transform: none;
   }
+}
+
+/* ========================================
+   마크다운 편집기: 라이브러리 기본색을 테마 토큰에 맞춘다
+   ======================================== */
+
+div[data-color-mode] .w-md-editor,
+div[data-color-mode] .wmde-markdown-var,
+div[data-color-mode] .wmde-markdown {
+  --color-canvas-default: var(--bg-primary);
+  --color-canvas-subtle: var(--bg-secondary);
+  --color-border-default: var(--border-default);
+  --color-border-muted: var(--border-default);
+  --color-fg-default: var(--text-primary);
+  --color-fg-muted: var(--text-secondary);
+  --color-fg-subtle: var(--text-muted);
+  --color-accent-fg: var(--accent-primary);
+  --color-neutral-muted: var(--bg-code-inline);
+  --md-editor-font-family: var(--font-sans);
+  font-family: var(--font-sans);
+}
+
+div[data-color-mode] .w-md-editor {
+  border-radius: 8px;
+  overflow: hidden;
 }

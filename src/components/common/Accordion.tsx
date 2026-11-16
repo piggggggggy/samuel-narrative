@@ -1,5 +1,6 @@
 "use client";
 
+import { CaretRightIcon } from "@phosphor-icons/react/dist/ssr/CaretRight";
 import { useState, useId } from "react";
 
 interface AccordionProps {
@@ -28,21 +29,12 @@ export function Accordion({
         className="flex w-full items-center justify-between gap-3 py-2.5 text-left transition-colors hover:text-accent-primary"
       >
         <span className="text-sm font-medium text-text-primary">{title}</span>
-        <svg
+        <CaretRightIcon
+          aria-hidden="true"
           className={`h-4 w-4 shrink-0 text-text-muted transition-transform duration-500 ${
             isOpen ? "rotate-90" : ""
           }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="2"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M8.25 4.5l7.5 7.5-7.5 7.5"
-          />
-        </svg>
+        />
       </button>
       <div
         id={contentId}
