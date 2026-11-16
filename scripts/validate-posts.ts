@@ -8,44 +8,9 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { z } from "zod";
+import { GitHubFrontmatterSchema } from "../src/lib/content/schemas/frontmatter";
 
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
-
-// Provider Layer 스키마 (직접 정의 - tsx에서 path alias 문제 방지)
-const GitHubFrontmatterSchema = z.object({
-  title: z.string().min(1, "title은 필수입니다"),
-  excerpt: z.string().min(1, "excerpt는 필수입니다"),
-  publishedAt: z.union([z.string(), z.date()]).transform((val) => {
-    if (val instanceof Date) {
-      return val.toISOString().split("T")[0];
-    }
-    return val;
-  }),
-  updatedAt: z
-    .union([z.string(), z.date()])
-    .transform((val) => {
-      if (val instanceof Date) {
-        return val.toISOString().split("T")[0];
-      }
-      return val;
-    })
-    .optional(),
-  tags: z
-    .union([z.array(z.string()), z.string()])
-    .transform((val) => {
-      if (typeof val === "string") {
-        return val
-          .split(",")
-          .map((t) => t.trim())
-          .filter(Boolean);
-      }
-      return val;
-    })
-    .default([]),
-  category: z.enum(["dev", "life", "review"]),
-  draft: z.boolean().default(false),
-});
 
 interface ValidationResult {
   file: string;
@@ -58,9 +23,7 @@ function getPostFiles(): string[] {
     console.warn(`Posts directory not found: ${POSTS_DIRECTORY}`);
     return [];
   }
-  return fs
-    .readdirSync(POSTS_DIRECTORY)
-    .filter((file) => file.endsWith(".md"));
+  return fs.readdirSync(POSTS_DIRECTORY).filter((file) => file.endsWith(".md"));
 }
 
 function validatePost(filename: string): ValidationResult {
@@ -86,21 +49,27 @@ function validatePost(filename: string): ValidationResult {
     return {
       file: filename,
       valid: false,
-      errors: [`Parse error: ${error instanceof Error ? error.message : "Unknown error"}`],
+      errors: [
+        `Parse error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      ],
     };
   }
 }
 
 function main() {
-  console.log("═══════════════════════════════════════════════════════════════");
+  console.log(
+    "═══════════════════════════════════════════════════════════════"
+  );
   console.log("  POST SCHEMA VALIDATION");
-  console.log("═══════════════════════════════════════════════════════════════\n");
+  console.log(
+    "═══════════════════════════════════════════════════════════════\n"
+  );
 
   const files = getPostFiles();
 
   if (files.length === 0) {
-    console.log("No post files found.\n");
-    return;
+    console.error("No post files found.\n");
+    process.exit(1);
   }
 
   console.log(`Found ${files.length} post files\n`);
@@ -133,9 +102,13 @@ function main() {
   }
 
   // 요약
-  console.log("───────────────────────────────────────────────────────────────");
+  console.log(
+    "───────────────────────────────────────────────────────────────"
+  );
   console.log(`Summary: ${validCount} valid, ${invalidCount} invalid`);
-  console.log("═══════════════════════════════════════════════════════════════\n");
+  console.log(
+    "═══════════════════════════════════════════════════════════════\n"
+  );
 
   // 실패 시 exit code 1
   if (invalidCount > 0) {

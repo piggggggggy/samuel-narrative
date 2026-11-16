@@ -15,7 +15,7 @@
     "schema:validate": "npx tsx scripts/validate-posts.ts",
     "images:cleanup": "node --import tsx scripts/cleanup-orphan-images.ts",
     "images:cleanup:dry": "node --import tsx scripts/cleanup-orphan-images.ts --dry-run",
-    "test": "node --import tsx --test scripts/image-cleanup.test.ts src/lib/content/local-reader.test.ts src/app/site-url.test.ts",
+    "test": "node --import tsx --test scripts/image-cleanup.test.ts src/lib/content/local-reader.test.ts src/app/site-url.test.ts src/lib/content/markdown.test.ts src/lib/schemas/post.test.ts",
     "test:images": "node --import tsx --test scripts/image-cleanup.test.ts"
   },
   "dependencies": {

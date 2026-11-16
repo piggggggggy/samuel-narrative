@@ -8,9 +8,7 @@ import fs from "fs";
 import path from "path";
 import type { Category, Post, PostMeta, PostsIndex } from "@/lib/schemas";
 import { getReadingTimeMinutes } from "@/lib/utils/reading-time";
-import { parseMarkdownPost } from "./markdown";
-
-const SLUG_PATTERN = /^[a-z0-9-]+$/;
+import { isValidSlug, parseMarkdownPost } from "./markdown";
 
 type Env = Record<string, string | undefined>;
 
@@ -62,7 +60,7 @@ export function listLocalPosts(postsDir: string): Post[] {
  * slug 형식이 맞지 않으면 파일 경로를 만들지 않고 null 반환
  */
 export function readLocalPost(postsDir: string, slug: string): Post | null {
-  if (!SLUG_PATTERN.test(slug)) {
+  if (!isValidSlug(slug)) {
     return null;
   }
 

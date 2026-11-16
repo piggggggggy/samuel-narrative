@@ -9,7 +9,12 @@ import type {
   UpdatePostInput,
   Category,
 } from "@/lib/schemas";
-import { parseMarkdownPost } from "./markdown";
+import {
+  isValidSlug,
+  parseMarkdownPost,
+  readFrontmatter,
+  serializePost,
+} from "./markdown";
 import {
   buildLocalIndex,
   listLocalPosts,
@@ -33,6 +38,10 @@ interface GitHubDirectoryItem {
   path: string;
   sha: string;
   type: "file" | "dir";
+}
+
+function today(): string {
+  return new Date().toISOString().split("T")[0];
 }
 
 function isProduction(): boolean {
@@ -312,6 +321,10 @@ export class GitHubProvider implements ContentProvider {
       return readLocalPost(POSTS_DIRECTORY, slug);
     }
 
+    if (!isValidSlug(slug)) {
+      return null;
+    }
+
     try {
       const fileResponse = await githubApiRequest<GitHubFileResponse>(
         `/contents/${POSTS_PATH}/${slug}.md`
@@ -375,48 +388,6 @@ export class GitHubProvider implements ContentProvider {
     );
   }
 
-  private generateMarkdown(
-    input: CreatePostInput | (UpdatePostInput & { slug?: string }),
-    existingPost?: Post
-  ): string {
-    const now = new Date().toISOString().split("T")[0];
-
-    const frontmatter: Record<string, unknown> = {
-      title:
-        "title" in input && input.title ? input.title : existingPost?.title,
-      excerpt:
-        "excerpt" in input && input.excerpt
-          ? input.excerpt
-          : existingPost?.excerpt,
-      publishedAt:
-        "publishedAt" in input && input.publishedAt
-          ? input.publishedAt
-          : existingPost?.publishedAt || now,
-      tags:
-        "tags" in input && input.tags ? input.tags : existingPost?.tags || [],
-      category:
-        "category" in input && input.category
-          ? input.category
-          : existingPost?.category || "dev",
-    };
-
-    const content =
-      "content" in input && input.content !== undefined
-        ? input.content
-        : existingPost?.content || "";
-
-    const yamlContent = Object.entries(frontmatter)
-      .map(([key, value]) => {
-        if (Array.isArray(value)) {
-          return `${key}: [${value.map((v) => `"${v}"`).join(", ")}]`;
-        }
-        return `${key}: "${value}"`;
-      })
-      .join("\n");
-
-    return `---\n${yamlContent}\n---\n\n${content}`;
-  }
-
   private async getFileSha(filePath: string): Promise<string | null> {
     try {
       const response = await githubApiRequest<GitHubFileResponse>(
@@ -429,7 +400,22 @@ export class GitHubProvider implements ContentProvider {
   }
 
   async createPost(input: CreatePostInput): Promise<Post> {
-    const markdown = this.generateMarkdown(input);
+    if (!isValidSlug(input.slug)) {
+      throw new Error(`Invalid slug "${input.slug}"`);
+    }
+
+    const publishedAt = input.publishedAt || today();
+    const tags = input.tags || [];
+    const markdown = serializePost(
+      {
+        title: input.title,
+        excerpt: input.excerpt,
+        publishedAt,
+        tags,
+        category: input.category,
+      },
+      input.content
+    );
     const filePath = `${POSTS_PATH}/${input.slug}.md`;
 
     const { branch } = getGitHubConfig();
@@ -456,8 +442,8 @@ export class GitHubProvider implements ContentProvider {
       title: input.title,
       content: input.content,
       excerpt: input.excerpt,
-      publishedAt: input.publishedAt || new Date().toISOString().split("T")[0],
-      tags: input.tags || [],
+      publishedAt,
+      tags,
       category: input.category,
     };
 
@@ -468,6 +454,10 @@ export class GitHubProvider implements ContentProvider {
   }
 
   async updatePost(slug: string, input: UpdatePostInput): Promise<Post> {
+    if (!isValidSlug(slug)) {
+      throw new Error(`Post with slug "${slug}" not found`);
+    }
+
     const filePath = `${POSTS_PATH}/${slug}.md`;
 
     const { branch } = getGitHubConfig();
@@ -488,8 +478,28 @@ export class GitHubProvider implements ContentProvider {
     ).toString("utf-8");
     const existingPost = this.parseMarkdownContent(slug, existingContent);
 
-    // Generate updated markdown
-    const markdown = this.generateMarkdown(input, existingPost);
+    // 수정한 값만 바꾸고 나머지 frontmatter는 그대로 둔다
+    const updatedPost: Post = {
+      ...existingPost,
+      ...(input.title ? { title: input.title } : {}),
+      ...(input.excerpt ? { excerpt: input.excerpt } : {}),
+      ...(input.tags ? { tags: input.tags } : {}),
+      ...(input.category ? { category: input.category } : {}),
+      ...(input.content !== undefined ? { content: input.content } : {}),
+      slug,
+      updatedAt: today(),
+    };
+    const markdown = serializePost(
+      {
+        title: updatedPost.title,
+        excerpt: updatedPost.excerpt,
+        updatedAt: updatedPost.updatedAt,
+        tags: updatedPost.tags,
+        category: updatedPost.category,
+      },
+      updatedPost.content,
+      readFrontmatter(existingContent)
+    );
 
     // Update file via GitHub API
     await githubApiRequest(`/contents/${filePath}`, {
@@ -502,13 +512,6 @@ export class GitHubProvider implements ContentProvider {
       }),
     });
 
-    // Return updated post
-    const updatedPost: Post = {
-      ...existingPost,
-      ...input,
-      slug,
-    };
-
     // Update index (Blob in production, filesystem locally)
     await this.addPostToIndex(updatedPost);
 
@@ -516,6 +519,10 @@ export class GitHubProvider implements ContentProvider {
   }
 
   async deletePost(slug: string): Promise<void> {
+    if (!isValidSlug(slug)) {
+      throw new Error(`Post with slug "${slug}" not found`);
+    }
+
     const filePath = `${POSTS_PATH}/${slug}.md`;
 
     const { branch } = getGitHubConfig();

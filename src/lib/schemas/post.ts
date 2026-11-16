@@ -62,20 +62,30 @@ export type PostMeta = z.infer<typeof PostMetaSchema>;
 
 /**
  * 포스트 생성 입력 스키마
+ * 관리자 API와 저장 계층이 함께 사용
  */
 export const CreatePostInputSchema = z.object({
   slug: z
     .string()
-    .min(1, "slug는 필수입니다")
-    .regex(/^[a-z0-9-]+$/, "slug는 소문자, 숫자, 하이픈만 허용됩니다"),
-  title: z.string().min(1, "제목은 필수입니다"),
-  content: z.string().min(1, "내용은 필수입니다"),
-  excerpt: z.string().min(1, "요약은 필수입니다"),
+    .min(1, "Slug를 입력해주세요")
+    .regex(
+      /^[a-z0-9-]+$/,
+      "Slug는 영문 소문자, 숫자, 하이픈만 사용할 수 있습니다"
+    ),
+  title: z
+    .string()
+    .min(1, "제목을 입력해주세요")
+    .max(200, "제목은 200자 이내로 입력해주세요"),
+  content: z.string().min(1, "내용을 입력해주세요"),
+  excerpt: z
+    .string()
+    .min(1, "요약을 입력해주세요")
+    .max(500, "요약은 500자 이내로 입력해주세요"),
   tags: z.array(z.string()).default([]),
   category: CategorySchema,
   publishedAt: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "날짜 형식: YYYY-MM-DD")
     .optional(),
 });
 
@@ -85,9 +95,9 @@ export type CreatePostInput = z.infer<typeof CreatePostInputSchema>;
  * 포스트 수정 입력 스키마
  */
 export const UpdatePostInputSchema = z.object({
-  title: z.string().min(1).optional(),
-  content: z.string().optional(),
-  excerpt: z.string().min(1).optional(),
+  title: z.string().min(1).max(200).optional(),
+  content: z.string().min(1).optional(),
+  excerpt: z.string().min(1).max(500).optional(),
   tags: z.array(z.string()).optional(),
   category: CategorySchema.optional(),
 });
