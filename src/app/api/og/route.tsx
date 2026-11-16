@@ -1,10 +1,10 @@
 import { ImageResponse } from "@vercel/og";
 import { NextRequest } from "next/server";
+import { siteConfig } from "@/lib/config/site";
 
 export const runtime = "edge";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://samuel-narrative.vercel.app";
+const BASE_URL = siteConfig.url;
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);

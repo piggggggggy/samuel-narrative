@@ -1,7 +1,7 @@
 import { getContentProvider } from "@/lib/content";
+import { siteConfig } from "@/lib/config/site";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://samuel-narrative.vercel.app";
+const BASE_URL = siteConfig.url;
 
 function escapeXml(text: string): string {
   return text
