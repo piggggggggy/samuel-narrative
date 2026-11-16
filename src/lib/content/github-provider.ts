@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import matter from "gray-matter";
 import type { ContentProvider } from "./types";
 import type {
   Post,
@@ -10,7 +9,13 @@ import type {
   UpdatePostInput,
   Category,
 } from "@/lib/schemas";
-import { parseFrontmatter, toPost, formatValidationError } from "./schemas";
+import { parseMarkdownPost } from "./markdown";
+import {
+  buildLocalIndex,
+  listLocalPosts,
+  readLocalPost,
+  shouldReadLocally,
+} from "./local-reader";
 import { getReadingTimeMinutes } from "@/lib/utils/reading-time";
 
 const BLOB_INDEX_KEY = "posts-index.json";
@@ -83,8 +88,13 @@ export class GitHubProvider implements ContentProvider {
    * 인덱스 파일 로드 (캐싱)
    * 상용: Vercel Blob → 번들 파일 폴백
    * 로컬: 파일시스템
+   * GitHub 설정이 없는 개발 환경: content/posts에서 매번 계산
    */
   private async loadIndex(): Promise<PostsIndex> {
+    if (shouldReadLocally()) {
+      return buildLocalIndex(POSTS_DIRECTORY);
+    }
+
     if (this.indexCache) {
       return this.indexCache;
     }
@@ -251,41 +261,7 @@ export class GitHubProvider implements ContentProvider {
   }
 
   private parseMarkdownContent(slug: string, fileContent: string): Post {
-    const { data, content } = matter(fileContent);
-    const cleanSlug = slug.replace(/\.md$/, "");
-
-    // Frontmatter 스키마 검증
-    const result = parseFrontmatter(data);
-
-    if (!result.success) {
-      const errorMsg = formatValidationError(result.error!);
-      console.error(
-        `[${cleanSlug}] Frontmatter validation failed: ${errorMsg}`
-      );
-      // 검증 실패 시에도 기본값으로 파싱 시도 (빌드 중단 방지)
-      const rawCategory = (data as Record<string, unknown>).category as string;
-      return {
-        slug: cleanSlug,
-        title:
-          ((data as Record<string, unknown>).title as string) || "Untitled",
-        content,
-        excerpt: ((data as Record<string, unknown>).excerpt as string) || "",
-        publishedAt:
-          ((data as Record<string, unknown>).publishedAt as string) ||
-          new Date().toISOString().split("T")[0],
-        tags: Array.isArray((data as Record<string, unknown>).tags)
-          ? ((data as Record<string, unknown>).tags as string[])
-          : [],
-        category:
-          rawCategory === "dev" ||
-          rawCategory === "life" ||
-          rawCategory === "review"
-            ? rawCategory
-            : "dev",
-      };
-    }
-
-    return toPost(cleanSlug, result.data!, content);
+    return parseMarkdownPost(slug, fileContent);
   }
 
   /**
@@ -303,6 +279,10 @@ export class GitHubProvider implements ContentProvider {
    * @deprecated 가능하면 getAllPostMetas() 사용 권장
    */
   async getAllPosts(): Promise<Post[]> {
+    if (shouldReadLocally()) {
+      return listLocalPosts(POSTS_DIRECTORY);
+    }
+
     const directoryItems = await githubApiRequest<GitHubDirectoryItem[]>(
       `/contents/${POSTS_PATH}`
     );
@@ -330,6 +310,10 @@ export class GitHubProvider implements ContentProvider {
   }
 
   async getPostBySlug(slug: string): Promise<Post | null> {
+    if (shouldReadLocally()) {
+      return readLocalPost(POSTS_DIRECTORY, slug);
+    }
+
     try {
       const fileResponse = await githubApiRequest<GitHubFileResponse>(
         `/contents/${POSTS_PATH}/${slug}.md`
