@@ -50,8 +50,6 @@ export function ThemeToggle() {
     );
   }
 
-  const isDark = theme === "dark" || theme === "dark-2";
-
   return (
     <button
       onClick={cycleTheme}

@@ -18,8 +18,6 @@ import {
 } from "./local-reader";
 import { getReadingTimeMinutes } from "@/lib/utils/reading-time";
 
-const BLOB_INDEX_KEY = "posts-index.json";
-
 const POSTS_DIRECTORY = path.join(process.cwd(), "content/posts");
 const POSTS_PATH = "content/posts";
 const INDEX_PATH = path.join(process.cwd(), "content/posts-index.json");

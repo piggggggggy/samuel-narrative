@@ -46,6 +46,8 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs["core-web-vitals"].rules,
+      // TypeScript가 미정의 식별자를 검사하므로 TS 파일에서는 끈다
+      "no-undef": "off",
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
       "@typescript-eslint/no-unused-vars": [

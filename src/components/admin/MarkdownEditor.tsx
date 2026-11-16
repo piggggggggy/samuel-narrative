@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState, useRef, useCallback } from "react";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import { Spinner, SpinnerOverlay } from "@/components/common";
+import { SpinnerOverlay } from "@/components/common";
 import {
   compressImage,
   logCompressionResult,
