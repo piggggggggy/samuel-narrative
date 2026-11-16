@@ -116,9 +116,7 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
         {state.isUploading ? (
           <div className="flex flex-col items-center gap-2">
             <Spinner size="lg" />
-            <span className="text-sm text-text-secondary">
-              업로드 중...
-            </span>
+            <span className="text-sm text-text-secondary">업로드 중...</span>
           </div>
         ) : (
           <>

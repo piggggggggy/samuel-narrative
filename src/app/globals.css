@@ -2,7 +2,9 @@
 @plugin "@tailwindcss/typography";
 
 /* Enable class-based dark mode for next-themes */
-@custom-variant dark (&:where(.dark, .dark *, .dark-1, .dark-1 *, .dark-2, .dark-2 *));
+@custom-variant dark (
+  &:where(.dark, .dark *, .dark-1, .dark-1 *, .dark-2, .dark-2 *)
+);
 
 /* ========================================
    PRIMITIVE COLOR TOKENS
@@ -17,7 +19,7 @@
   /* ===== Cloud Dancer Scale (Pantone 2026 Color of the Year) =====
      Base: #F0EEE9 - 따뜻한 화이트 톤 */
   --p-cloud-50: #faf9f7;
-  --p-cloud-100: #f0eee9;  /* Cloud Dancer 원본 */
+  --p-cloud-100: #f0eee9; /* Cloud Dancer 원본 */
   --p-cloud-200: #e6e3dc;
   --p-cloud-300: #d9d5cc;
   --p-cloud-400: #c4bfb3;
@@ -30,7 +32,7 @@
   /* ===== Terracotta Scale (Cloud Dancer Accent) ===== */
   --p-terracotta-300: #dba07a;
   --p-terracotta-400: #d18a5e;
-  --p-terracotta-500: #c2754f;  /* 메인 */
+  --p-terracotta-500: #c2754f; /* 메인 */
   --p-terracotta-600: #a86340;
   --p-terracotta-700: #8e5235;
 
@@ -180,17 +182,13 @@
     inset 0 20px 30px -10px rgba(255, 255, 255, 0.5);
 
   /* Glass outer shadow - 외부 그림자 (플로팅 효과) */
-  --glass-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
   --glass-shadow-lg:
-    0 12px 48px rgba(0, 0, 0, 0.15),
-    0 4px 16px rgba(0, 0, 0, 0.1);
+    0 12px 48px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
 
   /* Glass glow - 호버 시 빛나는 효과 */
   --glass-glow:
-    0 0 0 1px rgba(255, 255, 255, 0.6),
-    0 8px 24px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.6), 0 8px 24px rgba(0, 0, 0, 0.1),
     inset 0 1px 1px rgba(255, 255, 255, 0.9);
 
   /* Glass specular - 가장자리 광택 */
@@ -259,17 +257,13 @@
     inset 0 20px 30px -10px rgba(255, 255, 255, 0.08);
 
   /* Glass outer shadow */
-  --glass-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 2px 8px rgba(0, 0, 0, 0.25);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.25);
   --glass-shadow-lg:
-    0 12px 48px rgba(0, 0, 0, 0.45),
-    0 4px 16px rgba(0, 0, 0, 0.35);
+    0 12px 48px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.35);
 
   /* Glass glow */
   --glass-glow:
-    0 0 0 1px rgba(255, 255, 255, 0.2),
-    0 8px 24px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.25),
     inset 0 1px 1px rgba(255, 255, 255, 0.15);
 
   /* Glass specular - 더 강한 광택 */
@@ -336,16 +330,13 @@
 
   /* Glass outer shadow - 깊은 퍼플 */
   --glass-shadow:
-    0 8px 32px rgba(10, 10, 30, 0.5),
-    0 2px 8px rgba(10, 10, 30, 0.4);
+    0 8px 32px rgba(10, 10, 30, 0.5), 0 2px 8px rgba(10, 10, 30, 0.4);
   --glass-shadow-lg:
-    0 12px 48px rgba(10, 10, 30, 0.6),
-    0 4px 16px rgba(10, 10, 30, 0.5);
+    0 12px 48px rgba(10, 10, 30, 0.6), 0 4px 16px rgba(10, 10, 30, 0.5);
 
   /* Glass glow - 퍼플 글로우 */
   --glass-glow:
-    0 0 0 1px rgba(150, 150, 255, 0.18),
-    0 8px 24px rgba(10, 10, 30, 0.4),
+    0 0 0 1px rgba(150, 150, 255, 0.18), 0 8px 24px rgba(10, 10, 30, 0.4),
     inset 0 1px 1px rgba(180, 180, 255, 0.12);
 
   /* Glass specular - 퍼플 광택 */
@@ -363,8 +354,18 @@
 /* Tailwind theme extension */
 @theme {
   /* Font family */
-  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-  --font-mono: var(--font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace);
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-mono: var(
+    --font-mono,
+    ui-monospace,
+    SFMono-Regular,
+    "SF Mono",
+    Menlo,
+    Consolas,
+    "Liberation Mono",
+    monospace
+  );
 
   --color-bg-primary: var(--bg-primary);
   --color-bg-secondary: var(--bg-secondary);
@@ -519,18 +520,17 @@ code.hljs {
     position: relative;
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur))
+      saturate(var(--glass-saturate));
     border: 1px solid var(--glass-border);
     border-top-color: var(--glass-border-top);
     border-bottom-color: var(--glass-border-bottom);
-    box-shadow:
-      var(--glass-shadow),
-      var(--glass-inner-shadow);
+    box-shadow: var(--glass-shadow), var(--glass-inner-shadow);
   }
 
   /* Specular highlight overlay for .glass */
   .glass::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: var(--glass-specular);
@@ -546,13 +546,11 @@ code.hljs {
     border: 1px solid var(--glass-border);
     border-top-color: var(--glass-border-top);
     border-bottom-color: var(--glass-border-bottom);
-    box-shadow:
-      var(--glass-shadow),
-      var(--glass-inner-shadow);
+    box-shadow: var(--glass-shadow), var(--glass-inner-shadow);
   }
 
   .glass-panel::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: var(--glass-specular);
@@ -571,7 +569,7 @@ code.hljs {
   }
 
   .glass-card::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: var(--glass-specular);
@@ -670,7 +668,7 @@ code.hljs {
   }
 
   .glass-code::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(

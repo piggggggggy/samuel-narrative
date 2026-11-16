@@ -46,7 +46,9 @@ export async function POST(request: Request) {
 
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: `File too large. Maximum size for ${file.type === "image/gif" ? "GIF" : "this type"} is ${maxSizeLabel}` },
+        {
+          error: `File too large. Maximum size for ${file.type === "image/gif" ? "GIF" : "this type"} is ${maxSizeLabel}`,
+        },
         { status: 400 }
       );
     }

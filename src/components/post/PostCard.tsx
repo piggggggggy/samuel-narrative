@@ -21,9 +21,7 @@ export function PostCard({ post }: PostCardProps) {
         <h2 className="text-xl font-semibold text-text-primary transition-colors duration-200 group-hover:text-accent-primary">
           {post.title}
         </h2>
-        <p className="mt-2 line-clamp-2 text-text-secondary">
-          {post.excerpt}
-        </p>
+        <p className="mt-2 line-clamp-2 text-text-secondary">{post.excerpt}</p>
       </Link>
       <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
         <div className="flex items-center gap-2 text-xs">

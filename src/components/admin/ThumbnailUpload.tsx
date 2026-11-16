@@ -179,9 +179,7 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
               <span className="mt-2 text-sm text-text-secondary">
                 클릭 또는 드래그하여 업로드
               </span>
-              <span className="mt-1 text-xs text-text-muted">
-                최대 5MB
-              </span>
+              <span className="mt-1 text-xs text-text-muted">최대 5MB</span>
             </>
           )}
         </div>

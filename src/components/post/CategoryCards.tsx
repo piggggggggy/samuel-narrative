@@ -39,9 +39,7 @@ export function CategoryCards({ categoryCounts }: CategoryCardsProps) {
               <p className="mt-1 text-sm text-text-muted">
                 {CATEGORY_DESCRIPTIONS[category]}
               </p>
-              <p className="mt-3 text-xs text-text-muted">
-                {count}개의 포스트
-              </p>
+              <p className="mt-3 text-xs text-text-muted">{count}개의 포스트</p>
             </Link>
           );
         })}

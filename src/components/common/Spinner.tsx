@@ -29,9 +29,7 @@ export function SpinnerOverlay({ message }: SpinnerOverlayProps) {
   return (
     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-bg-primary/80 backdrop-blur-sm">
       <Spinner size="lg" />
-      {message && (
-        <p className="mt-3 text-sm text-text-secondary">{message}</p>
-      )}
+      {message && <p className="mt-3 text-sm text-text-secondary">{message}</p>}
     </div>
   );
 }

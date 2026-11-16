@@ -15,7 +15,9 @@ export function EducationSection({ educations }: EducationSectionProps) {
               <h3 className="font-medium text-text-primary">
                 {education.institution}
               </h3>
-              <span className="text-sm text-text-muted">{education.period}</span>
+              <span className="text-sm text-text-muted">
+                {education.period}
+              </span>
             </div>
             <p className="text-sm text-text-secondary">
               {education.description}

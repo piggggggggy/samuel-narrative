@@ -98,9 +98,7 @@ export default function AboutPage() {
 
       {/* Company Experiences */}
       <section className="mb-12">
-        <h2 className="mb-6 text-2xl font-bold text-text-primary">
-          주요 경험
-        </h2>
+        <h2 className="mb-6 text-2xl font-bold text-text-primary">주요 경험</h2>
         <div className="space-y-6">
           {experiences.map((experience) => (
             <CompanyCard key={experience.company} experience={experience} />
@@ -116,9 +114,7 @@ export default function AboutPage() {
 
       {/* Contact Section */}
       <section className="mb-12">
-        <h2 className="mb-4 text-xl font-semibold text-text-primary">
-          연락처
-        </h2>
+        <h2 className="mb-4 text-xl font-semibold text-text-primary">연락처</h2>
         <div className="flex gap-4">
           {socialLinks.map((link) => (
             <Link

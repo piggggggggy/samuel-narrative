@@ -23,7 +23,8 @@ export function ReadingProgress() {
         if (!progressRef.current) return;
 
         const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const docHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
         const progress = docHeight > 0 ? scrollTop / docHeight : 0;
         const clampedProgress = Math.min(1, Math.max(0, progress));
 

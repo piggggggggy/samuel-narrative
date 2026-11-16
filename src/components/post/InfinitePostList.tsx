@@ -175,15 +175,10 @@ export function InfinitePostList({
       )}
 
       {/* 로딩 트리거 영역 */}
-      <div
-        ref={observerRef}
-        className="flex h-20 items-center justify-center"
-      >
+      <div ref={observerRef} className="flex h-20 items-center justify-center">
         {isLoading && <Spinner size="lg" />}
         {!hasMore && posts.length > 0 && (
-          <p className="text-sm text-text-muted">
-            모든 포스트를 불러왔습니다
-          </p>
+          <p className="text-sm text-text-muted">모든 포스트를 불러왔습니다</p>
         )}
       </div>
     </div>

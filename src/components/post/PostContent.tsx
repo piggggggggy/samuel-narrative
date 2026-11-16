@@ -99,7 +99,7 @@ export function PostContent({ content }: PostContentProps) {
 
             // 메타데이터 없으면 기본 img 태그 사용 (기존 이미지 호환)
             return (
-              // eslint-disable-next-line @next/next/no-img-element
+              // biome-ignore lint/performance/noImgElement: 크기 정보가 없는 기존 이미지는 next/image를 쓸 수 없다
               <img src={url} alt={alt || ""} className="rounded-lg" />
             );
           },

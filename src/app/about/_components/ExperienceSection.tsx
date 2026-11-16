@@ -73,7 +73,9 @@ export function ExperienceSection({
                   )}
                 </div>
                 {item.subtitle && (
-                  <p className="mb-2 text-xs text-text-muted">{item.subtitle}</p>
+                  <p className="mb-2 text-xs text-text-muted">
+                    {item.subtitle}
+                  </p>
                 )}
                 <ul className="space-y-1 text-sm text-text-secondary">
                   {item.description.map((desc, idx) => (

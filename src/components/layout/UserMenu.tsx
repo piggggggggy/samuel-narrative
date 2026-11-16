@@ -63,9 +63,7 @@ export function UserMenu() {
             <p className="text-sm font-medium text-text-primary">
               {session.user?.name}
             </p>
-            <p className="text-xs text-text-muted">
-              {session.user?.email}
-            </p>
+            <p className="text-xs text-text-muted">{session.user?.email}</p>
           </div>
 
           {isAdmin && (

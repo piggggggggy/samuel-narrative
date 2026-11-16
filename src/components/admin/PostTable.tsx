@@ -143,10 +143,7 @@ export function PostTable({ posts }: PostTableProps) {
               </tr>
             ) : (
               filteredPosts.map((post) => (
-                <tr
-                  key={post.slug}
-                  className="hover:bg-bg-secondary"
-                >
+                <tr key={post.slug} className="hover:bg-bg-secondary">
                   <td className="px-6 py-4">
                     <div>
                       <Link
@@ -188,9 +185,7 @@ export function PostTable({ posts }: PostTableProps) {
                       >
                         수정
                       </Link>
-                      <span className="text-border-default">
-                        |
-                      </span>
+                      <span className="text-border-default">|</span>
                       <Link
                         href={`/posts/${post.slug}`}
                         className="text-text-secondary hover:text-text-primary"
@@ -198,9 +193,7 @@ export function PostTable({ posts }: PostTableProps) {
                       >
                         보기
                       </Link>
-                      <span className="text-border-default">
-                        |
-                      </span>
+                      <span className="text-border-default">|</span>
                       <button
                         type="button"
                         onClick={() => setDeleteTarget(post)}
