@@ -1,20 +1,18 @@
-name: Cleanup Orphan Images
+name: Report Unreferenced Images
 
 on:
   schedule:
     # 매월 1일 자정 (UTC)
-    - cron: '0 0 1 * *'
+    - cron: "0 0 1 * *"
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Dry run (삭제 없이 프리뷰만)'
-        required: false
-        default: 'false'
-        type: boolean
+
+permissions:
+  contents: read
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
@@ -28,20 +26,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Run cleanup (dry run)
-        if: ${{ github.event.inputs.dry_run == 'true' }}
+      - name: Test report safeguards
+        run: pnpm test:images
+
+      - name: Report candidates (never delete)
         run: pnpm images:cleanup:dry
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
-      - name: Run cleanup
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: pnpm images:cleanup
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
