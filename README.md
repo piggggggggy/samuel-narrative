@@ -1,5 +1,7 @@
 # samuel-narrative
 
+프로젝트 분석과 개선 순서: [개선 로드맵](IMPROVEMENT-ROADMAP.md).
+
 ## 이미지 정리 후보 보고
 
 ```sh
