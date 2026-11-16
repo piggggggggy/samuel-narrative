@@ -15,34 +15,34 @@ interface CategoryCardsProps {
 }
 
 export function CategoryCards({ categoryCounts }: CategoryCardsProps) {
-  const categories: Category[] = ["dev", "life", "review"];
+  // 글이 있는 주제만 보여준다
+  const categories = categoryCounts.filter(({ count }) => count > 0);
+
+  if (categories.length === 0) return null;
 
   return (
-    <section className="mt-12 border-t border-border-default pt-12">
-      <h2 className="mb-6 text-lg font-semibold text-text-primary">
-        카테고리별로 더 많은 글 탐색하기
+    <section aria-labelledby="categories-heading">
+      <h2 id="categories-heading" className="heading-5 text-text-primary">
+        주제별로 읽기
       </h2>
-      <div className="grid gap-4 sm:grid-cols-3">
-        {categories.map((category) => {
-          const countData = categoryCounts.find((c) => c.category === category);
-          const count = countData?.count || 0;
-
-          return (
-            <Link
-              key={category}
-              href={`/category/${category}`}
-              className="group rounded-xl border border-border-default bg-bg-secondary p-5 transition-all hover:border-accent-primary hover:shadow-md"
-            >
-              <h3 className="text-base font-semibold text-text-primary group-hover:text-accent-primary">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        {categories.map(({ category, count }) => (
+          <Link
+            key={category}
+            href={`/category/${category}`}
+            className="group rounded-2xl p-6 glass-card"
+          >
+            <div className="flex items-baseline justify-between gap-4">
+              <h3 className="heading-6 text-text-primary">
                 {CATEGORY_LABELS[category]}
               </h3>
-              <p className="mt-1 text-sm text-text-muted">
-                {CATEGORY_DESCRIPTIONS[category]}
-              </p>
-              <p className="mt-3 text-xs text-text-muted">{count}개의 포스트</p>
-            </Link>
-          );
-        })}
+              <span className="caption-4 text-text-muted">글 {count}편</span>
+            </div>
+            <p className="mt-2 body-6 text-text-secondary">
+              {CATEGORY_DESCRIPTIONS[category]}
+            </p>
+          </Link>
+        ))}
       </div>
     </section>
   );

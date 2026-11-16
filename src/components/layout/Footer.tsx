@@ -49,21 +49,21 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border-default bg-bg-secondary">
+    <footer className="bg-bg-secondary">
       <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-sm text-text-secondary">
-            &copy; {currentYear} Samuel&apos;s Blog. All rights reserved.
+          <p className="caption-2 text-text-secondary">
+            &copy; {currentYear} {siteConfig.name}
           </p>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             {socialLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-secondary transition-colors hover:text-text-primary"
+                className="flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary glass-hover hover:text-text-primary"
                 aria-label={link.name}
               >
                 {link.icon}

@@ -25,11 +25,11 @@ export function Accordion({
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls={contentId}
-        className="flex w-full items-center justify-between gap-3 py-2.5 text-left transition-colors hover:text-accent-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2"
+        className="flex w-full items-center justify-between gap-3 py-2.5 text-left transition-colors hover:text-accent-primary"
       >
         <span className="text-sm font-medium text-text-primary">{title}</span>
         <svg
-          className={`h-4 w-4 shrink-0 text-text-muted transition-transform duration-200 ${
+          className={`h-4 w-4 shrink-0 text-text-muted transition-transform duration-500 ${
             isOpen ? "rotate-90" : ""
           }`}
           fill="none"
@@ -48,7 +48,7 @@ export function Accordion({
         id={contentId}
         role="region"
         aria-labelledby={triggerId}
-        className={`grid transition-all duration-200 ease-in-out ${
+        className={`grid transition-[grid-template-rows,opacity] duration-500 ${
           isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
         }`}
       >

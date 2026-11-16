@@ -15,20 +15,24 @@ export function PostNavigation({
   }
 
   return (
-    <nav className="mt-12 grid gap-4 border-t border-border-default pt-8 sm:grid-cols-2">
+    <nav
+      aria-label="이전 글과 다음 글"
+      className="mt-12 grid gap-4 sm:grid-cols-2"
+    >
       {/* 이전 글 (더 오래된 글) */}
       {prevPostMeta ? (
         <Link
           href={`/posts/${prevPostMeta.slug}`}
-          className="group flex flex-col rounded-lg border border-border-default p-4 transition-colors hover:border-border-muted hover:bg-bg-secondary"
+          className="group flex flex-col gap-2 rounded-2xl p-4 glass-card"
         >
-          <span className="flex items-center gap-1 text-sm text-text-muted">
+          <span className="flex items-center gap-1 caption-2 text-text-muted">
             <svg
               className="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="2"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -38,21 +42,21 @@ export function PostNavigation({
             </svg>
             이전 글
           </span>
-          <span className="mt-2 line-clamp-2 font-medium text-text-primary transition-colors group-hover:text-accent-primary">
+          <span className="line-clamp-2 title-3 text-text-primary">
             {prevPostMeta.title}
           </span>
         </Link>
       ) : (
-        <div />
+        <div className="hidden sm:block" />
       )}
 
       {/* 다음 글 (더 최신 글) */}
       {nextPostMeta ? (
         <Link
           href={`/posts/${nextPostMeta.slug}`}
-          className="group flex flex-col rounded-lg border border-border-default p-4 text-right transition-colors hover:border-border-muted hover:bg-bg-secondary sm:col-start-2"
+          className="group flex flex-col gap-2 rounded-2xl p-4 text-right glass-card sm:col-start-2"
         >
-          <span className="flex items-center justify-end gap-1 text-sm text-text-muted">
+          <span className="flex items-center justify-end gap-1 caption-2 text-text-muted">
             다음 글
             <svg
               className="h-4 w-4"
@@ -60,6 +64,7 @@ export function PostNavigation({
               viewBox="0 0 24 24"
               strokeWidth="2"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -68,12 +73,12 @@ export function PostNavigation({
               />
             </svg>
           </span>
-          <span className="mt-2 line-clamp-2 font-medium text-text-primary transition-colors group-hover:text-accent-primary">
+          <span className="line-clamp-2 title-3 text-text-primary">
             {nextPostMeta.title}
           </span>
         </Link>
       ) : (
-        <div />
+        <div className="hidden sm:block" />
       )}
     </nav>
   );

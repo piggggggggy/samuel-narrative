@@ -12,14 +12,14 @@ export function PostList({
 }: PostListProps) {
   if (posts.length === 0) {
     return (
-      <div className="py-16 text-center">
-        <p className="text-text-muted">{emptyMessage}</p>
+      <div className="rounded-2xl border border-border-default px-6 py-16 text-center">
+        <p className="body-3 text-text-muted">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-5 md:gap-6">
+    <div className="grid gap-4">
       {posts.map((post) => (
         <PostCard key={post.slug} post={post} />
       ))}

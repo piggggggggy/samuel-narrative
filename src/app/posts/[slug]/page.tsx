@@ -1,21 +1,23 @@
-import { getContentProvider } from "@/lib/content";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ShareButtons, Utterances } from "@/components/common";
 import {
-  getReadingTimeMinutes,
-  getRelatedPosts,
-  extractToc,
-} from "@/lib/utils";
-import {
+  formatPostDate,
   PostContent,
-  RelatedPosts,
   PostNavigation,
+  RelatedPosts,
   TableOfContents,
 } from "@/components/post";
-import { Utterances, ShareButtons } from "@/components/common";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import type { Metadata } from "next";
 import { siteConfig } from "@/lib/config/site";
+import { getContentProvider } from "@/lib/content";
 import { getOgImageUrl } from "@/lib/og";
+import { CATEGORY_LABELS } from "@/lib/schemas";
+import {
+  extractToc,
+  getReadingTimeMinutes,
+  getRelatedPosts,
+} from "@/lib/utils";
 
 // 글은 배포 때만 바뀐다. 빌드에 없는 slug는 404로 처리한다.
 export const dynamicParams = false;
@@ -92,12 +94,6 @@ export default async function PostPage({ params }: PostPageProps) {
   const prevPostMeta = sortedPostMetas[currentIndex + 1] || null; // 이전 글 (더 오래된)
   const nextPostMeta = sortedPostMetas[currentIndex - 1] || null; // 다음 글 (더 최신)
 
-  const formattedDate = new Date(post.publishedAt).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   const readingTime = getReadingTimeMinutes(post.content);
   const postUrl = `${siteConfig.url}/posts/${slug}`;
   const tocItems = extractToc(post.content);
@@ -105,82 +101,90 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <div className="relative">
-      {/* TOC 사이드바 - 뷰포트 기준 고정 위치 */}
+      {/* 목차: 넓은 화면에서 본문 오른쪽에 고정 */}
       {showToc && (
-        <aside className="hidden xl:block fixed top-24 right-[max(1rem,calc((100vw-896px)/2-220px-2rem))] w-[200px]">
+        <aside className="fixed right-[max(1rem,calc((100vw-896px)/2-220px-2rem))] top-24 hidden w-[200px] xl:block">
           <TableOfContents items={tocItems} />
         </aside>
       )}
 
-      <div className="mx-auto max-w-3xl px-4 py-12">
-        {/* 메인 콘텐츠 */}
-        <div>
-          <article>
-            <header className="mb-8 border-b border-border-default pb-8">
-              <h1 className="text-3xl font-bold text-text-primary md:text-4xl">
-                {post.title}
-              </h1>
-              <p className="mt-4 text-lg text-text-secondary">{post.excerpt}</p>
-              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-text-muted">
-                <time dateTime={post.publishedAt}>{formattedDate}</time>
-                <span className="text-border-default">·</span>
-                <span>{readingTime}분 읽기</span>
-                {post.tags.length > 0 && (
-                  <>
-                    <span className="text-border-default">·</span>
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag) => (
-                        <Link
-                          key={tag}
-                          href={`/tags/${tag}`}
-                          className="rounded-full bg-tag-bg px-2.5 py-0.5 text-tag-text transition-colors hover:bg-tag-bg-hover"
-                        >
-                          {tag}
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            </header>
-
-            <PostContent content={post.content} />
-
-            <div className="mt-8 flex items-center justify-end border-t border-border-default pt-6">
-              <ShareButtons url={postUrl} title={post.title} />
-            </div>
-          </article>
-
-          <PostNavigation
-            prevPostMeta={prevPostMeta}
-            nextPostMeta={nextPostMeta}
-          />
-
-          <RelatedPosts postMetas={relatedPostMetas} />
-
-          <Utterances repo="piggggggggy/samuel-narrative" />
-
-          <div className="mt-12 border-t border-border-default pt-8">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-text-secondary transition-colors hover:text-text-primary"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
+      <div className="mx-auto max-w-3xl px-4 pb-24 pt-16">
+        <article>
+          <header className="flex flex-col gap-4 pb-8">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 caption-2 text-text-muted">
+              <Link
+                href={`/category/${post.category}`}
+                className="caption-1 text-accent-primary transition-colors hover:text-accent-hover"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                />
-              </svg>
-              목록으로 돌아가기
-            </Link>
+                {CATEGORY_LABELS[post.category]}
+              </Link>
+              <time dateTime={post.publishedAt}>
+                {formatPostDate(post.publishedAt)}
+              </time>
+              <span>{readingTime}분 읽기</span>
+            </div>
+            <h1 className="heading-4 text-text-primary md:heading-3">
+              {post.title}
+            </h1>
+            <p className="title-2 text-pretty text-text-secondary">
+              {post.excerpt}
+            </p>
+            {post.tags.length > 0 && (
+              <ul className="flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <li
+                    key={tag}
+                    className="rounded-full bg-tag-bg px-3 py-1 caption-4 text-tag-text"
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </header>
+
+          <div className="h-px bg-border-default" />
+
+          <div className="pt-8">
+            <PostContent content={post.content} />
           </div>
+
+          <div className="mt-12 h-px bg-border-default" />
+          <div className="flex items-center justify-end pt-4">
+            <ShareButtons url={postUrl} title={post.title} />
+          </div>
+        </article>
+
+        <PostNavigation
+          prevPostMeta={prevPostMeta}
+          nextPostMeta={nextPostMeta}
+        />
+
+        <RelatedPosts postMetas={relatedPostMetas} />
+
+        <Utterances repo="piggggggggy/samuel-narrative" />
+
+        <div className="mt-12">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 body-5 text-text-secondary transition-colors hover:text-text-primary"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+              />
+            </svg>
+            목록으로 돌아가기
+          </Link>
         </div>
       </div>
     </div>

@@ -7,12 +7,11 @@ interface CompanyCardProps {
 
 export function CompanyCard({ experience }: CompanyCardProps) {
   return (
-    <div className="rounded-2xl border border-border-default bg-bg-secondary shadow-sm">
-      <div className="border-b border-border-default px-6 py-4">
-        <h3 className="text-lg font-bold text-text-primary">
-          {experience.company}
-        </h3>
+    <div className="rounded-2xl border border-border-default bg-bg-secondary">
+      <div className="px-6 py-4">
+        <h3 className="title-1 text-text-primary">{experience.company}</h3>
       </div>
+      <div className="h-px bg-border-default" />
       <div className="px-6">
         {experience.sections.map((section, index) => (
           <ExperienceSection

@@ -45,9 +45,9 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   }
 
   return (
-    <nav className="glass-panel rounded-xl p-4">
-      <h2 className="mb-4 text-sm font-semibold text-text-primary">목차</h2>
-      <ul className="space-y-2 text-sm">
+    <nav aria-label="목차" className="rounded-2xl p-4 glass-panel">
+      <h2 className="mb-3 caption-3 text-text-muted">목차</h2>
+      <ul className="flex flex-col gap-1">
         {items.map((item) => (
           <li
             key={item.id}
@@ -64,10 +64,11 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   window.history.pushState(null, "", `#${item.id}`);
                 }
               }}
-              className={`block py-1 transition-colors hover:text-accent-primary ${
+              aria-current={activeId === item.id ? "location" : undefined}
+              className={`block py-1 transition-colors hover:text-text-primary ${
                 activeId === item.id
-                  ? "font-medium text-accent-primary"
-                  : "text-text-secondary"
+                  ? "caption-1 text-accent-primary"
+                  : "caption-2 text-text-secondary"
               }`}
             >
               {item.text}

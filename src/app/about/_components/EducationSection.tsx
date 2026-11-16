@@ -6,20 +6,22 @@ interface EducationSectionProps {
 
 export function EducationSection({ educations }: EducationSectionProps) {
   return (
-    <section className="mb-12">
-      <h2 className="mb-6 text-2xl font-bold text-text-primary">교육</h2>
-      <div className="space-y-3">
+    <section aria-labelledby="education-heading">
+      <h2 id="education-heading" className="mb-6 heading-5 text-text-primary">
+        교육
+      </h2>
+      <div className="flex flex-col gap-4">
         {educations.map((education) => (
           <div key={education.institution}>
-            <div className="flex items-baseline gap-2">
-              <h3 className="font-medium text-text-primary">
+            <div className="flex flex-wrap items-baseline gap-x-3">
+              <h3 className="body-2 text-text-primary">
                 {education.institution}
               </h3>
-              <span className="text-sm text-text-muted">
+              <span className="caption-2 text-text-muted">
                 {education.period}
               </span>
             </div>
-            <p className="text-sm text-text-secondary">
+            <p className="body-6 text-text-secondary">
               {education.description}
             </p>
           </div>
