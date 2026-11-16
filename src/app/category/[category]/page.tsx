@@ -11,8 +11,6 @@ import {
 import { siteConfig } from "@/lib/config/site";
 import { getDefaultOgImageUrl } from "@/lib/og";
 
-export const revalidate = 3600;
-
 const POSTS_PER_PAGE = 10;
 
 interface CategoryPageProps {

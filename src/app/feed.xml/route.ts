@@ -12,9 +12,12 @@ function escapeXml(text: string): string {
     .replace(/'/g, "&apos;");
 }
 
+// 글은 배포 때만 바뀌므로 빌드 시 한 번 생성한다
+export const dynamic = "force-static";
+
 export async function GET() {
   const provider = await getContentProvider();
-  const posts = await provider.getAllPosts();
+  const posts = await provider.getAllPostMetas();
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

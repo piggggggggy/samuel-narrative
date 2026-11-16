@@ -113,8 +113,9 @@ export function PostForm({ post, mode }: PostFormProps) {
         localStorage.removeItem(STORAGE_KEY);
       }
 
+      // 공개 화면은 다음 배포 후에 바뀌므로 관리자 목록으로 돌아간다
       const savedPost = await response.json();
-      router.push(`/posts/${savedPost.slug}`);
+      router.push(`/admin?saved=${encodeURIComponent(savedPost.slug)}`);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");

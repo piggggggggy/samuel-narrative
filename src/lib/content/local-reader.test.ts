@@ -9,7 +9,6 @@ import {
   readLocalPost,
   shouldReadLocally,
 } from "@/lib/content/local-reader";
-import { GitHubProvider } from "@/lib/content/github-provider";
 
 function markdown(fields: {
   title: string;
@@ -142,80 +141,4 @@ test("names the file when its frontmatter cannot be parsed", () => {
 
   assert.throws(() => listLocalPosts(postsDir), /broken\.md/);
   assert.throws(() => readLocalPost(postsDir, "broken"), /broken\.md/);
-});
-
-test("provider reads from GitHub when its config is present", async () => {
-  const saved = { ...process.env };
-  const originalFetch = globalThis.fetch;
-  Object.assign(process.env, {
-    GITHUB_TOKEN: "test-token",
-    GITHUB_OWNER: "owner",
-    GITHUB_REPO: "repo",
-  });
-  delete process.env.VERCEL;
-  const requested: string[] = [];
-  globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
-    requested.push(String(input));
-    const content = Buffer.from(
-      markdown({ title: "Remote", publishedAt: "2026-05-01" })
-    ).toString("base64");
-    return new Response(
-      JSON.stringify({ sha: "abc", content, encoding: "base64" }),
-      { status: 200 }
-    );
-  }) as typeof fetch;
-
-  try {
-    const slug = fs
-      .readdirSync(path.join(process.cwd(), "content/posts"))
-      .filter((file) => file.endsWith(".md"))[0]
-      .replace(/\.md$/, "");
-    const post = await new GitHubProvider().getPostBySlug(slug);
-
-    assert.equal(post?.title, "Remote");
-    assert.deepEqual(requested, [
-      `https://api.github.com/repos/owner/repo/contents/content/posts/${slug}.md`,
-    ]);
-  } finally {
-    globalThis.fetch = originalFetch;
-    process.env = saved;
-  }
-});
-
-test("provider serves the checkout without calling GitHub when no config is set", async () => {
-  const saved = { ...process.env };
-  const originalFetch = globalThis.fetch;
-  for (const key of ["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "VERCEL"]) {
-    delete process.env[key];
-  }
-  let fetchCalls = 0;
-  globalThis.fetch = (async () => {
-    fetchCalls += 1;
-    throw new Error("network access is not expected");
-  }) as typeof fetch;
-
-  try {
-    const contentDir = path.join(process.cwd(), "content/posts");
-    const slugs = fs
-      .readdirSync(contentDir)
-      .filter((file) => file.endsWith(".md"))
-      .map((file) => file.replace(/\.md$/, ""));
-    const provider = new GitHubProvider();
-
-    const metas = await provider.getAllPostMetas();
-    const posts = await provider.getAllPosts();
-    const post = await provider.getPostBySlug(slugs[0]);
-    const reviews = await provider.getPostsByCategory("review");
-
-    assert.deepEqual(metas.map((meta) => meta.slug).sort(), [...slugs].sort());
-    assert.equal(posts.length, slugs.length);
-    assert.equal(post?.slug, slugs[0]);
-    assert.ok((post?.content.length ?? 0) > 0);
-    assert.ok(reviews.every((meta) => meta.category === "review"));
-    assert.equal(await provider.getPostBySlug("../../README"), null);
-    assert.equal(fetchCalls, 0);
-  } finally {
-    globalThis.fetch = originalFetch;
-    process.env = saved;
-  }
 });

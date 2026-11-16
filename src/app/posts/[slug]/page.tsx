@@ -17,7 +17,8 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/lib/config/site";
 import { getOgImageUrl } from "@/lib/og";
 
-export const revalidate = 3600;
+// 글은 배포 때만 바뀐다. 빌드에 없는 slug는 404로 처리한다.
+export const dynamicParams = false;
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;

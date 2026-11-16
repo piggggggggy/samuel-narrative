@@ -5,8 +5,6 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/lib/config/site";
 import { getDefaultOgImageUrl } from "@/lib/og";
 
-export const revalidate = 3600; // 1시간마다 재생성
-
 export const metadata: Metadata = {
   title: {
     absolute: siteConfig.name,
