@@ -138,19 +138,16 @@ export function PostForm({ post, mode }: PostFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       {error && (
-        <div className="rounded-md bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
+        <div role="alert" className="notice-danger body-6">
           {error}
         </div>
       )}
 
       {/* Title */}
       <div>
-        <label
-          htmlFor="title"
-          className="block text-sm font-medium text-text-secondary"
-        >
+        <label htmlFor="title" className="block caption-1 text-text-secondary">
           제목
         </label>
         <input
@@ -158,35 +155,31 @@ export function PostForm({ post, mode }: PostFormProps) {
           id="title"
           value={form.title}
           onChange={(e) => updateField("title", e.target.value)}
-          className="mt-1 block w-full rounded-md border border-border-default bg-bg-primary px-3 py-2 text-text-primary shadow-sm focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
+          className="field mt-1 body-3"
           required
         />
       </div>
 
       {/* Slug */}
       <div>
-        <label
-          htmlFor="slug"
-          className="block text-sm font-medium text-text-secondary"
-        >
+        <label htmlFor="slug" className="block caption-1 text-text-secondary">
           Slug
         </label>
-        <div className="mt-1 flex rounded-md shadow-sm">
-          <span className="inline-flex items-center rounded-l-md border border-r-0 border-border-default bg-bg-secondary px-3 text-sm text-text-muted">
-            /posts/
-          </span>
+        <div className="mt-1 flex items-center gap-2">
+          <span className="body-6 text-text-muted">/posts/</span>
           <input
             type="text"
             id="slug"
             value={form.slug}
             onChange={(e) => updateField("slug", e.target.value)}
-            className="block w-full rounded-none rounded-r-md border border-border-default bg-bg-primary px-3 py-2 text-text-primary focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
+            className="field body-3"
+            aria-describedby="slug-help"
             required
             pattern="^[a-z0-9-]+$"
             title="영문 소문자, 숫자, 하이픈만 사용할 수 있습니다"
           />
         </div>
-        <p className="mt-1 text-xs text-text-muted">
+        <p id="slug-help" className="mt-1 caption-5 text-text-muted">
           영문 소문자, 숫자, 하이픈만 사용 가능
         </p>
       </div>
@@ -195,7 +188,7 @@ export function PostForm({ post, mode }: PostFormProps) {
       <div>
         <label
           htmlFor="category"
-          className="block text-sm font-medium text-text-secondary"
+          className="block caption-1 text-text-secondary"
         >
           카테고리
         </label>
@@ -203,7 +196,7 @@ export function PostForm({ post, mode }: PostFormProps) {
           id="category"
           value={form.category}
           onChange={(e) => updateField("category", e.target.value as Category)}
-          className="mt-1 block w-full rounded-md border border-border-default bg-bg-primary px-3 py-2 text-text-primary shadow-sm focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
+          className="field mt-1 body-3"
           required
         >
           {CATEGORIES.map((category) => (
@@ -218,7 +211,7 @@ export function PostForm({ post, mode }: PostFormProps) {
       <div>
         <label
           htmlFor="excerpt"
-          className="block text-sm font-medium text-text-secondary"
+          className="block caption-1 text-text-secondary"
         >
           요약
         </label>
@@ -227,16 +220,14 @@ export function PostForm({ post, mode }: PostFormProps) {
           value={form.excerpt}
           onChange={(e) => updateField("excerpt", e.target.value)}
           rows={2}
-          className="mt-1 block w-full rounded-md border border-border-default bg-bg-primary px-3 py-2 text-text-primary shadow-sm focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
+          className="field mt-1 body-3"
           required
         />
       </div>
 
       {/* Tags */}
       <div>
-        <label className="block text-sm font-medium text-text-secondary">
-          태그
-        </label>
+        <label className="block caption-1 text-text-secondary">태그</label>
         <div className="mt-1">
           <TagInput
             value={form.tags}
@@ -247,9 +238,7 @@ export function PostForm({ post, mode }: PostFormProps) {
 
       {/* Content */}
       <div>
-        <label className="block text-sm font-medium text-text-secondary">
-          내용
-        </label>
+        <label className="block caption-1 text-text-secondary">내용</label>
         <div className="mt-1">
           <MarkdownEditor
             value={form.content}
@@ -259,13 +248,14 @@ export function PostForm({ post, mode }: PostFormProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center justify-between border-t border-border-default pt-6">
+      <div className="h-px bg-border-default" />
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           {mode === "create" && (
             <button
               type="button"
               onClick={clearDraft}
-              className="text-sm text-text-muted hover:text-text-secondary"
+              className="rounded-lg py-2 caption-1 text-text-muted transition-colors hover:text-text-primary"
             >
               임시저장 삭제
             </button>
@@ -275,14 +265,14 @@ export function PostForm({ post, mode }: PostFormProps) {
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-md border border-border-default bg-bg-primary px-4 py-2 text-sm font-medium text-text-secondary shadow-sm hover:bg-bg-secondary"
+            className="button-secondary button-sm"
           >
             취소
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-md bg-accent-primary px-4 py-2 text-sm font-medium text-text-inverted shadow-sm hover:opacity-90 disabled:opacity-50"
+            className="button-primary button-sm"
           >
             {isSubmitting && <ButtonSpinner />}
             {isSubmitting

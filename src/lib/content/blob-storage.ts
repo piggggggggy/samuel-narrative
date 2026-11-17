@@ -7,7 +7,7 @@ import type { PutBlobResult } from "@vercel/blob";
 
 export async function uploadFileToBlob(
   pathname: string,
-  file: File | Blob,
+  file: File | Blob
 ): Promise<PutBlobResult> {
   return put(pathname, file, {
     access: "public",

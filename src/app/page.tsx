@@ -1,8 +1,7 @@
-import { getContentProvider } from "@/lib/content";
-import { PostList, CategoryCards } from "@/components/post";
-import type { Category } from "@/lib/schemas";
 import type { Metadata } from "next";
+import { PostRow } from "@/components/post";
 import { siteConfig } from "@/lib/config/site";
+import { getContentProvider } from "@/lib/content";
 import { getDefaultOgImageUrl } from "@/lib/og";
 
 export const metadata: Metadata = {
@@ -31,36 +30,38 @@ export const metadata: Metadata = {
   },
 };
 
-const POSTS_PER_PAGE = 10;
+const LATEST_COUNT = 10;
 
 export default async function HomePage() {
   const provider = await getContentProvider();
   const allPosts = await provider.getAllPostMetas();
-
-  // 최신 10개만 표시
-  const latestPosts = allPosts.slice(0, POSTS_PER_PAGE);
-
-  // 카테고리별 포스트 개수 계산
-  const categoryCounts: { category: Category; count: number }[] = [
-    { category: "dev", count: allPosts.filter((p) => p.category === "dev").length },
-    { category: "life", count: allPosts.filter((p) => p.category === "life").length },
-    { category: "review", count: allPosts.filter((p) => p.category === "review").length },
-  ];
+  const latestPosts = allPosts.slice(0, LATEST_COUNT);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12">
-      <section className="mb-8">
-        <h1 className="text-3xl font-bold text-text-primary">
-          최신 포스트
-        </h1>
-        <p className="mt-2 text-text-secondary">
-          웹 개발, 아키텍처, 그리고 개발 경험을 공유합니다.
-        </p>
+    <div className="mx-auto flex max-w-3xl flex-col gap-16 px-4 pb-24 pt-16 md:pt-20">
+      <h1 className="sr-only">{siteConfig.name}</h1>
+
+      <section aria-labelledby="latest-heading">
+        <h2 id="latest-heading" className="caption-1 text-text-muted">
+          최신 글
+        </h2>
+        {latestPosts.length === 0 ? (
+          <p className="mt-6 body-3 text-text-muted">
+            아직 작성된 포스트가 없습니다.
+          </p>
+        ) : (
+          <ul className="mt-2">
+            {latestPosts.map((post, index) => (
+              <li key={post.slug}>
+                {index > 0 && (
+                  <div aria-hidden="true" className="h-px bg-border-default" />
+                )}
+                <PostRow post={post} />
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
-
-      <PostList posts={latestPosts} />
-
-      <CategoryCards categoryCounts={categoryCounts} />
     </div>
   );
 }

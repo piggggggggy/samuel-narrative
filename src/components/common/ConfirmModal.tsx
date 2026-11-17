@@ -55,15 +55,13 @@ export function ConfirmModal({
   if (!isOpen) return null;
 
   const confirmButtonClass =
-    variant === "danger"
-      ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
-      : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500";
+    variant === "danger" ? "button-danger" : "button-primary";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60"
         onClick={isLoading ? undefined : onCancel}
       />
 
@@ -74,24 +72,19 @@ export function ConfirmModal({
         aria-modal="true"
         aria-labelledby="modal-title"
         tabIndex={-1}
-        className="relative z-10 w-full max-w-md rounded-2xl glass-panel p-6 overflow-hidden"
+        className="relative z-10 w-full max-w-md rounded-2xl p-6 glass-panel"
       >
-        <h2
-          id="modal-title"
-          className="text-lg font-semibold text-gray-900 dark:text-white"
-        >
+        <h2 id="modal-title" className="heading-6 text-text-primary">
           {title}
         </h2>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          {message}
-        </p>
+        <p className="mt-2 body-6 text-text-secondary">{message}</p>
 
         <div className="mt-6 flex justify-end gap-3">
           <button
             type="button"
             onClick={onCancel}
             disabled={isLoading}
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+            className="button-secondary button-sm"
           >
             {cancelText}
           </button>
@@ -99,7 +92,7 @@ export function ConfirmModal({
             type="button"
             onClick={onConfirm}
             disabled={isLoading}
-            className={`inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 ${confirmButtonClass}`}
+            className={`${confirmButtonClass} button-sm`}
           >
             {isLoading && <ButtonSpinner />}
             {isLoading ? "처리 중..." : confirmText}

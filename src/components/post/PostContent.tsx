@@ -39,7 +39,7 @@ interface PostContentProps {
 
 export function PostContent({ content }: PostContentProps) {
   return (
-    <article className="prose prose-gray max-w-none dark:prose-invert prose-headings:font-semibold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-a:text-accent-primary hover:prose-a:text-accent-hover prose-code:before:content-none prose-code:after:content-none prose-code:glass-inline-code prose-code:text-sm prose-pre:bg-transparent prose-pre:p-0 prose-pre:border-none [&_pre_code]:bg-transparent [&_pre_code]:p-0 prose-img:rounded-lg">
+    <article className="prose max-w-none prose-headings:font-semibold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-pre:m-0 prose-pre:rounded-none prose-pre:border-none prose-pre:bg-transparent prose-pre:p-4 [&_pre_code]:bg-transparent [&_pre_code]:p-0 prose-img:rounded-lg">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
@@ -48,7 +48,7 @@ export function PostContent({ content }: PostContentProps) {
             const text = String(children);
             const id = slugify(text);
             return (
-              <h2 id={id} className="scroll-mt-24">
+              <h2 id={id} className="scroll-mt-8">
                 {children}
               </h2>
             );
@@ -57,7 +57,7 @@ export function PostContent({ content }: PostContentProps) {
             const text = String(children);
             const id = slugify(text);
             return (
-              <h3 id={id} className="scroll-mt-24">
+              <h3 id={id} className="scroll-mt-8">
                 {children}
               </h3>
             );
@@ -66,7 +66,7 @@ export function PostContent({ content }: PostContentProps) {
             const text = String(children);
             const id = slugify(text);
             return (
-              <h4 id={id} className="scroll-mt-24">
+              <h4 id={id} className="scroll-mt-8">
                 {children}
               </h4>
             );
@@ -99,7 +99,7 @@ export function PostContent({ content }: PostContentProps) {
 
             // 메타데이터 없으면 기본 img 태그 사용 (기존 이미지 호환)
             return (
-              // eslint-disable-next-line @next/next/no-img-element
+              // biome-ignore lint/performance/noImgElement: 크기 정보가 없는 기존 이미지는 next/image를 쓸 수 없다
               <img src={url} alt={alt || ""} className="rounded-lg" />
             );
           },

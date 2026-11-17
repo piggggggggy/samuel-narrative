@@ -45,37 +45,36 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   }
 
   return (
-    <nav className="glass-panel rounded-xl p-4">
-      <h2 className="mb-4 text-sm font-semibold text-text-primary">
-        목차
-      </h2>
-      <ul className="space-y-2 text-sm">
-          {items.map((item) => (
-            <li
-              key={item.id}
-              style={{ paddingLeft: `${(item.level - 2) * 12}px` }}
+    <nav aria-label="목차">
+      <h2 className="mb-3 caption-3 text-text-muted">목차</h2>
+      <ul className="flex flex-col gap-1">
+        {items.map((item) => (
+          <li
+            key={item.id}
+            style={{ paddingLeft: `${(item.level - 2) * 12}px` }}
+          >
+            <a
+              href={`#${item.id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                const element = document.getElementById(item.id);
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth" });
+                  // URL 해시 업데이트
+                  window.history.pushState(null, "", `#${item.id}`);
+                }
+              }}
+              aria-current={activeId === item.id ? "location" : undefined}
+              className={`block py-1 transition-colors hover:text-text-primary ${
+                activeId === item.id
+                  ? "caption-1 text-text-primary"
+                  : "caption-2 text-text-muted"
+              }`}
             >
-              <a
-                href={`#${item.id}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  const element = document.getElementById(item.id);
-                  if (element) {
-                    element.scrollIntoView({ behavior: "smooth" });
-                    // URL 해시 업데이트
-                    window.history.pushState(null, "", `#${item.id}`);
-                  }
-                }}
-                className={`block py-1 transition-colors hover:text-accent-primary ${
-                  activeId === item.id
-                    ? "font-medium text-accent-primary"
-                    : "text-text-secondary"
-                }`}
-              >
-                {item.text}
-              </a>
-            </li>
-          ))}
+              {item.text}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   );

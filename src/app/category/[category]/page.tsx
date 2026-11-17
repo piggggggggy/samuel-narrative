@@ -96,18 +96,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const initialPosts = posts.slice(0, POSTS_PER_PAGE);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12">
-      <section className="mb-8">
-        <h1 className="text-3xl font-bold text-text-primary">{label}</h1>
-        <p className="mt-2 text-text-secondary">{description}</p>
-      </section>
+    <div className="mx-auto flex max-w-3xl flex-col gap-10 px-4 pb-24 pt-16">
+      <header className="flex flex-col gap-3">
+        <h1 className="heading-5 text-text-primary md:heading-4">{label}</h1>
+        <p className="max-w-2xl body-3 text-text-secondary">{description}</p>
+        <p className="caption-1 text-text-muted">글 {posts.length}편</p>
+      </header>
 
       <InfinitePostList
         initialPosts={initialPosts}
         allTags={tagCounts}
         category={validCategory}
         postsPerPage={POSTS_PER_PAGE}
-        emptyMessage={`${label} 카테고리에 포스트가 없습니다.`}
+        emptyMessage={`${label} 주제로 쓴 글이 아직 없습니다.`}
       />
     </div>
   );

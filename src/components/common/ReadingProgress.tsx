@@ -23,7 +23,8 @@ export function ReadingProgress() {
         if (!progressRef.current) return;
 
         const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const docHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
         const progress = docHeight > 0 ? scrollTop / docHeight : 0;
         const clampedProgress = Math.min(1, Math.max(0, progress));
 
@@ -48,10 +49,10 @@ export function ReadingProgress() {
   if (!isPostPage) return null;
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-border-default overflow-hidden">
+    <div className="fixed inset-x-0 top-0 z-50 h-0.5 overflow-hidden">
       <div
         ref={progressRef}
-        className="h-full w-full origin-left bg-accent-primary will-change-transform"
+        className="h-full w-full origin-left bg-accent-decorative will-change-transform"
         style={{ transform: "scaleX(0)" }}
       />
     </div>

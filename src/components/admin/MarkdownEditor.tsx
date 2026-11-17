@@ -1,5 +1,6 @@
 "use client";
 
+import { ImageIcon } from "@phosphor-icons/react/dist/ssr/Image";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -49,6 +50,7 @@ export function MarkdownEditor({
   const [mounted, setMounted] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -71,11 +73,12 @@ export function MarkdownEditor({
   const handleImageUpload = useCallback(
     async (file: File) => {
       if (!file.type.startsWith("image/")) {
-        alert("이미지 파일만 업로드할 수 있습니다.");
+        setUploadError("이미지 파일만 올릴 수 있습니다.");
         return;
       }
 
       setIsUploading(true);
+      setUploadError(null);
       try {
         // 이미지 압축 (GIF/SVG는 자동으로 건너뜀)
         const result = await compressImage(file);
@@ -86,7 +89,7 @@ export function MarkdownEditor({
         insertImageAtCursor(url, altText, result.metadata);
       } catch (error) {
         console.error("Image upload failed:", error);
-        alert(
+        setUploadError(
           error instanceof Error
             ? error.message
             : "이미지 업로드에 실패했습니다."
@@ -166,7 +169,7 @@ export function MarkdownEditor({
   if (!mounted) {
     return (
       <div
-        className="animate-pulse rounded-md bg-bg-secondary"
+        className="animate-pulse rounded-lg bg-bg-secondary"
         style={{ height }}
       />
     );
@@ -180,23 +183,13 @@ export function MarkdownEditor({
     >
       {isUploading && <SpinnerOverlay message="이미지 업로드 중..." />}
       {isDragOver && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center rounded-md border-2 border-dashed border-accent-primary bg-accent-primary/10">
+        <div className="absolute inset-0 z-50 flex items-center justify-center rounded-lg border-2 border-dashed border-accent-primary bg-bg-secondary">
           <div className="text-center">
-            <svg
+            <ImageIcon
+              aria-hidden="true"
               className="mx-auto h-12 w-12 text-accent-primary"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <p className="mt-2 text-sm font-medium text-accent-primary">
+            />
+            <p className="mt-2 body-5 text-accent-primary">
               이미지를 여기에 놓으세요
             </p>
           </div>
@@ -211,6 +204,11 @@ export function MarkdownEditor({
           placeholder,
         }}
       />
+      {uploadError && (
+        <p role="alert" className="notice-danger mt-2 body-6">
+          {uploadError}
+        </p>
+      )}
     </div>
   );
 }

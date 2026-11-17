@@ -69,11 +69,14 @@ export default function EditPostPage() {
 
   if (error) {
     return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
-        <div className="text-red-600 dark:text-red-400">{error}</div>
+      <div className="flex min-h-96 flex-col items-center justify-center gap-4">
+        <div role="alert" className="notice-danger body-6">
+          {error}
+        </div>
         <button
+          type="button"
           onClick={() => router.back()}
-          className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          className="button-secondary button-sm"
         >
           뒤로 가기
         </button>
@@ -87,14 +90,12 @@ export default function EditPostPage() {
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          포스트 수정
-        </h1>
+      <div className="mb-8 flex items-center justify-between gap-3">
+        <h1 className="heading-5 text-text-primary">포스트 수정</h1>
         <button
           type="button"
           onClick={() => setShowDeleteModal(true)}
-          className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700"
+          className="button-danger button-sm"
         >
           삭제
         </button>

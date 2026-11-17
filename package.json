@@ -7,17 +7,18 @@
     "dev": "next dev",
     "build": "pnpm schema:validate && next build",
     "start": "next start",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
     "schema:validate": "npx tsx scripts/validate-posts.ts",
     "images:cleanup": "node --import tsx scripts/cleanup-orphan-images.ts",
     "images:cleanup:dry": "node --import tsx scripts/cleanup-orphan-images.ts --dry-run",
-    "test": "node --import tsx --test scripts/image-cleanup.test.ts src/lib/content/local-reader.test.ts src/app/site-url.test.ts src/lib/content/markdown.test.ts src/lib/schemas/post.test.ts src/lib/content/snapshot-provider.test.ts src/lib/content/github-store.test.ts",
+    "test": "node --import tsx --test scripts/image-cleanup.test.ts src/lib/content/local-reader.test.ts src/app/site-url.test.ts src/lib/content/markdown.test.ts src/lib/schemas/post.test.ts src/lib/content/snapshot-provider.test.ts src/lib/content/github-store.test.ts src/lib/auth/auth.test.ts",
     "test:images": "node --import tsx --test scripts/image-cleanup.test.ts"
   },
   "dependencies": {
+    "@phosphor-icons/react": "2.1.10",
     "@tailwindcss/typography": "^0.5.19",
     "@types/nprogress": "^0.2.3",
     "@uiw/react-markdown-preview": "^5.1.5",
@@ -26,8 +27,8 @@
     "@vercel/og": "^0.8.6",
     "browser-image-compression": "^2.0.2",
     "gray-matter": "^4.0.3",
-    "next": "^16.1.6",
-    "next-auth": "5.0.0-beta.30",
+    "next": "^16.4.6",
+    "next-auth": "5.0.0-beta.32",
     "next-themes": "^0.4.6",
     "nprogress": "^0.2.0",
     "react": "^19.2.3",
@@ -39,20 +40,13 @@
     "zod": "^4.3.4"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "@next/eslint-plugin-next": "^16.1.6",
+    "@biomejs/biome": "2.6.7",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "25.0.3",
     "@types/react": "19.2.7",
-    "@typescript-eslint/eslint-plugin": "^8.51.0",
-    "@typescript-eslint/parser": "^8.51.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
     "postcss": "^8.5.6",
-    "prettier": "^3.7.4",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   }
 }

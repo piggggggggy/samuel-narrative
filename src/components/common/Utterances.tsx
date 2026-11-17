@@ -52,18 +52,18 @@ export function Utterances({
 
   if (!mounted) {
     return (
-      <section className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
-        <h2 className="mb-6 text-xl font-semibold text-gray-900 dark:text-white">
+      <section aria-labelledby="comments-heading" className="mt-16">
+        <h2 id="comments-heading" className="mb-6 heading-6 text-text-primary">
           댓글
         </h2>
-        <div className="h-32 animate-pulse rounded-md bg-gray-100 dark:bg-gray-800" />
+        <div className="h-32 animate-pulse rounded-2xl bg-bg-secondary" />
       </section>
     );
   }
 
   return (
-    <section className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
-      <h2 className="mb-6 text-xl font-semibold text-gray-900 dark:text-white">
+    <section aria-labelledby="comments-heading" className="mt-16">
+      <h2 id="comments-heading" className="mb-6 heading-6 text-text-primary">
         댓글
       </h2>
       <div ref={ref} />

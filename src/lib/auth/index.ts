@@ -1,15 +1,14 @@
-import NextAuth from "next-auth";
-import GitHub from "next-auth/providers/github";
 import type { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
 
-const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(",").map((e) =>
-  e.trim().toLowerCase()
-) ?? [];
+const ADMIN_EMAILS =
+  process.env.ADMIN_EMAILS?.split(",").map((e) => e.trim().toLowerCase()) ?? [];
 
 export const authConfig: NextAuthConfig = {
-  secret: process.env.AUTH_SECRET, 
+  secret: process.env.AUTH_SECRET,
   providers: [
-    GitHub({
+    GitHubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),

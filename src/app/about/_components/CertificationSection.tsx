@@ -8,13 +8,15 @@ export function CertificationSection({
   certifications,
 }: CertificationSectionProps) {
   return (
-    <section className="mb-12">
-      <h2 className="mb-6 text-2xl font-bold text-text-primary">자격증</h2>
-      <div className="space-y-3">
+    <section aria-labelledby="cert-heading">
+      <h2 id="cert-heading" className="mb-6 heading-5 text-text-primary">
+        자격증
+      </h2>
+      <div className="flex flex-col gap-3">
         {certifications.map((cert) => (
-          <div key={cert.name} className="flex items-baseline gap-2">
-            <span className="font-medium text-text-primary">{cert.name}</span>
-            <span className="text-sm text-text-muted">{cert.year}</span>
+          <div key={cert.name} className="flex items-baseline gap-3">
+            <span className="body-2 text-text-primary">{cert.name}</span>
+            <span className="caption-2 text-text-muted">{cert.year}</span>
           </div>
         ))}
       </div>

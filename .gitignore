@@ -2,7 +2,7 @@
 
 .claude/
 CLAUDE.md
-
+.fablize/
 .cursor/
 
 
@@ -26,3 +26,4 @@ docs/
 
 .husky/
 .playwright-mcp/
+*.tsbuildinfo

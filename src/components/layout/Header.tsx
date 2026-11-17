@@ -2,154 +2,65 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { ReadingProgress } from "@/components/common";
+import { CATEGORY_LABELS, CategorySchema } from "@/lib/schemas";
 import { ThemeToggle } from "./ThemeToggle";
 import { UserMenu } from "./UserMenu";
-import { ReadingProgress } from "@/components/common";
-import { CATEGORY_LABELS, type Category } from "@/lib/schemas";
 
-const categories: Category[] = ["dev", "life", "review"];
+const links = [
+  ...CategorySchema.options.map((category) => ({
+    href: `/category/${category}`,
+    label: CATEGORY_LABELS[category],
+  })),
+  { href: "/about", label: "About" },
+];
 
 export function Header() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // 현재 경로가 특정 카테고리 페이지인지 확인
-  const isActiveCategory = (category: Category) =>
-    pathname === `/category/${category}` ||
-    pathname.startsWith(`/category/${category}/`);
-
-  const isActiveAbout = pathname === "/about";
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="sticky top-0 z-50 glass relative">
-      <nav className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
-        <Link href="/" className="text-xl font-bold text-text-primary">
-          Samuel Narrative
-        </Link>
+    <>
+      <ReadingProgress />
 
-        {/* Desktop Navigation */}
-        <div className="hidden items-center gap-6 md:flex">
-          {/* 카테고리 링크 */}
-          {categories.map((category) => (
-            <Link
-              key={category}
-              href={`/category/${category}`}
-              className={`relative pb-1 text-sm font-medium transition-colors ${
-                isActiveCategory(category)
-                  ? "text-text-primary"
-                  : "text-text-secondary hover:text-text-primary"
-              }`}
-            >
-              {CATEGORY_LABELS[category]}
-              {isActiveCategory(category) && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent-primary" />
-              )}
-            </Link>
-          ))}
-
-          {/* About 링크 */}
+      <header className="mx-auto w-full max-w-3xl px-4 pt-4 md:pt-6">
+        {/* 좁은 화면에서는 메뉴 링크가 둘째 줄로 내려간다 */}
+        <nav
+          aria-label="주요 메뉴"
+          className="flex flex-wrap items-center gap-x-8"
+        >
           <Link
-            href="/about"
-            className={`relative pb-1 text-sm font-medium transition-colors ${
-              isActiveAbout
-                ? "text-text-primary"
-                : "text-text-secondary hover:text-text-primary"
-            }`}
+            href="/"
+            className="inline-flex min-h-11 items-center title-3 text-text-primary"
           >
-            About
-            {isActiveAbout && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent-primary" />
-            )}
+            Samuel Narrative
           </Link>
 
-          <ThemeToggle />
-          <UserMenu />
-        </div>
-
-        {/* Mobile: Theme Toggle + Menu Button */}
-        <div className="flex items-center gap-3 md:hidden">
-          <ThemeToggle />
-          <UserMenu />
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-lg p-2 text-text-secondary glass-hover"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-expanded={isMobileMenuOpen}
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
-            )}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
-        <div className="border-t border-border-default glass-panel md:hidden">
-          <div className="mx-auto max-w-4xl space-y-1 px-4 py-3">
-            {/* 카테고리 링크 */}
-            {categories.map((category) => (
+          <div className="order-last flex w-full items-center gap-x-6 md:order-none md:w-auto">
+            {links.map((link) => (
               <Link
-                key={category}
-                href={`/category/${category}`}
-                className={`block rounded-md px-3 py-2 transition-colors ${
-                  isActiveCategory(category)
-                    ? "bg-bg-tertiary text-text-primary font-medium"
-                    : "text-text-secondary hover:bg-bg-tertiary hover:text-text-primary"
+                key={link.href}
+                href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={`inline-flex min-h-11 items-center title-4 underline-offset-8 transition-colors ${
+                  isActive(link.href)
+                    ? "text-text-primary underline"
+                    : "text-text-muted hover:text-text-primary"
                 }`}
-                onClick={() => setIsMobileMenuOpen(false)}
               >
-                {CATEGORY_LABELS[category]}
+                {link.label}
               </Link>
             ))}
-
-            {/* 구분선 */}
-            <div className="my-2 border-t border-border-default" />
-
-            {/* About 링크 */}
-            <Link
-              href="/about"
-              className={`block rounded-md px-3 py-2 transition-colors ${
-                isActiveAbout
-                  ? "bg-bg-tertiary text-text-primary font-medium"
-                  : "text-text-secondary hover:bg-bg-tertiary hover:text-text-primary"
-              }`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About
-            </Link>
           </div>
-        </div>
-      )}
-      <ReadingProgress />
-    </header>
+
+          <div className="ml-auto flex items-center gap-4">
+            <ThemeToggle />
+            <UserMenu />
+          </div>
+        </nav>
+      </header>
+    </>
   );
 }

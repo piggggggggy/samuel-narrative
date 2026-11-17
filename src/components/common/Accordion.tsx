@@ -1,5 +1,6 @@
 "use client";
 
+import { CaretRightIcon } from "@phosphor-icons/react/dist/ssr/CaretRight";
 import { useState, useId } from "react";
 
 interface AccordionProps {
@@ -25,30 +26,21 @@ export function Accordion({
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls={contentId}
-        className="flex w-full items-center justify-between gap-3 py-2.5 text-left transition-colors hover:text-accent-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2"
+        className="flex w-full items-center justify-between gap-3 py-2.5 text-left transition-colors hover:text-accent-primary"
       >
         <span className="text-sm font-medium text-text-primary">{title}</span>
-        <svg
-          className={`h-4 w-4 shrink-0 text-text-muted transition-transform duration-200 ${
+        <CaretRightIcon
+          aria-hidden="true"
+          className={`h-4 w-4 shrink-0 text-text-muted transition-transform duration-500 ${
             isOpen ? "rotate-90" : ""
           }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="2"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M8.25 4.5l7.5 7.5-7.5 7.5"
-          />
-        </svg>
+        />
       </button>
       <div
         id={contentId}
         role="region"
         aria-labelledby={triggerId}
-        className={`grid transition-all duration-200 ease-in-out ${
+        className={`grid transition-[grid-template-rows,opacity] duration-500 ${
           isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
         }`}
       >

@@ -1,5 +1,7 @@
 "use client";
 
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass";
+import { PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -66,145 +68,105 @@ export function PostTable({ posts }: PostTableProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       {/* 검색 및 새 글 버튼 */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 sm:max-w-xs">
           <input
-            type="text"
+            type="search"
+            aria-label="포스트 검색"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="포스트 검색..."
-            className="w-full rounded-md border border-border-default bg-bg-primary px-4 py-2 pl-10 text-sm text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary"
+            placeholder="제목, 요약, 태그로 검색"
+            className="field pl-10 body-6"
           />
-          <svg
-            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <MagnifyingGlassIcon
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted"
+          />
         </div>
-        <Link
-          href="/admin/posts/new"
-          className="inline-flex items-center justify-center rounded-md bg-accent-primary px-4 py-2 text-sm font-medium text-text-inverted shadow-sm hover:opacity-90"
-        >
-          <svg
-            className="mr-2 h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          새 포스트
+        <Link href="/admin/posts/new" className="button-primary button-sm">
+          <PlusIcon aria-hidden="true" className="h-4 w-4" />새 포스트
         </Link>
       </div>
 
       {/* 테이블 */}
-      <div className="overflow-hidden rounded-lg border border-border-default">
+      <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-border-default">
-          <thead className="bg-bg-secondary">
+          <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+              <th className="pr-6 py-3 text-left caption-4 text-text-secondary">
                 제목
               </th>
-              <th className="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary sm:table-cell">
+              <th className="hidden pr-6 py-3 text-left caption-4 text-text-secondary sm:table-cell">
                 태그
               </th>
-              <th className="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary md:table-cell">
+              <th className="hidden pr-6 py-3 text-left caption-4 text-text-secondary md:table-cell">
                 작성일
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-text-secondary">
-                액션
+              <th className="py-3 text-right caption-4 text-text-secondary">
+                관리
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border-default bg-bg-primary">
+          <tbody className="divide-y divide-border-default">
             {filteredPosts.length === 0 ? (
               <tr>
                 <td
                   colSpan={4}
-                  className="px-6 py-8 text-center text-sm text-text-secondary"
+                  className="py-12 text-center body-6 text-text-muted"
                 >
                   {search ? "검색 결과가 없습니다." : "포스트가 없습니다."}
                 </td>
               </tr>
             ) : (
               filteredPosts.map((post) => (
-                <tr
-                  key={post.slug}
-                  className="hover:bg-bg-secondary"
-                >
-                  <td className="px-6 py-4">
+                <tr key={post.slug}>
+                  <td className="pr-6 py-4">
                     <div>
                       <Link
                         href={`/posts/${post.slug}`}
-                        className="font-medium text-text-primary hover:text-accent-primary"
+                        className="title-3 text-text-primary transition-colors hover:text-accent-primary"
                       >
                         {post.title}
                       </Link>
-                      <p className="mt-1 line-clamp-1 text-sm text-text-secondary">
+                      <p className="mt-1 line-clamp-1 body-6 text-text-secondary">
                         {post.excerpt}
                       </p>
                     </div>
                   </td>
-                  <td className="hidden px-6 py-4 sm:table-cell">
-                    <div className="flex flex-wrap gap-1">
+                  <td className="hidden pr-6 py-4 sm:table-cell">
+                    <div className="flex flex-wrap gap-x-2 gap-y-1 caption-2 text-text-muted">
                       {post.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="inline-flex rounded-full bg-tag-bg px-2 py-0.5 text-xs text-tag-text"
-                        >
-                          {tag}
-                        </span>
+                        <span key={tag}>{tag}</span>
                       ))}
                       {post.tags.length > 3 && (
-                        <span className="text-xs text-text-muted">
-                          +{post.tags.length - 3}
-                        </span>
+                        <span>+{post.tags.length - 3}</span>
                       )}
                     </div>
                   </td>
-                  <td className="hidden whitespace-nowrap px-6 py-4 text-sm text-text-secondary md:table-cell">
+                  <td className="hidden whitespace-nowrap pr-6 py-4 caption-2 text-text-secondary md:table-cell">
                     {formatDate(post.publishedAt)}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
-                    <div className="flex items-center justify-end gap-2">
+                  <td className="whitespace-nowrap py-4 text-right">
+                    <div className="flex items-center justify-end gap-4 caption-1">
                       <Link
                         href={`/admin/posts/${post.slug}/edit`}
-                        className="text-accent-primary hover:opacity-80"
+                        className="py-2 text-text-primary underline-offset-4 hover:underline"
                       >
                         수정
                       </Link>
-                      <span className="text-border-default">
-                        |
-                      </span>
                       <Link
                         href={`/posts/${post.slug}`}
-                        className="text-text-secondary hover:text-text-primary"
+                        className="py-2 text-text-muted transition-colors hover:text-text-primary"
                         target="_blank"
                       >
                         보기
                       </Link>
-                      <span className="text-border-default">
-                        |
-                      </span>
                       <button
                         type="button"
                         onClick={() => setDeleteTarget(post)}
-                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                        className="py-2 text-danger underline-offset-4 hover:underline"
                       >
                         삭제
                       </button>
@@ -219,7 +181,7 @@ export function PostTable({ posts }: PostTableProps) {
 
       {/* 결과 수 */}
       {filteredPosts.length > 0 && (
-        <p className="text-sm text-text-secondary">
+        <p className="caption-2 text-text-muted">
           {search
             ? `${filteredPosts.length}개의 검색 결과`
             : `총 ${filteredPosts.length}개의 포스트`}
@@ -228,11 +190,15 @@ export function PostTable({ posts }: PostTableProps) {
 
       {/* 에러 메시지 */}
       {error && (
-        <div className="rounded-md bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
+        <div
+          role="alert"
+          className="notice-danger flex items-center justify-between gap-3 body-6"
+        >
           {error}
           <button
+            type="button"
             onClick={() => setError(null)}
-            className="ml-2 font-medium underline"
+            className="body-4 underline"
           >
             닫기
           </button>

@@ -73,8 +73,12 @@ export function calculateReadingTime(
   // 읽기 시간 계산
   const wordTime = words / opts.wordsPerMinute;
   const imageTime =
-    calculateImageTime(images, opts.firstImageTime, opts.imageTimeDecrement, opts.minImageTime) /
-    60;
+    calculateImageTime(
+      images,
+      opts.firstImageTime,
+      opts.imageTimeDecrement,
+      opts.minImageTime
+    ) / 60;
 
   const totalMinutes = Math.max(1, Math.ceil(wordTime + imageTime));
 

@@ -7,10 +7,7 @@ export async function POST(request: Request) {
     // 인증 확인
     const admin = await isAdmin();
     if (!admin) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -47,9 +44,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Revalidation failed:", error);
-    return NextResponse.json(
-      { error: "Revalidation failed" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Revalidation failed" }, { status: 500 });
   }
 }

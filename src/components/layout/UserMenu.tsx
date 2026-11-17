@@ -29,7 +29,7 @@ export function UserMenu() {
     return (
       <Link
         href="/auth/signin"
-        className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+        className="inline-flex min-h-11 items-center title-4 text-text-muted transition-colors hover:text-text-primary"
       >
         로그인
       </Link>
@@ -63,9 +63,7 @@ export function UserMenu() {
             <p className="text-sm font-medium text-text-primary">
               {session.user?.name}
             </p>
-            <p className="text-xs text-text-muted">
-              {session.user?.email}
-            </p>
+            <p className="text-xs text-text-muted">{session.user?.email}</p>
           </div>
 
           {isAdmin && (
