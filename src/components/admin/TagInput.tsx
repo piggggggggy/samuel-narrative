@@ -38,14 +38,14 @@ export function TagInput({
       {value.map((tag) => (
         <span
           key={tag}
-          className="inline-flex items-center gap-1 rounded-full bg-tag-bg py-0.5 pl-3 pr-1 caption-1 text-tag-text"
+          className="inline-flex items-center caption-1 text-text-primary"
         >
           {tag}
           <button
             type="button"
             onClick={() => removeTag(tag)}
             aria-label={`${tag} 태그 지우기`}
-            className="rounded-full p-1 text-text-muted transition-colors hover:bg-tag-bg-hover hover:text-text-primary"
+            className="p-1 text-text-muted transition-colors hover:text-text-primary"
           >
             <XIcon aria-hidden="true" className="h-3 w-3" />
           </button>

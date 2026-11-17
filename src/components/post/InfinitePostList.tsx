@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { PostCard } from "./PostCard";
+import { PostRow } from "./PostRow";
 import { Spinner } from "@/components/common";
 import type { PostMeta, Category } from "@/lib/content/types";
 
@@ -142,10 +142,10 @@ export function InfinitePostList({
   };
 
   const filterClass = (selected: boolean) =>
-    `inline-flex min-h-11 items-center rounded-full px-4 caption-1 transition-colors md:min-h-8 md:px-3 ${
+    `inline-flex min-h-11 items-center caption-1 underline-offset-8 transition-colors md:min-h-8 ${
       selected
-        ? "bg-text-primary text-text-inverted"
-        : "bg-tag-bg text-tag-text hover:bg-tag-bg-hover"
+        ? "text-text-primary underline"
+        : "text-text-muted hover:text-text-primary"
     }`;
 
   return (
@@ -155,7 +155,7 @@ export function InfinitePostList({
         <div
           role="group"
           aria-label="태그로 걸러 보기"
-          className="flex flex-wrap items-center gap-2"
+          className="flex flex-wrap items-center gap-x-5"
         >
           <button
             type="button"
@@ -181,15 +181,18 @@ export function InfinitePostList({
 
       {/* 글 목록 */}
       {posts.length === 0 && !hasError ? (
-        <div className="rounded-2xl border border-border-default px-6 py-16 text-center">
-          <p className="body-3 text-text-muted">{getEmptyMessage()}</p>
-        </div>
+        <p className="py-6 body-3 text-text-muted">{getEmptyMessage()}</p>
       ) : (
-        <div className="grid gap-4">
-          {posts.map((post) => (
-            <PostCard key={post.slug} post={post} />
+        <ul>
+          {posts.map((post, index) => (
+            <li key={post.slug}>
+              {index > 0 && (
+                <div aria-hidden="true" className="h-px bg-border-default" />
+              )}
+              <PostRow post={post} showCategory={!category} />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       {/* 로딩 트리거 영역 */}

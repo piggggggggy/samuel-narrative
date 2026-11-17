@@ -91,41 +91,38 @@ export function PostTable({ posts }: PostTableProps) {
       </div>
 
       {/* 테이블 */}
-      <div className="overflow-x-auto rounded-2xl border border-border-default">
+      <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-border-default">
-          <thead className="bg-bg-secondary">
+          <thead>
             <tr>
-              <th className="px-4 py-3 text-left caption-4 text-text-secondary">
+              <th className="pr-6 py-3 text-left caption-4 text-text-secondary">
                 제목
               </th>
-              <th className="hidden px-4 py-3 text-left caption-4 text-text-secondary sm:table-cell">
+              <th className="hidden pr-6 py-3 text-left caption-4 text-text-secondary sm:table-cell">
                 태그
               </th>
-              <th className="hidden px-4 py-3 text-left caption-4 text-text-secondary md:table-cell">
+              <th className="hidden pr-6 py-3 text-left caption-4 text-text-secondary md:table-cell">
                 작성일
               </th>
-              <th className="px-4 py-3 text-right caption-4 text-text-secondary">
+              <th className="py-3 text-right caption-4 text-text-secondary">
                 관리
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border-default bg-bg-primary">
+          <tbody className="divide-y divide-border-default">
             {filteredPosts.length === 0 ? (
               <tr>
                 <td
                   colSpan={4}
-                  className="px-4 py-12 text-center body-6 text-text-muted"
+                  className="py-12 text-center body-6 text-text-muted"
                 >
                   {search ? "검색 결과가 없습니다." : "포스트가 없습니다."}
                 </td>
               </tr>
             ) : (
               filteredPosts.map((post) => (
-                <tr
-                  key={post.slug}
-                  className="transition-colors hover:bg-bg-secondary"
-                >
-                  <td className="px-4 py-4">
+                <tr key={post.slug}>
+                  <td className="pr-6 py-4">
                     <div>
                       <Link
                         href={`/posts/${post.slug}`}
@@ -138,37 +135,30 @@ export function PostTable({ posts }: PostTableProps) {
                       </p>
                     </div>
                   </td>
-                  <td className="hidden px-4 py-4 sm:table-cell">
-                    <div className="flex flex-wrap gap-1">
+                  <td className="hidden pr-6 py-4 sm:table-cell">
+                    <div className="flex flex-wrap gap-x-2 gap-y-1 caption-2 text-text-muted">
                       {post.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="inline-flex rounded-full bg-tag-bg px-2 py-0.5 caption-4 text-tag-text"
-                        >
-                          {tag}
-                        </span>
+                        <span key={tag}>{tag}</span>
                       ))}
                       {post.tags.length > 3 && (
-                        <span className="caption-5 text-text-muted">
-                          +{post.tags.length - 3}
-                        </span>
+                        <span>+{post.tags.length - 3}</span>
                       )}
                     </div>
                   </td>
-                  <td className="hidden whitespace-nowrap px-4 py-4 caption-2 text-text-secondary md:table-cell">
+                  <td className="hidden whitespace-nowrap pr-6 py-4 caption-2 text-text-secondary md:table-cell">
                     {formatDate(post.publishedAt)}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-4 text-right">
-                    <div className="flex items-center justify-end gap-1 caption-1">
+                  <td className="whitespace-nowrap py-4 text-right">
+                    <div className="flex items-center justify-end gap-4 caption-1">
                       <Link
                         href={`/admin/posts/${post.slug}/edit`}
-                        className="rounded-lg px-2 py-2 text-text-primary transition-colors hover:bg-bg-tertiary"
+                        className="py-2 text-text-primary underline-offset-4 hover:underline"
                       >
                         수정
                       </Link>
                       <Link
                         href={`/posts/${post.slug}`}
-                        className="rounded-lg px-2 py-2 text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-text-primary"
+                        className="py-2 text-text-muted transition-colors hover:text-text-primary"
                         target="_blank"
                       >
                         보기
@@ -176,7 +166,7 @@ export function PostTable({ posts }: PostTableProps) {
                       <button
                         type="button"
                         onClick={() => setDeleteTarget(post)}
-                        className="rounded-lg px-2 py-2 text-danger transition-colors hover:bg-bg-tertiary"
+                        className="py-2 text-danger underline-offset-4 hover:underline"
                       >
                         삭제
                       </button>

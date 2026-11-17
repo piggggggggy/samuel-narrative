@@ -27,7 +27,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary glass-hover hover:text-text-primary"
+      className="flex h-11 w-11 items-center justify-center text-text-muted transition-colors hover:text-text-primary"
       aria-label={`${nextLabel} 테마로 바꾸기`}
       title={`${nextLabel} 테마로 바꾸기`}
     >

@@ -2,7 +2,6 @@ export { Accordion } from "./Accordion";
 export { ConfirmModal } from "./ConfirmModal";
 export { ProgressBar } from "./ProgressBar";
 export { ReadingProgress } from "./ReadingProgress";
-export { Reveal } from "./Reveal";
 export { ShareButtons } from "./ShareButtons";
 export {
   PostCardSkeleton,

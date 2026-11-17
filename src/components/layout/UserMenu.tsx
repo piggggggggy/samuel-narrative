@@ -29,7 +29,7 @@ export function UserMenu() {
     return (
       <Link
         href="/auth/signin"
-        className="rounded-lg px-3 py-2 title-4 text-text-secondary glass-hover hover:text-text-primary"
+        className="inline-flex min-h-11 items-center title-4 text-text-muted transition-colors hover:text-text-primary"
       >
         로그인
       </Link>

@@ -43,7 +43,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         href={shareLinks.twitter}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-full p-3 text-text-secondary glass-hover hover:text-text-primary"
+        className="p-3 text-text-muted transition-colors hover:text-text-primary"
         aria-label="X에 공유"
       >
         <XLogoIcon aria-hidden="true" className="h-5 w-5" />
@@ -54,7 +54,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         href={shareLinks.facebook}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-full p-3 text-text-secondary glass-hover hover:text-text-primary"
+        className="p-3 text-text-muted transition-colors hover:text-text-primary"
         aria-label="Facebook에 공유"
       >
         <FacebookLogoIcon aria-hidden="true" className="h-5 w-5" />
@@ -65,7 +65,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         href={shareLinks.linkedin}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-full p-3 text-text-secondary glass-hover hover:text-text-primary"
+        className="p-3 text-text-muted transition-colors hover:text-text-primary"
         aria-label="LinkedIn에 공유"
       >
         <LinkedinLogoIcon aria-hidden="true" className="h-5 w-5" />
@@ -75,7 +75,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
       <button
         type="button"
         onClick={copyToClipboard}
-        className="rounded-full p-3 text-text-secondary glass-hover hover:text-text-primary"
+        className="p-3 text-text-muted transition-colors hover:text-text-primary"
         aria-label={copied ? "링크 복사됨" : "링크 복사"}
       >
         {copied ? (

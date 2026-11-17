@@ -45,7 +45,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   }
 
   return (
-    <nav aria-label="목차" className="rounded-2xl p-4 glass-panel">
+    <nav aria-label="목차">
       <h2 className="mb-3 caption-3 text-text-muted">목차</h2>
       <ul className="flex flex-col gap-1">
         {items.map((item) => (
@@ -67,8 +67,8 @@ export function TableOfContents({ items }: TableOfContentsProps) {
               aria-current={activeId === item.id ? "location" : undefined}
               className={`block py-1 transition-colors hover:text-text-primary ${
                 activeId === item.id
-                  ? "caption-1 text-accent-primary"
-                  : "caption-2 text-text-secondary"
+                  ? "caption-1 text-text-primary"
+                  : "caption-2 text-text-muted"
               }`}
             >
               {item.text}

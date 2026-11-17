@@ -26,21 +26,22 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-bg-secondary">
-      <div className="mx-auto max-w-4xl px-4 py-8">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="caption-2 text-text-secondary">
+    <footer>
+      <div className="mx-auto max-w-3xl px-4">
+        <div className="h-px bg-border-default" />
+        <div className="flex items-center justify-between gap-4 py-6">
+          <p className="caption-2 text-text-muted">
             &copy; {currentYear} {siteConfig.name}
           </p>
 
-          <div className="flex items-center gap-2">
+          <div className="-mr-3 flex items-center">
             {socialLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary glass-hover hover:text-text-primary"
+                className="flex h-11 w-11 items-center justify-center text-text-muted transition-colors hover:text-text-primary"
                 aria-label={link.name}
               >
                 {link.icon}

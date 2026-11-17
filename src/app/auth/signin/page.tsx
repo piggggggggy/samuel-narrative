@@ -11,7 +11,7 @@ export default function SignInPage() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <div className="flex flex-col gap-6 rounded-2xl border border-border-default bg-bg-secondary p-8">
+        <div className="flex flex-col gap-6">
           <h1 className="text-center heading-5 text-text-primary">
             관리자 로그인
           </h1>

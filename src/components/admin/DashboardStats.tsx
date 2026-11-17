@@ -23,40 +23,34 @@ export function DashboardStats({ posts }: DashboardStatsProps) {
     .slice(0, 5);
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {/* 전체 포스트 */}
-      <div className="rounded-2xl border border-border-default bg-bg-secondary p-6">
-        <div className="caption-1 text-text-secondary">전체 포스트</div>
-        <div className="mt-2 heading-4 text-text-primary">{totalPosts}</div>
+    <dl className="flex flex-wrap gap-x-12 gap-y-6">
+      <div>
+        <dt className="caption-2 text-text-muted">전체 포스트</dt>
+        <dd className="mt-1 heading-5 text-text-primary">{totalPosts}</dd>
       </div>
 
-      {/* 태그 수 */}
-      <div className="rounded-2xl border border-border-default bg-bg-secondary p-6">
-        <div className="caption-1 text-text-secondary">태그</div>
-        <div className="mt-2 heading-4 text-text-primary">
+      <div>
+        <dt className="caption-2 text-text-muted">태그</dt>
+        <dd className="mt-1 heading-5 text-text-primary">
           {Object.keys(tagCounts).length}
-        </div>
+        </dd>
       </div>
 
-      {/* 인기 태그 */}
-      <div className="rounded-2xl border border-border-default bg-bg-secondary p-6 sm:col-span-2 lg:col-span-1">
-        <div className="caption-1 text-text-secondary">인기 태그</div>
-        <div className="mt-2 flex flex-wrap gap-2">
+      <div>
+        <dt className="caption-2 text-text-muted">인기 태그</dt>
+        <dd className="mt-1 flex min-h-8 flex-wrap items-center gap-x-4 gap-y-1 body-6 text-text-primary">
           {topTags.length > 0 ? (
             topTags.map(([tag, count]) => (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1 rounded-full bg-tag-bg px-3 py-1 caption-4 text-tag-text"
-              >
+              <span key={tag} className="inline-flex items-center gap-1">
                 {tag}
                 <span className="text-text-muted">{count}</span>
               </span>
             ))
           ) : (
-            <span className="body-6 text-text-muted">태그 없음</span>
+            <span className="text-text-muted">태그 없음</span>
           )}
-        </div>
+        </dd>
       </div>
-    </div>
+    </dl>
   );
 }

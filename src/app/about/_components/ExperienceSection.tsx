@@ -27,7 +27,7 @@ export function ExperienceSection({
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls={contentId}
-        className="flex w-full items-center justify-between gap-3 rounded-lg py-4 text-left"
+        className="flex w-full items-center justify-between gap-3 py-4 text-left"
       >
         <div className="min-w-0 flex-1">
           <h4 className="body-1 text-text-primary">{section.title}</h4>
@@ -51,12 +51,9 @@ export function ExperienceSection({
         }`}
       >
         <div className="overflow-hidden">
-          <div className="flex flex-col gap-3 pb-4">
+          <div className="flex flex-col gap-6 pb-6">
             {section.items.map((item) => (
-              <div
-                key={item.title}
-                className="flex flex-col gap-2 rounded-lg bg-bg-tertiary p-4"
-              >
+              <div key={item.title} className="flex flex-col gap-2">
                 <div className="flex items-start justify-between gap-2">
                   <h5 className="title-4 text-text-primary">{item.title}</h5>
                   {item.period && (

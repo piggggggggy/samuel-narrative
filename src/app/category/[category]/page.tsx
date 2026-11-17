@@ -96,12 +96,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const initialPosts = posts.slice(0, POSTS_PER_PAGE);
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-10 px-4 pb-24 pt-16">
+    <div className="mx-auto flex max-w-3xl flex-col gap-10 px-4 pb-24 pt-16">
       <header className="flex flex-col gap-3">
-        <h1 className="heading-4 text-text-primary md:heading-3">{label}</h1>
-        <p className="max-w-2xl title-2 text-pretty text-text-secondary">
-          {description}
-        </p>
+        <h1 className="heading-5 text-text-primary md:heading-4">{label}</h1>
+        <p className="max-w-2xl body-3 text-text-secondary">{description}</p>
         <p className="caption-1 text-text-muted">글 {posts.length}편</p>
       </header>
 

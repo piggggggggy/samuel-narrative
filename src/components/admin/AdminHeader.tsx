@@ -18,7 +18,7 @@ export function AdminHeader() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="title-3 text-text-muted">관리자</p>
-        <nav aria-label="관리자 메뉴" className="flex flex-wrap gap-1">
+        <nav aria-label="관리자 메뉴" className="flex flex-wrap gap-x-6">
           {links.map((link) => {
             const current = pathname === link.href;
             return (
@@ -26,10 +26,10 @@ export function AdminHeader() {
                 key={link.href}
                 href={link.href}
                 aria-current={current ? "page" : undefined}
-                className={`rounded-lg px-3 py-2 caption-1 transition-colors ${
+                className={`inline-flex min-h-11 items-center caption-1 underline-offset-8 transition-colors ${
                   current
-                    ? "bg-bg-tertiary text-text-primary"
-                    : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
+                    ? "text-text-primary underline"
+                    : "text-text-muted hover:text-text-primary"
                 }`}
               >
                 {link.label}
@@ -38,7 +38,7 @@ export function AdminHeader() {
           })}
           <Link
             href="/"
-            className="rounded-lg px-3 py-2 caption-1 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+            className="inline-flex min-h-11 items-center caption-1 text-text-muted transition-colors hover:text-text-primary"
           >
             블로그로 돌아가기
           </Link>

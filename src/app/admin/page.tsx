@@ -24,7 +24,7 @@ export default async function AdminDashboardPage({
       {saved && (
         <p
           role="status"
-          className="rounded-lg border border-border-default bg-bg-secondary px-4 py-3 body-6 text-text-primary"
+          className="rounded-lg border border-border-default px-4 py-3 body-6 text-text-primary"
         >
           <span className="body-4">{saved}</span> 글을 저장했습니다. 공개
           화면에는 다음 배포가 끝난 뒤에 반영됩니다.
@@ -36,7 +36,7 @@ export default async function AdminDashboardPage({
 
       {/* Posts Table */}
       <div>
-        <h2 className="mb-4 heading-6 text-text-primary">포스트 관리</h2>
+        <h2 className="mb-4 caption-1 text-text-muted">포스트 관리</h2>
         <PostTable posts={posts} />
       </div>
     </div>

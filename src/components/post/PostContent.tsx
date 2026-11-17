@@ -48,7 +48,7 @@ export function PostContent({ content }: PostContentProps) {
             const text = String(children);
             const id = slugify(text);
             return (
-              <h2 id={id} className="scroll-mt-24">
+              <h2 id={id} className="scroll-mt-8">
                 {children}
               </h2>
             );
@@ -57,7 +57,7 @@ export function PostContent({ content }: PostContentProps) {
             const text = String(children);
             const id = slugify(text);
             return (
-              <h3 id={id} className="scroll-mt-24">
+              <h3 id={id} className="scroll-mt-8">
                 {children}
               </h3>
             );
@@ -66,7 +66,7 @@ export function PostContent({ content }: PostContentProps) {
             const text = String(children);
             const id = slugify(text);
             return (
-              <h4 id={id} className="scroll-mt-24">
+              <h4 id={id} className="scroll-mt-8">
                 {children}
               </h4>
             );

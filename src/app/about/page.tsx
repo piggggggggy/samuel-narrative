@@ -78,7 +78,7 @@ export default function AboutPage() {
         >
           주요 경험
         </h2>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-10">
           {experiences.map((experience) => (
             <CompanyCard key={experience.company} experience={experience} />
           ))}
@@ -102,7 +102,7 @@ export default function AboutPage() {
                 href={link.href}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
-                className="rounded-full p-3 text-text-secondary glass-hover hover:text-text-primary"
+                className="p-3 text-text-muted transition-colors hover:text-text-primary"
                 aria-label={link.name}
               >
                 {link.icon}
@@ -112,14 +112,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="flex flex-col items-center gap-4 rounded-2xl border border-border-default bg-bg-secondary p-6 text-center">
-        <p className="body-3 text-text-secondary">
-          블로그 글이 마음에 드셨다면, 최신 포스트도 확인해보세요!
-        </p>
-        <Link href="/" className="button-primary button-md">
-          포스트 보러가기
-        </Link>
-      </section>
+      <Link
+        href="/"
+        className="inline-flex min-h-11 items-center self-start body-5 text-text-muted transition-colors hover:text-text-primary"
+      >
+        포스트 보러가기
+      </Link>
     </div>
   );
 }

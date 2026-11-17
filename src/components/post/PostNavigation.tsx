@@ -1,5 +1,3 @@
-import { CaretLeftIcon } from "@phosphor-icons/react/dist/ssr/CaretLeft";
-import { CaretRightIcon } from "@phosphor-icons/react/dist/ssr/CaretRight";
 import Link from "next/link";
 import type { PostMeta } from "@/lib/content";
 
@@ -19,19 +17,16 @@ export function PostNavigation({
   return (
     <nav
       aria-label="이전 글과 다음 글"
-      className="mt-12 grid gap-4 sm:grid-cols-2"
+      className="mt-12 grid gap-6 sm:grid-cols-2"
     >
       {/* 이전 글 (더 오래된 글) */}
       {prevPostMeta ? (
         <Link
           href={`/posts/${prevPostMeta.slug}`}
-          className="group flex flex-col gap-2 rounded-2xl p-4 glass-card"
+          className="group flex flex-col gap-1"
         >
-          <span className="flex items-center gap-1 caption-2 text-text-muted">
-            <CaretLeftIcon aria-hidden="true" className="h-4 w-4" />
-            이전 글
-          </span>
-          <span className="line-clamp-2 title-3 text-text-primary">
+          <span className="caption-2 text-text-muted">이전 글</span>
+          <span className="line-clamp-2 title-3 text-text-primary transition-colors group-hover:text-accent-primary">
             {prevPostMeta.title}
           </span>
         </Link>
@@ -43,13 +38,10 @@ export function PostNavigation({
       {nextPostMeta ? (
         <Link
           href={`/posts/${nextPostMeta.slug}`}
-          className="group flex flex-col gap-2 rounded-2xl p-4 text-right glass-card sm:col-start-2"
+          className="group flex flex-col gap-1 sm:col-start-2 sm:text-right"
         >
-          <span className="flex items-center justify-end gap-1 caption-2 text-text-muted">
-            다음 글
-            <CaretRightIcon aria-hidden="true" className="h-4 w-4" />
-          </span>
-          <span className="line-clamp-2 title-3 text-text-primary">
+          <span className="caption-2 text-text-muted">다음 글</span>
+          <span className="line-clamp-2 title-3 text-text-primary transition-colors group-hover:text-accent-primary">
             {nextPostMeta.title}
           </span>
         </Link>

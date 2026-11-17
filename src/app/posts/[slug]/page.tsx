@@ -1,4 +1,3 @@
-import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr/ArrowLeft";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -104,7 +103,7 @@ export default async function PostPage({ params }: PostPageProps) {
     <div className="relative">
       {/* 목차: 넓은 화면에서 본문 오른쪽에 고정 */}
       {showToc && (
-        <aside className="fixed right-[max(1rem,calc((100vw-896px)/2-220px-2rem))] top-24 hidden w-[200px] xl:block">
+        <aside className="fixed right-[max(1rem,calc((100vw-768px)/2-200px-2rem))] top-24 hidden w-[200px] xl:block">
           <TableOfContents items={tocItems} />
         </aside>
       )}
@@ -115,7 +114,7 @@ export default async function PostPage({ params }: PostPageProps) {
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 caption-2 text-text-muted">
               <Link
                 href={`/category/${post.category}`}
-                className="caption-1 text-accent-primary transition-colors hover:text-accent-hover"
+                className="transition-colors hover:text-text-primary"
               >
                 {CATEGORY_LABELS[post.category]}
               </Link>
@@ -127,18 +126,11 @@ export default async function PostPage({ params }: PostPageProps) {
             <h1 className="heading-4 text-text-primary md:heading-3">
               {post.title}
             </h1>
-            <p className="title-2 text-pretty text-text-secondary">
-              {post.excerpt}
-            </p>
+            <p className="body-3 text-text-secondary">{post.excerpt}</p>
             {post.tags.length > 0 && (
-              <ul className="flex flex-wrap gap-2">
+              <ul className="flex flex-wrap gap-x-3 gap-y-1 caption-2 text-text-muted">
                 {post.tags.map((tag) => (
-                  <li
-                    key={tag}
-                    className="rounded-full bg-tag-bg px-3 py-1 caption-4 text-tag-text"
-                  >
-                    {tag}
-                  </li>
+                  <li key={tag}>#{tag}</li>
                 ))}
               </ul>
             )}
@@ -168,9 +160,8 @@ export default async function PostPage({ params }: PostPageProps) {
         <div className="mt-12">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 body-5 text-text-secondary transition-colors hover:text-text-primary"
+            className="inline-flex min-h-11 items-center body-5 text-text-muted transition-colors hover:text-text-primary"
           >
-            <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
             목록으로 돌아가기
           </Link>
         </div>

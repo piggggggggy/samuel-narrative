@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="mx-auto flex max-w-4xl flex-col items-start gap-6 px-4 py-24">
+    <div className="mx-auto flex max-w-3xl flex-col items-start gap-6 px-4 py-24">
       <p className="caption-1 text-text-muted">404</p>
       <h1 className="max-w-2xl heading-4 text-text-primary md:heading-3">
         찾으시는 페이지가 없습니다
